@@ -1,0 +1,1233 @@
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 17.04.00.058(Camera-10)[17_04_00.136-18_04_01.478].mat'}
+
+
+InitialFrame =
+
+   719
+
+
+FrameI =
+
+   819
+
+
+FinalFrame =
+
+   936
+
+
+FrameF =
+
+   836
+
+
+L =
+
+       44957
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 17.04.00.058(Camera-10)[17_04_00.136-18_04_01.478].mat'}
+
+
+InitialFrame =
+
+        1433
+
+
+FrameI =
+
+        1533
+
+
+FinalFrame =
+
+        1655
+
+
+FrameF =
+
+        1555
+
+
+L =
+
+       44957
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 17.04.00.058(Camera-10)[17_04_00.136-18_04_01.478].mat'}
+
+
+InitialFrame =
+
+        4006
+
+
+FrameI =
+
+        4106
+
+
+FinalFrame =
+
+        4216
+
+
+FrameF =
+
+        4116
+
+
+L =
+
+       44957
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 17.04.00.058(Camera-10)[17_04_00.136-18_04_01.478].mat'}
+
+
+InitialFrame =
+
+        9036
+
+
+FrameI =
+
+        9136
+
+
+FinalFrame =
+
+        9258
+
+
+FrameF =
+
+        9158
+
+
+L =
+
+       44957
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 17.04.00.058(Camera-10)[17_04_00.136-18_04_01.478].mat'}
+
+
+InitialFrame =
+
+       17162
+
+
+FrameI =
+
+       17262
+
+
+FinalFrame =
+
+       17379
+
+
+FrameF =
+
+       17279
+
+
+L =
+
+       44957
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 17.04.00.058(Camera-10)[17_04_00.136-18_04_01.478].mat'}
+
+
+InitialFrame =
+
+       17328
+
+
+FrameI =
+
+       17428
+
+
+FinalFrame =
+
+       17562
+
+
+FrameF =
+
+       17462
+
+
+L =
+
+       44957
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 17.04.00.058(Camera-10)[17_04_00.136-18_04_01.478].mat'}
+
+
+InitialFrame =
+
+       19570
+
+
+FrameI =
+
+       19670
+
+
+FinalFrame =
+
+       19790
+
+
+FrameF =
+
+       19690
+
+
+L =
+
+       44957
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 17.04.00.058(Camera-10)[17_04_00.136-18_04_01.478].mat'}
+
+
+InitialFrame =
+
+       22136
+
+
+FrameI =
+
+       22236
+
+
+FinalFrame =
+
+       22420
+
+
+FrameF =
+
+       22320
+
+
+L =
+
+       44957
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 17.04.00.058(Camera-10)[17_04_00.136-18_04_01.478].mat'}
+
+
+InitialFrame =
+
+       24699
+
+
+FrameI =
+
+       24799
+
+
+FinalFrame =
+
+       24960
+
+
+FrameF =
+
+       24860
+
+
+L =
+
+       44957
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 17.04.00.058(Camera-10)[17_04_00.136-18_04_01.478].mat'}
+
+
+InitialFrame =
+
+       27892
+
+
+FrameI =
+
+       27992
+
+
+FinalFrame =
+
+       28106
+
+
+FrameF =
+
+       28006
+
+
+L =
+
+       44957
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 17.04.00.058(Camera-10)[17_04_00.136-18_04_01.478].mat'}
+
+
+InitialFrame =
+
+       29381
+
+
+FrameI =
+
+       29481
+
+
+FinalFrame =
+
+       29595
+
+
+FrameF =
+
+       29495
+
+
+L =
+
+       44957
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 17.04.00.058(Camera-10)[17_04_00.136-18_04_01.478].mat'}
+
+
+InitialFrame =
+
+       29688
+
+
+FrameI =
+
+       29788
+
+
+FinalFrame =
+
+       29922
+
+
+FrameF =
+
+       29822
+
+
+L =
+
+       44957
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 17.04.00.058(Camera-10)[17_04_00.136-18_04_01.478].mat'}
+
+
+InitialFrame =
+
+       29712
+
+
+FrameI =
+
+       29812
+
+
+FinalFrame =
+
+       29922
+
+
+FrameF =
+
+       29822
+
+
+L =
+
+       44957
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 17.04.00.058(Camera-10)[17_04_00.136-18_04_01.478].mat'}
+
+
+InitialFrame =
+
+       29783
+
+
+FrameI =
+
+       29883
+
+
+FinalFrame =
+
+       30026
+
+
+FrameF =
+
+       29926
+
+
+L =
+
+       44957
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 17.04.00.058(Camera-10)[17_04_00.136-18_04_01.478].mat'}
+
+
+InitialFrame =
+
+       29868
+
+
+FrameI =
+
+       29968
+
+
+FinalFrame =
+
+       30146
+
+
+FrameF =
+
+       30046
+
+
+L =
+
+       44957
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 17.04.00.058(Camera-10)[17_04_00.136-18_04_01.478].mat'}
+
+
+InitialFrame =
+
+       32272
+
+
+FrameI =
+
+       32372
+
+
+FinalFrame =
+
+       32498
+
+
+FrameF =
+
+       32398
+
+
+L =
+
+       44957
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 17.04.00.058(Camera-10)[17_04_00.136-18_04_01.478].mat'}
+
+
+InitialFrame =
+
+       33602
+
+
+FrameI =
+
+       33702
+
+
+FinalFrame =
+
+       33848
+
+
+FrameF =
+
+       33748
+
+
+L =
+
+       44957
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 17.04.00.058(Camera-10)[17_04_00.136-18_04_01.478].mat'}
+
+
+InitialFrame =
+
+       33651
+
+
+FrameI =
+
+       33751
+
+
+FinalFrame =
+
+       33915
+
+
+FrameF =
+
+       33815
+
+
+L =
+
+       44957
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 17.04.00.058(Camera-10)[17_04_00.136-18_04_01.478].mat'}
+
+
+InitialFrame =
+
+       37451
+
+
+FrameI =
+
+       37551
+
+
+FinalFrame =
+
+       37661
+
+
+FrameF =
+
+       37561
+
+
+L =
+
+       44957
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 18.04.00.025(Camera-10)[18_04_00.119-19_04_02.599].mat'}
+
+
+InitialFrame =
+
+        2968
+
+
+FrameI =
+
+        3068
+
+
+FinalFrame =
+
+        3185
+
+
+FrameF =
+
+        3085
+
+
+L =
+
+       44984
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 18.04.00.025(Camera-10)[18_04_00.119-19_04_02.599].mat'}
+
+
+InitialFrame =
+
+       24209
+
+
+FrameI =
+
+       24309
+
+
+FinalFrame =
+
+       24465
+
+
+FrameF =
+
+       24365
+
+
+L =
+
+       44984
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 18.04.00.025(Camera-10)[18_04_00.119-19_04_02.599].mat'}
+
+
+InitialFrame =
+
+       27476
+
+
+FrameI =
+
+       27576
+
+
+FinalFrame =
+
+       27692
+
+
+FrameF =
+
+       27592
+
+
+L =
+
+       44984
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 18.04.00.025(Camera-10)[18_04_00.119-19_04_02.599].mat'}
+
+
+InitialFrame =
+
+       29158
+
+
+FrameI =
+
+       29258
+
+
+FinalFrame =
+
+       29368
+
+
+FrameF =
+
+       29268
+
+
+L =
+
+       44984
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 18.04.00.025(Camera-10)[18_04_00.119-19_04_02.599].mat'}
+
+
+InitialFrame =
+
+       31631
+
+
+FrameI =
+
+       31731
+
+
+FinalFrame =
+
+       31884
+
+
+FrameF =
+
+       31784
+
+
+L =
+
+       44984
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 18.04.00.025(Camera-10)[18_04_00.119-19_04_02.599].mat'}
+
+
+InitialFrame =
+
+       37016
+
+
+FrameI =
+
+       37116
+
+
+FinalFrame =
+
+       37250
+
+
+FrameF =
+
+       37150
+
+
+L =
+
+       44984
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 19.04.00.036(Camera-10)[19_04_00.114-20_04_02.723].mat'}
+
+
+InitialFrame =
+
+        6553
+
+
+FrameI =
+
+        6653
+
+
+FinalFrame =
+
+        6771
+
+
+FrameF =
+
+        6671
+
+
+L =
+
+       44995
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 19.04.00.036(Camera-10)[19_04_00.114-20_04_02.723].mat'}
+
+
+InitialFrame =
+
+       13503
+
+
+FrameI =
+
+       13603
+
+
+FinalFrame =
+
+       13779
+
+
+FrameF =
+
+       13679
+
+
+L =
+
+       44995
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 19.04.00.036(Camera-10)[19_04_00.114-20_04_02.723].mat'}
+
+
+InitialFrame =
+
+       41105
+
+
+FrameI =
+
+       41205
+
+
+FinalFrame =
+
+       41335
+
+
+FrameF =
+
+       41235
+
+
+L =
+
+       44995
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 19.04.00.036(Camera-10)[19_04_00.114-20_04_02.723].mat'}
+
+
+InitialFrame =
+
+       42707
+
+
+FrameI =
+
+       42807
+
+
+FinalFrame =
+
+       42980
+
+
+FrameF =
+
+       42880
+
+
+L =
+
+       44995
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 20.04.00.004(Camera-10)[20_04_00.083-21_05_40.781].mat'}
+
+
+InitialFrame =
+
+   726
+
+
+FrameI =
+
+   826
+
+
+FinalFrame =
+
+   961
+
+
+FrameF =
+
+   861
+
+
+L =
+
+       45685
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 20.04.00.004(Camera-10)[20_04_00.083-21_05_40.781].mat'}
+
+
+InitialFrame =
+
+       20064
+
+
+FrameI =
+
+       20164
+
+
+FinalFrame =
+
+       20281
+
+
+FrameF =
+
+       20181
+
+
+L =
+
+       45685
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 20.04.00.004(Camera-10)[20_04_00.083-21_05_40.781].mat'}
+
+
+InitialFrame =
+
+       32985
+
+
+FrameI =
+
+       33085
+
+
+FinalFrame =
+
+       33239
+
+
+FrameF =
+
+       33139
+
+
+L =
+
+       45685
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 20.04.00.004(Camera-10)[20_04_00.083-21_05_40.781].mat'}
+
+
+InitialFrame =
+
+       36408
+
+
+FrameI =
+
+       36508
+
+
+FinalFrame =
+
+       36622
+
+
+FrameF =
+
+       36522
+
+
+L =
+
+       45685
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 20.04.00.004(Camera-10)[20_04_00.083-21_05_40.781].mat'}
+
+
+InitialFrame =
+
+       40178
+
+
+FrameI =
+
+       40278
+
+
+FinalFrame =
+
+       40389
+
+
+FrameF =
+
+       40289
+
+
+L =
+
+       45685
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'21.4.2014 - 20.04.00.004(Camera-10)[20_04_00.083-21_05_40.781].mat'}
+
+
+InitialFrame =
+
+       45151
+
+
+FrameI =
+
+       45251
+
+
+FinalFrame =
+
+       45379
+
+
+FrameF =
+
+       45279
+
+
+L =
+
+       45685
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'22.4.2014 - 10.10.00.041(Camera-10)[10_10_00.119-10_19_59.996].mat'}
+
+
+InitialFrame =
+
+        3708
+
+
+FrameI =
+
+        3808
+
+
+FinalFrame =
+
+        3942
+
+
+FrameF =
+
+        3842
+
+
+L =
+
+        7488
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'22.4.2014 - 10.10.00.041(Camera-10)[10_10_00.119-10_19_59.996].mat'}
+
+
+InitialFrame =
+
+        3885
+
+
+FrameI =
+
+        3985
+
+
+FinalFrame =
+
+        4120
+
+
+FrameF =
+
+        4020
+
+
+L =
+
+        7488
+
+
+DateExp =
+
+  1×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    {'22.4.2014 - 10.10.00.041(Camera-10)[11_40_00.050-11_49_59.111].mat'}
+
+
+InitialFrame =
+
+        4267
+
+
+FrameI =
+
+        4367
+
+
+FinalFrame =
+
+        4472
+
+
+FrameF =
+
+        4372
+
+
+L =
+
+        7480
+
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('VideoReader/init', 'C:\Program Files\MATLAB\R2018b\toolbox\matlab\audiovideo\@VideoReader\VideoReader.m', 611)" style="font-weight:bold">VideoReader/init</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2018b\toolbox\matlab\audiovideo\@VideoReader\VideoReader.m',611,0)">line 611</a>)
+The filename specified was not found in the MATLAB path.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('VideoReader', 'C:\Program Files\MATLAB\R2018b\toolbox\matlab\audiovideo\@VideoReader\VideoReader.m', 176)" style="font-weight:bold">VideoReader</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2018b\toolbox\matlab\audiovideo\@VideoReader\VideoReader.m',176,0)">line 176</a>)
+            obj.init(fileName);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CreateMovie', 'D:\MiceApplication - For New Mice Tracer\ScriptsForValidation\MainGUI_ValidationSocialEvents_ReadMovie\CreateMovie.m', 141)" style="font-weight:bold">CreateMovie</a> (<a href="matlab: opentoline('D:\MiceApplication - For New Mice Tracer\ScriptsForValidation\MainGUI_ValidationSocialEvents_ReadMovie\CreateMovie.m',141,0)">line 141</a>)
+    v = VideoReader(strcat(directory,'\',get(h.editExpName,'string'),'VideoAvi','\',DateExp(1:I-1),'WithRFID.avi'));
+} 
+Error while evaluating UIControl Callback.
+
+MiceGUI_Main
+
+root_folder =
+
+    'D:\MiceApplication - For New Mice Tracer\'
+

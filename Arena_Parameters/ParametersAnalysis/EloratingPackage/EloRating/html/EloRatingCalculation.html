@@ -1,0 +1,184 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>EloRatingCalculation</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-06-25"><meta name="DC.source" content="EloRatingCalculation.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Variable definition</a></li><li><a href="#4">ELORATING CALCULATION-Take from old program</a></li><li><a href="#6">Define which number of mouse is doing and being chasing</a></li><li><a href="#7">Definition of p, which is the expectation of winning for the higher rated individual which is a function of the absolute difference in the rating of the two interaction</a></li><li><a href="#8">Check eloe according who is the winner and the looser/There are winner or looser in chasing</a></li><li><a href="#10">adding a'zeroth event' with 1000s for each mouse</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> eloe  = EloRatingCalculation( SubsetData,MouseID,k,initial_rating,IndexChasing,IndexBeingChasing,IndexEvents )
+</pre><h2>Variable definition<a name="2"></a></h2><pre class="codeinput">clear <span class="string">eloe</span>;
+clear <span class="string">eloee</span>;
+</pre><pre class="codeinput"><span class="comment">%UNTITLED Summary of this function goes here</span>
+<span class="comment">%   Elo rating calculation</span>
+</pre><h2>ELORATING CALCULATION-Take from old program<a name="4"></a></h2><pre class="codeinput"><span class="keyword">for</span> event=1:size(SubsetData,1)
+</pre><pre class="codeinput"><span class="keyword">for</span> mouse=1:length(MouseID) <span class="comment">%define from which elorating begins</span>
+<span class="keyword">if</span> event&gt;1
+    eloe(mouse,event)=eloe(mouse,event-1);
+<span class="keyword">else</span>
+    eloe(mouse,event)=initial_rating; <span class="comment">%at the beggining the elo rating is 1000</span>
+
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2>Define which number of mouse is doing and being chasing<a name="6"></a></h2><pre class="codeinput"><span class="keyword">if</span> strcmp(strrep( SubsetData(event,IndexEvents),<span class="string">''''</span>,<span class="string">''</span>),<span class="string">'Y'</span>)==1
+   doing=find(strcmp(strrep(SubsetData(event,IndexChasing),<span class="string">''''</span>,<span class="string">''</span>),MouseID)==1);
+   being=find(strcmp(strrep(SubsetData(event,IndexBeingChasing),<span class="string">''''</span>,<span class="string">''</span>),MouseID)==1);
+
+<span class="keyword">else</span><span class="comment">%in the case the event was detected as reverse</span>
+   doing=find(strcmp(strrep(SubsetData(event,IndexBeingChasing),<span class="string">''''</span>,<span class="string">''</span>),MouseID)==1);
+   being=find(strcmp(strrep(SubsetData(event,IndexChasing),<span class="string">''''</span>,<span class="string">''</span>),MouseID)==1);
+
+<span class="keyword">end</span>
+</pre><h2>Definition of p, which is the expectation of winning for the higher rated individual which is a function of the absolute difference in the rating of the two interaction<a name="7"></a></h2><p>patterns before the interaction-see wikipedia definition</p><pre class="codeinput"><span class="keyword">if</span> abs(eloe(doing,event)-eloe(being,event))&gt;800
+    p=1;
+<span class="keyword">else</span>
+    p=1-1/(1+10^(abs(eloe(doing,event)-eloe(being,event))/400));
+<span class="keyword">end</span>
+</pre><h2>Check eloe according who is the winner and the looser/There are winner or looser in chasing<a name="8"></a></h2><pre class="codeinput"><span class="keyword">if</span> eloe(doing,event)&gt;=eloe(being,event) <span class="comment">%the higher rated mouse wins</span>
+eloe(doing,event)=eloe(doing,event)+(1-p)*k; <span class="comment">%eloe of the winner</span>
+eloe(being,event)=eloe(being,event)-(1-p)*k; <span class="comment">%eloe rating of the loser</span>
+<span class="keyword">else</span> <span class="comment">%lower rated individual wins against expectation</span>
+eloe(doing,event)=eloe(doing,event)+p*k; <span class="comment">%eloe of the winner</span>
+eloe(being,event)=eloe(being,event)-p*k; <span class="comment">%eloe rating of the loser</span>
+<span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><pre class="codeoutput error">Not enough input arguments.
+
+Error in EloRatingCalculation (line 11)
+for event=1:size(SubsetData,1)
+</pre><h2>adding a'zeroth event' with 1000s for each mouse<a name="10"></a></h2><pre class="codeinput">eloee=zeros(length(MouseID),size(SubsetData,1)+1)+initial_rating;
+ <span class="keyword">for</span> event=1:size(SubsetData,1)
+     eloee(:,event+1)=eloe(:,event);
+ <span class="keyword">end</span>
+ eloe=eloee;
+</pre><pre class="codeinput"> <span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function eloe  = EloRatingCalculation( SubsetData,MouseID,k,initial_rating,IndexChasing,IndexBeingChasing,IndexEvents )
+%% Variable definition
+clear eloe;
+clear eloee;
+%% 
+
+%UNTITLED Summary of this function goes here
+%   Elo rating calculation
+%% ELORATING CALCULATION-Take from old program
+
+for event=1:size(SubsetData,1)
+for mouse=1:length(MouseID) %define from which elorating begins
+if event>1
+    eloe(mouse,event)=eloe(mouse,event-1);
+else
+    eloe(mouse,event)=initial_rating; %at the beggining the elo rating is 1000
+    
+end
+end
+%% Define which number of mouse is doing and being chasing
+
+if strcmp(strrep( SubsetData(event,IndexEvents),'''',''),'Y')==1
+   doing=find(strcmp(strrep(SubsetData(event,IndexChasing),'''',''),MouseID)==1);
+   being=find(strcmp(strrep(SubsetData(event,IndexBeingChasing),'''',''),MouseID)==1);
+   
+else%in the case the event was detected as reverse
+   doing=find(strcmp(strrep(SubsetData(event,IndexBeingChasing),'''',''),MouseID)==1);
+   being=find(strcmp(strrep(SubsetData(event,IndexChasing),'''',''),MouseID)==1);
+   
+end
+%% Definition of p, which is the expectation of winning for the higher rated individual which is a function of the absolute difference in the rating of the two interaction
+% patterns before the interaction-see wikipedia definition
+if abs(eloe(doing,event)-eloe(being,event))>800
+    p=1;
+else
+    p=1-1/(1+10^(abs(eloe(doing,event)-eloe(being,event))/400));
+end
+%% Check eloe according who is the winner and the looser/There are winner or looser in chasing
+
+if eloe(doing,event)>=eloe(being,event) %the higher rated mouse wins
+eloe(doing,event)=eloe(doing,event)+(1-p)*k; %eloe of the winner
+eloe(being,event)=eloe(being,event)-(1-p)*k; %eloe rating of the loser
+else %lower rated individual wins against expectation
+eloe(doing,event)=eloe(doing,event)+p*k; %eloe of the winner
+eloe(being,event)=eloe(being,event)-p*k; %eloe rating of the loser
+end
+
+
+end
+%% adding a'zeroth event' with 1000s for each mouse
+eloee=zeros(length(MouseID),size(SubsetData,1)+1)+initial_rating;
+ for event=1:size(SubsetData,1)
+     eloee(:,event+1)=eloe(:,event);
+ end
+ eloe=eloee;
+
+ 
+     
+     
+ end
+
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>

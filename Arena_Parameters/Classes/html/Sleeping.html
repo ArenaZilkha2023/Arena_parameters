@@ -1,0 +1,418 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Sleeping</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-03-26"><meta name="DC.source" content="Sleeping.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Find where is sleeping and assign 1</a></li><li><a href="#3">--------Corrections------------------</a></li><li><a href="#4">Corrections because side antenna also is measured when it is inside</a></li><li><a href="#6">------------find interval frames----------------------------</a></li><li><a href="#7">-----------find the number of cage per interval------------</a></li><li><a href="#8">------change the coordinates of the sleeping to the position of the entrance to the cage---------</a></li><li><a href="#10">AUXILIARY FUNCTIONS</a></li></ul></div><pre class="codeinput"><span class="keyword">classdef</span> Sleeping
+    <span class="comment">%UNTITLED Summary of this class goes here</span>
+    <span class="comment">%   Detailed explanation goes here</span>
+
+    <span class="keyword">properties</span>
+        AntennaNumber;
+        AntennaCage;
+        AntennaSideBox;
+        CoordinateX;
+        CoordinateY;
+        SleepingCoord;
+    <span class="keyword">end</span>
+
+    <span class="keyword">methods</span>
+</pre><h2>Find where is sleeping and assign 1<a name="2"></a></h2><pre class="codeinput">        <span class="keyword">function</span> IsSleeping=IsSleeping(obj)
+          IsSleeping=zeros(length(obj.AntennaNumber),1);
+          IndexS=[];
+          AntennaN=[obj.AntennaCage,obj.AntennaSideBox];<span class="comment">%consider antenna on the side and on the entrance to the cage</span>
+
+           <span class="comment">%only if it is sleeping</span>
+            <span class="keyword">for</span> j=1:length(AntennaN)
+
+             Index=find(strcmp({num2str(AntennaN(j))},obj.AntennaNumber)==1);
+             IndexS=[IndexS ; Index];
+
+            <span class="keyword">end</span>
+            <span class="keyword">if</span> ~isempty(IndexS) <span class="comment">%only if is sleeping</span>
+            IsSleeping(IndexS)=1;
+            <span class="keyword">end</span>
+
+          <span class="keyword">end</span>
+</pre><h2>--------Corrections------------------<a name="3"></a></h2><pre class="codeinput">          <span class="keyword">function</span> IsSleepingCorrections=IsSleepingCorrections(obj,IsSleeping)
+</pre><h2>Corrections because side antenna also is measured when it is inside<a name="4"></a></h2><pre class="codeinput">              AntennaInput=[14,34,36,15];
+               IsSleepingCorrections=IsSleeping;
+<span class="comment">%               %LogicalIndex= strcmp({num2str(AntennaInput)},obj.AntennaNumber) &amp; (cell2mat(obj.CoordinateX)==1e6);</span>
+              <span class="keyword">for</span> j=1:length(AntennaInput)
+
+              LogicalIndex1= strcmp({num2str(AntennaInput(j))},obj.AntennaNumber) &amp; (cell2mat(obj.CoordinateX)&gt;=10000);
+              LogicalIndex2= strcmp({num2str(AntennaInput(j))},obj.AntennaNumber) &amp; (cell2mat(obj.CoordinateX)&lt;=0);
+<span class="comment">%               %LogicalIndex3= strcmp({num2str(AntennaInput)},obj.AntennaNumber) &amp; (cell2mat(obj.CoordinateY)&lt;=0);</span>
+
+                <span class="keyword">if</span> ~isempty(find(LogicalIndex1==1))
+                  IsSleepingCorrections(find(LogicalIndex1==1))=1;
+                <span class="keyword">end</span>
+
+                 <span class="keyword">if</span> ~isempty(find(LogicalIndex2==1))
+                  IsSleepingCorrections(find(LogicalIndex2==1))=1;
+                <span class="keyword">end</span>
+
+              <span class="keyword">end</span>
+</pre><pre class="codeinput">             <span class="keyword">end</span>
+</pre><h2>------------find interval frames----------------------------<a name="6"></a></h2><pre class="codeinput">             <span class="keyword">function</span>     IsSleepingInterval=IsSleepingInterval(obj,IsSleepingCorrections)
+
+               [EventsBeg EventsEnd]=getEventsIndexesGV(IsSleepingCorrections,length(IsSleepingCorrections));
+
+
+               IsSleepingInterval=[EventsBeg EventsEnd];
+
+
+             <span class="keyword">end</span>
+</pre><h2>-----------find the number of cage per interval------------<a name="7"></a></h2><pre class="codeinput">             <span class="comment">%since in a same interval there could be different antenna for</span>
+             <span class="comment">%the same cage we are doing a mean and find the exact cage</span>
+
+             <span class="keyword">function</span> IsSleepingCage=IsSleepingCage(obj,IsSleepingInterval)
+
+                 IsSleepingCage=zeros(length(obj.AntennaNumber),1);
+                 <span class="keyword">for</span> i=1:length(IsSleepingInterval(:,1))
+                 clear <span class="string">Data</span>
+                 clear <span class="string">result</span>
+                 clear <span class="string">MeanCages</span>
+                 clear <span class="string">value</span>
+
+                Data=obj.AntennaNumber(IsSleepingInterval(i,1):IsSleepingInterval(i,2));
+
+                <span class="comment">%convert the Data into number</span>
+
+                   result=cellfun(@NumberConversion,Data,<span class="string">'UniformOutput'</span>,false);
+                   MeanCages= mean(cell2mat(result));
+                  B=cell2mat(result);
+                   value =knnsearch(cell2mat(result),repmat(MeanCages,length(result),1));
+                   CageValue=B(value(1));
+
+
+                   <span class="comment">%look for the Cage number</span>
+                   <span class="keyword">if</span> ~isempty(find( obj.AntennaCage==CageValue, 1))
+                       IsSleepingCage([IsSleepingInterval(i,1):IsSleepingInterval(i,2)],1)=find( obj.AntennaCage==CageValue);
+                   <span class="keyword">elseif</span> ~isempty(find( obj.AntennaSideBox==CageValue, 1))
+                       IsSleepingCage([IsSleepingInterval(i,1):IsSleepingInterval(i,2)],1)=find( obj.AntennaSideBox==CageValue);
+                   <span class="keyword">elseif</span> CageValue==15
+                       IsSleepingCage([IsSleepingInterval(i,1):IsSleepingInterval(i,2)],1)=8;
+                    <span class="keyword">elseif</span> CageValue==36
+                       IsSleepingCage(IsSleepingInterval(i,1):IsSleepingInterval(i,2),1)=7;
+                    <span class="keyword">elseif</span> CageValue==14
+                       IsSleepingCage(IsSleepingInterval(i,1):IsSleepingInterval(i,2),1)=3;
+                     <span class="keyword">elseif</span> CageValue==34
+                       IsSleepingCage(IsSleepingInterval(i,1):IsSleepingInterval(i,2),1)=4;
+
+                   <span class="keyword">end</span>
+
+
+
+                 <span class="keyword">end</span>
+
+
+             <span class="keyword">end</span>
+</pre><h2>------change the coordinates of the sleeping to the position of the entrance to the cage---------<a name="8"></a></h2><pre class="codeinput">             <span class="keyword">function</span> IsSleepingCoord=IsSleepingCoord(obj,IsSleepingInterval,IsSleepingCage)
+                 clear <span class="string">X</span>
+                 clear <span class="string">Y</span>
+                 X=obj.CoordinateX;
+                 Y=obj.CoordinateY;
+                 X=cell2mat(X);
+                 Y=cell2mat(Y);
+                <span class="keyword">for</span> i=1:length(IsSleepingInterval(:,1))
+                   clear <span class="string">ReferenceCage</span>
+                   ReferenceCage=IsSleepingCage(IsSleepingInterval(i,1));
+                   X(IsSleepingInterval(i,1):IsSleepingInterval(i,2))=obj.SleepingCoord(ReferenceCage,1); <span class="comment">%for the x</span>
+                   Y(IsSleepingInterval(i,1):IsSleepingInterval(i,2))=obj.SleepingCoord(ReferenceCage,2); <span class="comment">%for the y</span>
+
+                <span class="keyword">end</span>
+                 IsSleepingCoord=[X,Y];
+
+
+
+             <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">
+ans = 
+
+  Sleeping with properties:
+
+     AntennaNumber: []
+       AntennaCage: []
+    AntennaSideBox: []
+       CoordinateX: []
+       CoordinateY: []
+     SleepingCoord: []
+
+</pre><h2>AUXILIARY FUNCTIONS<a name="10"></a></h2><pre class="codeinput"><span class="keyword">function</span> [EventsBeg EventsEnd]=getEventsIndexesGV(IndLogical,n)
+
+EventsBeg=find(diff(IndLogical)==1)+1;
+EventsEnd=find(diff(IndLogical)==-1);
+
+<span class="keyword">if</span> isempty(EventsBeg)||isempty(EventsEnd)
+    <span class="keyword">if</span>(isempty(EventsBeg)&amp;&amp;~isempty(EventsEnd))
+        EventsBeg=[1;EventsBeg];
+    <span class="keyword">elseif</span>(isempty(EventsEnd)&amp;&amp;~isempty(EventsBeg))
+        EventsEnd=[EventsEnd;n];
+    <span class="keyword">else</span>
+        <span class="keyword">if</span> sum(IndLogical)==n
+            EventsBeg=1;
+            EventsEnd=n;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">else</span>
+    <span class="keyword">if</span>(EventsBeg(1)&gt;EventsEnd(1))
+        EventsBeg=[1;EventsBeg];
+    <span class="keyword">end</span>
+
+    <span class="keyword">if</span>(EventsBeg(end)&gt;EventsEnd(end))
+        EventsEnd=[EventsEnd;n];
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">function</span> result=NumberConversion(x)
+result=str2num(x);
+
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+classdef Sleeping
+    %UNTITLED Summary of this class goes here
+    %   Detailed explanation goes here
+    
+    properties
+        AntennaNumber;
+        AntennaCage;
+        AntennaSideBox;
+        CoordinateX;
+        CoordinateY;
+        SleepingCoord;
+    end
+    
+    methods
+        %% Find where is sleeping and assign 1
+        function IsSleeping=IsSleeping(obj)
+          IsSleeping=zeros(length(obj.AntennaNumber),1);  
+          IndexS=[];
+          AntennaN=[obj.AntennaCage,obj.AntennaSideBox];%consider antenna on the side and on the entrance to the cage
+          
+           %only if it is sleeping
+            for j=1:length(AntennaN)
+            
+             Index=find(strcmp({num2str(AntennaN(j))},obj.AntennaNumber)==1);
+             IndexS=[IndexS ; Index];
+             
+            end
+            if ~isempty(IndexS) %only if is sleeping
+            IsSleeping(IndexS)=1;
+            end
+            
+          end
+          %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHCorrectionsREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+          function IsSleepingCorrections=IsSleepingCorrections(obj,IsSleeping)
+              %% Corrections because side antenna also is measured when it is inside
+              AntennaInput=[14,34,36,15];
+               IsSleepingCorrections=IsSleeping;
+%               %LogicalIndex= strcmp({num2str(AntennaInput)},obj.AntennaNumber) & (cell2mat(obj.CoordinateX)==1e6);
+              for j=1:length(AntennaInput)
+               
+              LogicalIndex1= strcmp({num2str(AntennaInput(j))},obj.AntennaNumber) & (cell2mat(obj.CoordinateX)>=10000);
+              LogicalIndex2= strcmp({num2str(AntennaInput(j))},obj.AntennaNumber) & (cell2mat(obj.CoordinateX)<=0);
+%               %LogicalIndex3= strcmp({num2str(AntennaInput)},obj.AntennaNumber) & (cell2mat(obj.CoordinateY)<=0);
+                       
+                if ~isempty(find(LogicalIndex1==1))
+                  IsSleepingCorrections(find(LogicalIndex1==1))=1;  
+                end
+                
+                 if ~isempty(find(LogicalIndex2==1))
+                  IsSleepingCorrections(find(LogicalIndex2==1))=1;  
+                end
+                
+              end
+                  
+             end    
+             %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHfind interval framesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+             function     IsSleepingInterval=IsSleepingInterval(obj,IsSleepingCorrections)
+                 
+               [EventsBeg EventsEnd]=getEventsIndexesGV(IsSleepingCorrections,length(IsSleepingCorrections));  
+                 
+              
+               IsSleepingInterval=[EventsBeg EventsEnd];
+              
+              
+             end
+             %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-find the number of cage per intervalREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+             %since in a same interval there could be different antenna for
+             %the same cage we are doing a mean and find the exact cage
+             
+             function IsSleepingCage=IsSleepingCage(obj,IsSleepingInterval)
+                
+                 IsSleepingCage=zeros(length(obj.AntennaNumber),1);
+                 for i=1:length(IsSleepingInterval(:,1))
+                 clear Data
+                 clear result
+                 clear MeanCages
+                 clear value
+                 
+                Data=obj.AntennaNumber(IsSleepingInterval(i,1):IsSleepingInterval(i,2));
+                    
+                %convert the Data into number
+                
+                   result=cellfun(@NumberConversion,Data,'UniformOutput',false);
+                   MeanCages= mean(cell2mat(result));
+                  B=cell2mat(result);
+                   value =knnsearch(cell2mat(result),repmat(MeanCages,length(result),1));
+                   CageValue=B(value(1));
+                   
+                  
+                   %look for the Cage number
+                   if ~isempty(find( obj.AntennaCage==CageValue, 1))
+                       IsSleepingCage([IsSleepingInterval(i,1):IsSleepingInterval(i,2)],1)=find( obj.AntennaCage==CageValue);
+                   elseif ~isempty(find( obj.AntennaSideBox==CageValue, 1))
+                       IsSleepingCage([IsSleepingInterval(i,1):IsSleepingInterval(i,2)],1)=find( obj.AntennaSideBox==CageValue);
+                   elseif CageValue==15
+                       IsSleepingCage([IsSleepingInterval(i,1):IsSleepingInterval(i,2)],1)=8;
+                    elseif CageValue==36
+                       IsSleepingCage(IsSleepingInterval(i,1):IsSleepingInterval(i,2),1)=7;  
+                    elseif CageValue==14
+                       IsSleepingCage(IsSleepingInterval(i,1):IsSleepingInterval(i,2),1)=3;  
+                     elseif CageValue==34
+                       IsSleepingCage(IsSleepingInterval(i,1):IsSleepingInterval(i,2),1)=4; 
+                        
+                   end
+        
+                   
+                     
+                 end
+                 
+                 
+             end
+             %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHchange the coordinates of the sleeping to the position of the entrance to the cageREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+             
+             function IsSleepingCoord=IsSleepingCoord(obj,IsSleepingInterval,IsSleepingCage)
+                 clear X
+                 clear Y
+                 X=obj.CoordinateX;
+                 Y=obj.CoordinateY;
+                 X=cell2mat(X);
+                 Y=cell2mat(Y);
+                for i=1:length(IsSleepingInterval(:,1))
+                   clear ReferenceCage 
+                   ReferenceCage=IsSleepingCage(IsSleepingInterval(i,1)); 
+                   X(IsSleepingInterval(i,1):IsSleepingInterval(i,2))=obj.SleepingCoord(ReferenceCage,1); %for the x  
+                   Y(IsSleepingInterval(i,1):IsSleepingInterval(i,2))=obj.SleepingCoord(ReferenceCage,2); %for the y   
+                    
+                end
+                 IsSleepingCoord=[X,Y];
+                 
+                 
+                 
+             end
+             
+             
+             
+             
+             
+             
+end
+
+end
+
+%% AUXILIARY FUNCTIONS
+function [EventsBeg EventsEnd]=getEventsIndexesGV(IndLogical,n)
+
+EventsBeg=find(diff(IndLogical)==1)+1;
+EventsEnd=find(diff(IndLogical)==-1);
+
+if isempty(EventsBeg)||isempty(EventsEnd)
+    if(isempty(EventsBeg)&&~isempty(EventsEnd))
+        EventsBeg=[1;EventsBeg];
+    elseif(isempty(EventsEnd)&&~isempty(EventsBeg))
+        EventsEnd=[EventsEnd;n];
+    else
+        if sum(IndLogical)==n
+            EventsBeg=1;
+            EventsEnd=n;
+        end
+    end
+else
+    if(EventsBeg(1)>EventsEnd(1))
+        EventsBeg=[1;EventsBeg];
+    end
+    
+    if(EventsBeg(end)>EventsEnd(end))
+        EventsEnd=[EventsEnd;n];
+    end
+end
+
+end
+%% 
+function result=NumberConversion(x)
+result=str2num(x);
+
+end
+
+##### SOURCE END #####
+--></body></html>

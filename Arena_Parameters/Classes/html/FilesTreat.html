@@ -1,0 +1,313 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>FilesTreat</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-03-20"><meta name="DC.source" content="FilesTreat.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">----------------------Number the files-------------</a></li><li><a href="#4">------------------------Information about date of RFID-------------------</a></li><li><a href="#5">-------------------Order the files according to the date-----------------</a></li><li><a href="#6">----------------Read only one RFID files----------------------</a></li><li><a href="#7">-------------------------Read all RFID files and concatenate-------------</a></li><li><a href="#8">-------------------Read the csv file</a></li><li><a href="#9">-------------------- Take the miceIDS of the csv---------------</a></li></ul></div><pre class="codeinput"><span class="keyword">classdef</span> FilesTreat
+    <span class="comment">%For the file treatment as reorder</span>
+    <span class="comment">%   Detailed explanation goes here</span>
+
+    <span class="keyword">properties</span>
+        directory
+        extension
+        numberfile
+
+
+
+    <span class="keyword">end</span>
+
+    <span class="keyword">methods</span>
+</pre><pre class="codeinput">        <span class="comment">%%-----------------------Open the list of files----------------</span>
+        <span class="keyword">function</span> ListFiles=ListFiles(obj) <span class="comment">%list the files</span>
+           ListFiles= dir([obj.directory,<span class="string">'\*'</span>,obj.extension])
+        <span class="keyword">end</span>
+</pre><h2>----------------------Number the files-------------<a name="3"></a></h2><pre class="codeinput">        <span class="keyword">function</span> NumFiles=NumFiles(obj,ListFiles)<span class="comment">%Number of files</span>
+            NumFiles=length(ListFiles(not([ListFiles.isdir])));
+        <span class="keyword">end</span>
+</pre><h2>------------------------Information about date of RFID-------------------<a name="4"></a></h2><pre class="codeinput">         <span class="keyword">function</span> DateFiles=DateFiles(obj,ListFiles,NumFiles)<span class="comment">%list the files</span>
+               <span class="keyword">for</span> i=1:NumFiles
+                   A=char(ListFiles(i).name);
+                   Lim=strfind(A,<span class="string">'-'</span>);
+                DateFiles(i,1)=datenum(A(1:Lim-1),<span class="string">'mm_dd_yyyy'</span>);
+
+               <span class="keyword">end</span>
+
+        <span class="keyword">end</span>
+</pre><h2>-------------------Order the files according to the date-----------------<a name="5"></a></h2><pre class="codeinput">        <span class="keyword">function</span>  idx=SortFiles(obj,ListFiles) <span class="comment">%Order the files according to the date</span>
+            [~,idx] = sort([ListFiles.datenum]);
+        <span class="keyword">end</span>
+</pre><h2>----------------Read only one RFID files----------------------<a name="6"></a></h2><pre class="codeinput">        <span class="keyword">function</span> ReadFiles=ReadFiles(obj,ListFiles) <span class="comment">%Read the files</span>
+           fid=fopen([obj.directory,<span class="string">'\'</span>,ListFiles(obj.numberfile).name]);
+           ReadFiles=textscan(fid,<span class="string">'%s %s %s %s'</span>,<span class="string">'delimiter'</span>,<span class="string">';'</span>,<span class="string">'EmptyValue'</span>,NaN);
+           fclose(fid);
+        <span class="keyword">end</span>
+</pre><h2>-------------------------Read all RFID files and concatenate-------------<a name="7"></a></h2><pre class="codeinput">        <span class="keyword">function</span> ReadFilesAll=ReadFilesAll(obj,ListFiles,NumFiles) <span class="comment">%Read  all the files and concatenate</span>
+           ReadFilesAll=[];
+           <span class="keyword">for</span> i=3:NumFiles
+
+           fid=fopen([obj.directory,<span class="string">'\'</span>,ListFiles(i).name]);
+           ReadFiles=textscan(fid,<span class="string">'%s %s %s %s'</span>,<span class="string">'delimiter'</span>,<span class="string">';'</span>,<span class="string">'EmptyValue'</span>,NaN);
+           ReadFilesAll=[ReadFilesAll; ReadFiles];
+           fclose(fid);
+
+           <span class="keyword">end</span>
+
+
+        <span class="keyword">end</span>
+</pre><h2>-------------------Read the csv file<a name="8"></a></h2><pre class="codeinput">        <span class="keyword">function</span> ReadFilesAllCSV=ReadFilesAllCSV(obj,ListFiles,n) <span class="comment">%n is number of file</span>
+          fid=fopen([obj.directory,<span class="string">'\'</span>,ListFiles(n).name]);
+          header=fgets(fid);<span class="comment">%GET FIRST HEADER</span>
+          <span class="comment">%numOfMice=length(strfind(header,'000')); %THIS COULD BE A PROBLEM IF THE 000 DISSAPEAR!!!!</span>
+          numOfMice=length(strfind(header,<span class="string">',,,'</span>))+1;
+
+          FORMAT1=[];
+          FORMAT2=[];
+<span class="comment">%</span>
+       <span class="keyword">for</span> i=1:numOfMice*3+2 <span class="comment">%For each mouse x, y and velocity.The first 2 columns are the date and the time.</span>
+         FORMAT1 = [FORMAT1 <span class="string">' %s'</span>];
+         <span class="keyword">if</span> i&gt;2
+        FORMAT2 = [FORMAT2 <span class="string">' %f'</span>];
+        <span class="keyword">else</span>
+         FORMAT2= [FORMAT2 <span class="string">' %s'</span>];
+         <span class="keyword">end</span>
+         <span class="keyword">end</span>
+         header = textscan(header,FORMAT1,<span class="string">'delimiter'</span>, <span class="string">','</span>,<span class="string">'EmptyValue'</span>, NaN);<span class="comment">%GETS XY VELO</span>
+<span class="comment">%</span>
+<span class="comment">% %%</span>
+<span class="comment">%</span>
+         <span class="keyword">for</span> i=1:numOfMice <span class="comment">%COULD BRING DATA NUM OF MICE FROM PARAMS!!!!!!!!!</span>
+          miceIDs(i)=header{3*i+1};
+        <span class="keyword">end</span>
+
+        header=fgets(fid);
+<span class="comment">%</span>
+        ReadFilesAllCSV = textscan(fid,FORMAT2,<span class="string">'delimiter'</span>, <span class="string">','</span>,<span class="string">'EmptyValue'</span>, NaN);  <span class="comment">%data values</span>
+
+       fclose(fid);
+         <span class="keyword">end</span>
+</pre><h2>-------------------- Take the miceIDS of the csv---------------<a name="9"></a></h2><pre class="codeinput">        <span class="keyword">function</span> miceIDs=miceIDs(obj,ListFiles,n)
+         fid=fopen([obj.directory,<span class="string">'\'</span>,ListFiles(n).name]);
+         header=fgets(fid);<span class="comment">%GET FIRST HEADER</span>
+         numOfMice=length(strfind(header,<span class="string">',,,'</span>))+1;
+
+          FORMAT1=[];
+          FORMAT2=[];
+<span class="comment">%</span>
+       <span class="keyword">for</span> i=1:numOfMice*3+2 <span class="comment">%For each mouse x, y and velocity.The first 2 columns are the date and the time.</span>
+         FORMAT1 = [FORMAT1 <span class="string">' %s'</span>];
+         <span class="keyword">if</span> i&gt;2
+        FORMAT2 = [FORMAT2 <span class="string">' %f'</span>];
+        <span class="keyword">else</span>
+         FORMAT2= [FORMAT2 <span class="string">' %s'</span>];
+         <span class="keyword">end</span>
+         <span class="keyword">end</span>
+         header = textscan(header,FORMAT1,<span class="string">'delimiter'</span>, <span class="string">','</span>,<span class="string">'EmptyValue'</span>, NaN);<span class="comment">%GETS XY VELO</span>
+<span class="comment">%</span>
+<span class="comment">% %%</span>
+<span class="comment">%</span>
+         <span class="keyword">for</span> i=1:numOfMice <span class="comment">%COULD BRING DATA NUM OF MICE FROM PARAMS!!!!!!!!!</span>
+          miceIDs(i)=header{3*i+1};
+        <span class="keyword">end</span>
+
+        <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">
+ans = 
+
+  FilesTreat with properties:
+
+     directory: []
+     extension: []
+    numberfile: []
+
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+classdef FilesTreat
+    %For the file treatment as reorder
+    %   Detailed explanation goes here
+    
+    properties
+        directory
+        extension
+        numberfile
+      
+        
+    
+    end
+    
+    methods
+        %%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Open the list of filesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH 
+        function ListFiles=ListFiles(obj) %list the files
+           ListFiles= dir([obj.directory,'\*',obj.extension])
+        end
+        %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHNumber the filesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+        
+        function NumFiles=NumFiles(obj,ListFiles)%Number of files
+            NumFiles=length(ListFiles(not([ListFiles.isdir])));
+        end
+        
+        %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHInformation about date of RFIDREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+         function DateFiles=DateFiles(obj,ListFiles,NumFiles)%list the files
+               for i=1:NumFiles
+                   A=char(ListFiles(i).name);
+                   Lim=strfind(A,'-');
+                DateFiles(i,1)=datenum(A(1:Lim-1),'mm_dd_yyyy'); 
+                
+               end
+           
+        end
+                   
+        %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Order the files according to the dateREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+       
+        function  idx=SortFiles(obj,ListFiles) %Order the files according to the date
+            [~,idx] = sort([ListFiles.datenum]);
+        end
+        %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHRead only one RFID filesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+        function ReadFiles=ReadFiles(obj,ListFiles) %Read the files
+           fid=fopen([obj.directory,'\',ListFiles(obj.numberfile).name]);
+           ReadFiles=textscan(fid,'%s %s %s %s','delimiter',';','EmptyValue',NaN);
+           fclose(fid);
+        end
+        %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Read all RFID files and concatenateREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+        function ReadFilesAll=ReadFilesAll(obj,ListFiles,NumFiles) %Read  all the files and concatenate
+           ReadFilesAll=[];    
+           for i=3:NumFiles
+               
+           fid=fopen([obj.directory,'\',ListFiles(i).name]);
+           ReadFiles=textscan(fid,'%s %s %s %s','delimiter',';','EmptyValue',NaN);
+           ReadFilesAll=[ReadFilesAll; ReadFiles];
+           fclose(fid);
+          
+           end
+           
+           
+        end
+        %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Read the csv file
+        
+        function ReadFilesAllCSV=ReadFilesAllCSV(obj,ListFiles,n) %n is number of file
+          fid=fopen([obj.directory,'\',ListFiles(n).name]);
+          header=fgets(fid);%GET FIRST HEADER
+          %numOfMice=length(strfind(header,'000')); %THIS COULD BE A PROBLEM IF THE 000 DISSAPEAR!!!!
+          numOfMice=length(strfind(header,',,,'))+1;           
+
+          FORMAT1=[];
+          FORMAT2=[];
+% 
+       for i=1:numOfMice*3+2 %For each mouse x, y and velocity.The first 2 columns are the date and the time.
+         FORMAT1 = [FORMAT1 ' %s'];
+         if i>2
+        FORMAT2 = [FORMAT2 ' %f'];
+        else
+         FORMAT2= [FORMAT2 ' %s'];
+         end
+         end
+         header = textscan(header,FORMAT1,'delimiter', ',','EmptyValue', NaN);%GETS XY VELO
+% 
+% %% 
+% 
+         for i=1:numOfMice %COULD BRING DATA NUM OF MICE FROM PARAMS!!!!!!!!!
+          miceIDs(i)=header{3*i+1};
+        end
+        
+        header=fgets(fid);
+% 
+        ReadFilesAllCSV = textscan(fid,FORMAT2,'delimiter', ',','EmptyValue', NaN);  %data values
+        
+       fclose(fid); 
+         end
+         %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH Take the miceIDS of the csvREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+        function miceIDs=miceIDs(obj,ListFiles,n)
+         fid=fopen([obj.directory,'\',ListFiles(n).name]);
+         header=fgets(fid);%GET FIRST HEADER
+         numOfMice=length(strfind(header,',,,'))+1;
+
+          FORMAT1=[];
+          FORMAT2=[];
+% 
+       for i=1:numOfMice*3+2 %For each mouse x, y and velocity.The first 2 columns are the date and the time.
+         FORMAT1 = [FORMAT1 ' %s'];
+         if i>2
+        FORMAT2 = [FORMAT2 ' %f'];
+        else
+         FORMAT2= [FORMAT2 ' %s'];
+         end
+         end
+         header = textscan(header,FORMAT1,'delimiter', ',','EmptyValue', NaN);%GETS XY VELO
+% 
+% %% 
+% 
+         for i=1:numOfMice %COULD BRING DATA NUM OF MICE FROM PARAMS!!!!!!!!!
+          miceIDs(i)=header{3*i+1};
+        end
+        
+        end
+        
+end
+end
+
+##### SOURCE END #####
+--></body></html>

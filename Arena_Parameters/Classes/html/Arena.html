@@ -1,0 +1,1003 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Arena</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-06-20"><meta name="DC.source" content="Arena.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">-----------Determine according to sleeping and hiding when it is at the arena--</a></li><li><a href="#3">----------------Determine arena events interval----------------</a></li><li><a href="#4">-----------------Find the duplicates in the coordinates-----------------</a></li><li><a href="#5">---------------------find intervals of all the duplicates------------------</a></li><li><a href="#6">-------------------------------------Calculate velocity without repeats---------------------------------</a></li><li><a href="#7">%% -------------------------------------Calculate velocity without repeats with constant time frames---------------------------------</a></li><li><a href="#9">-----------------------------Before determine the mouse activity interpolate the velocity inside the arena  since sometimes the velocity drops to zero and it is not good----------</a></li><li><a href="#10">-------------------------------Determine Activity of the mouse in the arena with the velocity calculated in the arena-----------------------------------------------</a></li><li><a href="#11">-----------------------------------Calculate auxiliary parameters for chasing----------------------------------------</a></li><li><a href="#12">--------------------------Calculate distance to antenna-----------------------</a></li><li><a href="#13">---------------------Arrange repeated and non defined places----------------------</a></li><li><a href="#14">-------------------------------Interpolate -----------------------------------------------</a></li><li><a href="#15">--------------------------Return repeated frames-----------------------</a></li><li><a href="#17">%% AUXILIARY FUNCTIONS</a></li><li><a href="#18">Convert to number</a></li></ul></div><pre class="codeinput"><span class="keyword">classdef</span> Arena
+<span class="comment">%All related with the arena</span>
+
+    <span class="keyword">properties</span>
+        AntennaNumber;
+        IsHiding;
+        IsSleeping;
+        AntennaCoord;
+        TreshRun;
+        TreshWalk;
+    <span class="keyword">end</span>
+
+    <span class="keyword">methods</span>
+</pre><h2>-----------Determine according to sleeping and hiding when it is at the arena--<a name="2"></a></h2><pre class="codeinput">        <span class="keyword">function</span> InArena=InArena(obj)
+        InArena=zeros(length(obj.AntennaNumber),1);
+        LogicalIndex=~(cell2mat(obj.IsHiding) + cell2mat(obj.IsSleeping));
+        <span class="keyword">if</span> ~isempty(LogicalIndex)
+        InArena(LogicalIndex)=1;
+        <span class="keyword">end</span>
+        <span class="keyword">end</span>
+</pre><h2>----------------Determine arena events interval----------------<a name="3"></a></h2><pre class="codeinput">        <span class="keyword">function</span> InArenaInterval=InArenaInterval(obj,InArena)
+
+            [EventsBeg EventsEnd]=getEventsIndexesGV(InArena,length(InArena));
+            InArenaInterval=[EventsBeg EventsEnd];
+
+        <span class="keyword">end</span>
+</pre><h2>-----------------Find the duplicates in the coordinates-----------------<a name="4"></a></h2><pre class="codeinput">        <span class="keyword">function</span> InArenaDuplic=InArenaDuplic(obj,X,Y,NumberMouse,LengthMouse,InArena)
+            InArenaDuplic=zeros(length(X(:,1)),1);
+            clear <span class="string">IndexLogical1</span>;
+            clear <span class="string">IndexLogical2</span>;
+            clear <span class="string">IndexLogical3</span>;
+            clear <span class="string">IndexLogical4</span>;
+            clear <span class="string">InArena1</span>
+
+            <span class="keyword">if</span> ~isempty(find(InArena)==1)
+            ML=[1:LengthMouse];
+            ML=ML(ML~=NumberMouse); <span class="comment">%only the list for compare</span>
+         <span class="comment">%Remove Non defined coord. as million and larger than 2000 in the arena</span>
+         IndexLogical4=(X(:,NumberMouse)&lt;2000)&amp; (Y(:,NumberMouse)&lt;2000);
+         InArena1=InArena &amp; IndexLogical4;
+
+
+            XMouse=repmat(X(:,NumberMouse),1,length(ML));
+            YMouse=repmat(Y(:,NumberMouse),1,length(ML));
+            Xother=X(:,ML);
+            Yother=Y(:,ML);
+
+
+
+            IndexLogical1=(XMouse==Xother) &amp; (YMouse==Yother);
+            IndexLogical2=sum(IndexLogical1,2)&gt;0;
+            IndexLogical3=InArena1 &amp; IndexLogical2;
+
+            <span class="keyword">if</span> ~isempty(IndexLogical3)
+            InArenaDuplic(IndexLogical3,1)=1;
+            <span class="keyword">end</span>
+
+            <span class="keyword">else</span>
+             InArenaDuplic=zeros(length(X(:,1)),1);
+        <span class="keyword">end</span>
+       <span class="keyword">end</span>
+
+   <span class="comment">%------------------Find  Non defined in the arena---------------------</span>
+   <span class="keyword">function</span> InArenaNonDefined=InArenaNonDefined(obj,X,Y,NumberMouse,InArena)
+    InArenaNonDefined=zeros(length(InArena),1);
+    clear <span class="string">IndexLogical1</span>;
+    clear <span class="string">IndexLogical2</span>;
+
+    IndexLogical1=(X(:,NumberMouse)&gt;10000)| (Y(:,NumberMouse)&gt;10000); <span class="comment">%consider 20000 and million</span>
+    IndexLogical2=InArena &amp; IndexLogical1;
+
+    <span class="keyword">if</span> ~isempty(IndexLogical2)
+    InArenaNonDefined(IndexLogical2,1)=1;
+    <span class="keyword">end</span>
+
+
+
+   <span class="keyword">end</span>
+</pre><h2>---------------------find intervals of all the duplicates------------------<a name="5"></a></h2><pre class="codeinput">   <span class="keyword">function</span> InArenaDuplicatesInterval=InArenaDuplicatesInterval(obj,InArenaDuplic)
+
+       [EventsBeg EventsEnd]=getEventsIndexesGV(InArenaDuplic,length(InArenaDuplic));
+
+       InArenaDuplicatesInterval=[EventsBeg EventsEnd];
+
+   <span class="keyword">end</span>
+</pre><h2>-------------------------------------Calculate velocity without repeats---------------------------------<a name="6"></a></h2><pre class="codeinput">   <span class="keyword">function</span> InArenaVelocity=InArenaVelocity(obj,RepeatedFrames,XMouse,YMouse,ElapTime)
+      InArenaVelocity=zeros(length(XMouse),1);
+
+      XMouseWithoutRepeats=XMouse(RepeatedFrames);
+      YMouseWithoutRepeats=YMouse(RepeatedFrames);
+
+      TimeWithoutRepeats=ElapTime(RepeatedFrames);
+
+
+      DiffTime=diff(TimeWithoutRepeats);
+      AuxVelocity=(sqrt(sum([diff(XMouseWithoutRepeats) diff(YMouseWithoutRepeats)].^2,2))); <span class="comment">%velocity in cm/sec</span>
+      AuxVelocity=(AuxVelocity./DiffTime)*100;
+       InArenaVelocity(RepeatedFrames(2:length(RepeatedFrames),1))=AuxVelocity;
+
+
+   <span class="keyword">end</span>
+</pre><h2>%% -------------------------------------Calculate velocity without repeats with constant time frames---------------------------------<a name="7"></a></h2><pre class="codeinput">   <span class="keyword">function</span> InArenaVelocityR=InArenaVelocityR(obj,RepeatedFrames,XMouse,YMouse,ElapTime,InArena)
+      InArenaVelocityR=zeros(length(XMouse),1);
+
+      XMouseWithoutRepeats=XMouse(RepeatedFrames);
+      YMouseWithoutRepeats=YMouse(RepeatedFrames);
+
+      TimeWithoutRepeats=ElapTime;
+
+
+      DiffTime=TimeWithoutRepeats;
+      AuxVelocity=(sqrt(sum([diff(XMouseWithoutRepeats) diff(YMouseWithoutRepeats)].^2,2))); <span class="comment">%velocity in cm/sec</span>
+      AuxVelocity=(AuxVelocity/DiffTime)*100;
+       InArenaVelocityR(RepeatedFrames(2:length(RepeatedFrames),1))=AuxVelocity;
+
+       <span class="comment">%%-----------Final corrections of velocity</span>
+
+       InArenaVelocityR(~InArena,1)=0;<span class="comment">%adjust velocity to zero when it is not in the arena</span>
+
+       InArenaVelocityR(InArenaVelocityR&gt;1000,1)=0; <span class="comment">%in general at the exit of the cages the velocity is  very big and not real</span>
+
+   <span class="keyword">end</span>
+</pre><pre class="codeinput">   <span class="comment">%%-------------- Refill the repeated places with the velocity---</span>
+   <span class="keyword">function</span> InArenaVelocityAllFrames=InArenaVelocityAllFrames(obj,RepeatedFrames,InArenaVelocityR)
+
+       InArenaVelocityAllFrames=InArenaVelocityR;
+
+       <span class="keyword">for</span> i=1:length(RepeatedFrames)
+
+           <span class="keyword">if</span> i==length(RepeatedFrames)
+           InArenaVelocityAllFrames(RepeatedFrames(i):end,1)=InArenaVelocityR(RepeatedFrames(i),1);
+           <span class="keyword">else</span>
+            InArenaVelocityAllFrames(RepeatedFrames(i):RepeatedFrames(i+1)-1,1)=InArenaVelocityR(RepeatedFrames(i),1);
+           <span class="keyword">end</span>
+
+       <span class="keyword">end</span>
+
+
+
+
+   <span class="keyword">end</span>
+</pre><h2>-----------------------------Before determine the mouse activity interpolate the velocity inside the arena  since sometimes the velocity drops to zero and it is not good----------<a name="9"></a></h2><pre class="codeinput"><span class="keyword">function</span> InArenaVelocityRInterp=InArenaVelocityRInterp(obj,RepeatedFrames,InArenaVelocityR,InArenaWithCorrections)
+
+ <span class="comment">%---Clear variables---------------</span>
+ clear <span class="string">VelocitySelect</span>
+ clear <span class="string">AuxVector</span>
+ clear <span class="string">IndexVelNull</span>
+ clear <span class="string">Velocityint</span>
+ clear <span class="string">InArenaVelocityRInterp</span>
+ clear <span class="string">I1</span>
+
+ <span class="comment">%------------------</span>
+
+
+ InArenaVelocityRInterp=InArenaVelocityR;
+
+ VelocitySelect=InArenaVelocityR(RepeatedFrames,1);
+ AuxVector=[1:length(VelocitySelect)]';
+
+
+ IndexVelNull=find(VelocitySelect==0 &amp; InArenaWithCorrections(RepeatedFrames,1)==1);<span class="comment">%found inside the arena null velocities (which are due because repeated frames)-this values will be interpolated</span>
+
+
+
+ <span class="keyword">if</span> ~isempty(IndexVelNull)
+
+VelocitySelect(IndexVelNull,1)=NaN;
+
+<span class="keyword">try</span>
+ Velocityint=interp1(AuxVector,VelocitySelect,AuxVector(IndexVelNull),<span class="string">'cubic'</span>);
+ <span class="comment">%-------Remove very negative values from the velocity-----------------</span>
+ I1=find(Velocityint&lt;-100); <span class="comment">%This happen at the beggining a file.</span>
+ <span class="keyword">if</span> ~isempty(I1)
+ Velocityint(I1)=0;
+ <span class="keyword">end</span>
+
+
+ VelocitySelect(IndexVelNull,1)=Velocityint;
+<span class="keyword">catch</span>
+ <span class="comment">%error interpolation</span>
+ <span class="keyword">end</span>
+ <span class="keyword">end</span>
+ InArenaVelocityRInterp(RepeatedFrames,1)=VelocitySelect;
+
+<span class="keyword">end</span>
+</pre><h2>-------------------------------Determine Activity of the mouse in the arena with the velocity calculated in the arena-----------------------------------------------<a name="10"></a></h2><pre class="codeinput">   <span class="keyword">function</span> InArenaActivity=InArenaActivity(obj,RepeatedFrames,InArenaVelocityR,InArenaWithCorrections)
+
+       RunInd=zeros(length(InArenaVelocityR),1);
+       WalkInd=zeros(length(InArenaVelocityR),1);
+       StopInd=zeros(length(InArenaVelocityR),1);
+
+       <span class="keyword">for</span> i=1:length(RepeatedFrames)
+
+
+
+           <span class="keyword">if</span> (InArenaVelocityR(RepeatedFrames(i)) &gt;= obj.TreshRun &amp; InArenaWithCorrections(RepeatedFrames(i))==1 &amp; InArenaVelocityR(RepeatedFrames(i))&lt;200)<span class="comment">%THE VELOCITY CANNOT BE MORE THAN 200CM/SEC</span>
+               <span class="keyword">if</span> i==length(RepeatedFrames)
+                RunInd( RepeatedFrames(i):end)=1;
+
+               <span class="keyword">else</span>
+               RunInd( RepeatedFrames(i):RepeatedFrames(i+1)-1)=1;
+               <span class="keyword">end</span>
+
+           <span class="keyword">elseif</span> (InArenaVelocityR(RepeatedFrames(i)) &lt; obj.TreshWalk &amp; InArenaWithCorrections(RepeatedFrames(i))==1)
+                <span class="keyword">if</span> i==length(RepeatedFrames)
+                StopInd( RepeatedFrames(i):end)=1;
+
+               <span class="keyword">else</span>
+               StopInd( RepeatedFrames(i):RepeatedFrames(i+1)-1)=1;
+                <span class="keyword">end</span>
+
+           <span class="keyword">elseif</span> (InArenaVelocityR(RepeatedFrames(i)) &gt;= obj.TreshWalk &amp; InArenaVelocityR(RepeatedFrames(i))&lt; obj.TreshRun &amp; InArenaWithCorrections(RepeatedFrames(i))==1)
+
+                <span class="keyword">if</span> i==length(RepeatedFrames)
+                WalkInd(RepeatedFrames(i):end)=1;
+
+               <span class="keyword">else</span>
+               WalkInd(RepeatedFrames(i):RepeatedFrames(i+1)-1)=1;
+
+                <span class="keyword">end</span>
+
+           <span class="keyword">end</span>
+
+
+       <span class="keyword">end</span>
+
+
+     InArenaActivity=[StopInd,WalkInd,RunInd];
+
+
+
+   <span class="keyword">end</span>
+</pre><h2>-----------------------------------Calculate auxiliary parameters for chasing----------------------------------------<a name="11"></a></h2><pre class="codeinput">   <span class="keyword">function</span> InArenaAuxiliary=InArenaAuxiliary(obj,RepeatedFrames,XMouse,YMouse)
+       XMouseWithoutRepeats=XMouse(RepeatedFrames);
+       YMouseWithoutRepeats=YMouse(RepeatedFrames);
+
+       Distance=(sqrt(sum([diff(XMouseWithoutRepeats) diff(YMouseWithoutRepeats)].^2,2)));
+       <span class="comment">%Calculation vector for chasing</span>
+       vectorx=diff( XMouseWithoutRepeats);
+       vectory=diff( YMouseWithoutRepeats);
+       vectorx1=vectorx;
+       vectory1=vectory;
+       Inozero=vectorx~=0 &amp; vectory~=0;
+       vector=[vectorx(Inozero) vectory(Inozero)];
+       norm_vec=sqrt(sum(vector.^2,2));
+       vectorx(Inozero)=vector(:,1)./norm_vec;
+       vectory(Inozero)=vector(:,2)./norm_vec;
+
+       InArenaAuxiliary=[Distance vectorx vectory vectorx1 vectory1];
+   <span class="keyword">end</span>
+</pre><h2>--------------------------Calculate distance to antenna-----------------------<a name="12"></a></h2><pre class="codeinput">   <span class="keyword">function</span> InArenaAntennaDistance=InArenaAntennaDistance(obj,XMouse,YMouse,InArenaDuplic,AntennaNumber)
+       clear <span class="string">N</span>;
+       clear <span class="string">XAntennaSel</span>;
+       clear <span class="string">YAntennaSel</span>;
+
+       N=cellfun(@conversion,AntennaNumber);
+
+       XAntenna=obj.AntennaCoord(N,1);
+       YAntenna=obj.AntennaCoord(N,2);
+
+       InArenaAntennaDistance=zeros(length(InArenaDuplic),1);
+
+       <span class="keyword">if</span> ~isempty((find(InArenaDuplic==1)))
+       Index=find(InArenaDuplic==1);
+       XSelected=XMouse(Index);
+       YSelected=YMouse(Index);
+       XAntennaSel=XAntenna(Index);
+       YAntennaSel=YAntenna(Index);
+
+
+       dist=(sqrt(sum([(XSelected-XAntennaSel) (YSelected-YAntennaSel)].^2,2)));
+       InArenaAntennaDistance(Index,1)=dist;
+       <span class="keyword">end</span>
+   <span class="keyword">end</span>
+</pre><h2>---------------------Arrange repeated and non defined places----------------------<a name="13"></a></h2><pre class="codeinput">   <span class="keyword">function</span> InArenaCorrectedCoord=InArenaCorrectedCoord(obj,X,Y,RepeatedFrames,DistanceToAntenna,IndexDuplicate,IndexNonDefine,TimeFrame,AntennaNumber)
+
+
+   clear <span class="string">XR</span>
+   clear <span class="string">YR</span>
+   clear <span class="string">DistanceToAntennaR</span>
+   clear <span class="string">IndexDuplicateR</span>
+   clear <span class="string">IndexNonDefineR</span>
+   clear <span class="string">TimeFrameR</span>
+   clear <span class="string">I</span>
+   clear <span class="string">I1</span>
+   clear <span class="string">N</span>
+
+   XR=X(RepeatedFrames);
+   YR=Y(RepeatedFrames);
+   DistanceToAntennaR=DistanceToAntenna(RepeatedFrames);
+   IndexDuplicateR=IndexDuplicate(RepeatedFrames);
+   IndexNonDefineR=IndexNonDefine(RepeatedFrames);
+   TimeFrameR=TimeFrame(RepeatedFrames);
+
+   <span class="comment">%------------------- antenna coord.--------------------</span>
+
+    N=cellfun(@conversion,AntennaNumber);
+   AntennaPositionX=obj.AntennaCoord(N,1);
+    AntennaPositionY=obj.AntennaCoord(N,2);
+
+   AntennaPositionXR=AntennaPositionX(RepeatedFrames);
+   AntennaPositionYR=AntennaPositionY(RepeatedFrames);
+
+   <span class="comment">%--------------------------find the duplicates------------</span>
+
+   ILogical1=(IndexDuplicateR==1)&amp;(DistanceToAntennaR&gt;120) &amp; (TimeFrameR&lt;80) ;
+   ILogical2=(IndexDuplicateR==1)&amp;(DistanceToAntennaR&gt;120) &amp; (TimeFrameR&gt;80) ;
+  <span class="comment">%determine what to do with duplicates</span>
+  <span class="keyword">if</span> ~isempty(find( ILogical1==1))
+    I= find( ILogical1==1);
+   XR(I)=AntennaPositionXR(I);   <span class="comment">%in the case the information of antenna is almost sure we replaced the coordinates</span>
+   YR(I)=AntennaPositionYR(I);
+  <span class="keyword">end</span>
+  <span class="keyword">if</span>  ~isempty(find( ILogical2==1))
+      I2=find(ILogical2==1);
+       XR(I2)=NaN;   <span class="comment">%in the case the information of antenna is not sure</span>
+       YR(I2)=NaN;
+
+  <span class="keyword">end</span>
+
+   <span class="comment">%-------------------------------------Correct non-defined positions------------------</span>
+      ILogical3=(IndexNonDefineR==1)&amp;(TimeFrameR&lt;80);
+      ILogical4=(IndexNonDefineR==1)&amp;(TimeFrameR&gt;80);
+  <span class="comment">%determine what to do with duplicates</span>
+  <span class="keyword">if</span> ~isempty(find(ILogical3==1))
+      I3= find(ILogical3==1);
+   XR(I3)=AntennaPositionXR(I3);   <span class="comment">%in the case the information of antenna is almost sure we replaced the coordinates</span>
+   YR(I3)=AntennaPositionYR(I3);
+  <span class="keyword">end</span>
+  <span class="keyword">if</span>  ~isempty(find(ILogical4==1))
+       I4= find(ILogical4==1);
+       XR(I4)=NaN;   <span class="comment">%in the case the information of antenna is not sure</span>
+       YR(I4)=NaN;
+
+  <span class="keyword">end</span>
+   <span class="comment">%----------------------------------Return the repeats coordinates----------------</span>
+   Xaux=zeros(length(X),1);
+   Yaux=zeros(length(Y),1);
+
+
+    Xaux(RepeatedFrames)=XR;
+    Yaux(RepeatedFrames)=YR;
+
+   InArenaCorrectedCoord=[Xaux,Yaux];
+
+
+   <span class="comment">%----------------------------------------------------</span>
+
+
+   <span class="keyword">end</span>
+</pre><h2>-------------------------------Interpolate -----------------------------------------------<a name="14"></a></h2><pre class="codeinput">   <span class="keyword">function</span> InArenaInterpolation=InArenaInterpolation(obj,RepeatedFrames,TimeFrame,X,Y)
+      clear <span class="string">XR</span>;
+      clear <span class="string">YR</span>;
+      clear <span class="string">TimeR</span>;
+      clear <span class="string">XR</span>;
+      clear <span class="string">YR</span>;
+      clear <span class="string">InArenaInterpolation</span>;
+
+      XR=X(RepeatedFrames);
+      YR=Y(RepeatedFrames);
+      TimeR=TimeFrame(RepeatedFrames);
+
+      IndexNaN=find(isnan(XR)==1); <span class="comment">%these are the indexes for interpolation</span>
+
+     <span class="keyword">if</span> ~isempty(IndexNaN) &amp; length(XR)&gt;100 <span class="comment">%for interpolation need enough data</span>
+
+     XRint=interp1(TimeR,XR,TimeR(IndexNaN),<span class="string">'cubic'</span>);
+     YRint=interp1(TimeR,YR,TimeR(IndexNaN),<span class="string">'cubic'</span>);
+
+     XR(IndexNaN)=XRint;<span class="comment">%add the correction</span>
+     YR(IndexNaN)=YRint;
+     <span class="keyword">end</span>
+      <span class="comment">%----------------------------------Return the repeats coordinates----------------</span>
+   Xaux=zeros(length(X),1);
+   Yaux=zeros(length(Y),1);
+
+
+    Xaux(RepeatedFrames)=XR;
+    Yaux(RepeatedFrames)=YR;
+
+   InArenaInterpolation=[Xaux,Yaux];
+
+
+   <span class="comment">%----------------------------------------------------</span>
+
+
+   <span class="keyword">end</span>
+</pre><h2>--------------------------Return repeated frames-----------------------<a name="15"></a></h2><pre class="codeinput">   <span class="keyword">function</span> InArenaAddRepeats=InArenaAddRepeats(obj,RepeatedFrames,Xinterp,Yinterp)
+       XinterpR=Xinterp;
+       YinterpR=Yinterp;
+
+    <span class="keyword">for</span> i=1:length(RepeatedFrames)
+        <span class="keyword">if</span> i==length(RepeatedFrames)
+       XinterpR(RepeatedFrames(i)+1:length(Xinterp))=repmat(Xinterp(RepeatedFrames(i)),(length(Xinterp)-RepeatedFrames(i)),1);
+       YinterpR(RepeatedFrames(i)+1:length(Xinterp))=repmat(Yinterp(RepeatedFrames(i)),(length(Xinterp)-RepeatedFrames(i)),1);
+        <span class="keyword">else</span>
+       XinterpR(RepeatedFrames(i):RepeatedFrames(i+1)-1)=repmat(Xinterp(RepeatedFrames(i)),(RepeatedFrames(i+1)-RepeatedFrames(i)),1);
+       YinterpR(RepeatedFrames(i):RepeatedFrames(i+1)-1)=repmat(Yinterp(RepeatedFrames(i)),(RepeatedFrames(i+1)-RepeatedFrames(i)),1);
+
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+
+    InArenaAddRepeats=[XinterpR,YinterpR];
+
+
+   <span class="keyword">end</span>
+</pre><pre class="codeinput">    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">
+ans = 
+
+  Arena with properties:
+
+    AntennaNumber: []
+         IsHiding: []
+       IsSleeping: []
+     AntennaCoord: []
+         TreshRun: []
+        TreshWalk: []
+
+</pre><h2>%% AUXILIARY FUNCTIONS<a name="17"></a></h2><pre class="codeinput"><span class="keyword">function</span> [EventsBeg EventsEnd]=getEventsIndexesGV(IndLogical,n)
+
+EventsBeg=find(diff(IndLogical)==1)+1;
+EventsEnd=find(diff(IndLogical)==-1);
+
+<span class="keyword">if</span> isempty(EventsBeg)||isempty(EventsEnd)
+    <span class="keyword">if</span>(isempty(EventsBeg)&amp;&amp;~isempty(EventsEnd))
+        EventsBeg=[1;EventsBeg];
+    <span class="keyword">elseif</span>(isempty(EventsEnd)&amp;&amp;~isempty(EventsBeg))
+        EventsEnd=[EventsEnd;n];
+    <span class="keyword">else</span>
+        <span class="keyword">if</span> sum(IndLogical)==n
+            EventsBeg=1;
+            EventsEnd=n;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">else</span>
+    <span class="keyword">if</span>(EventsBeg(1)&gt;EventsEnd(1))
+        EventsBeg=[1;EventsBeg];
+    <span class="keyword">end</span>
+
+    <span class="keyword">if</span>(EventsBeg(end)&gt;EventsEnd(end))
+        EventsEnd=[EventsEnd;n];
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">end</span>
+</pre><h2>Convert to number<a name="18"></a></h2><pre class="codeinput"><span class="keyword">function</span> a=conversion(x)
+
+a=str2num(x);
+
+
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+
+classdef Arena
+%All related with the arena
+    
+    properties
+        AntennaNumber;
+        IsHiding;
+        IsSleeping;
+        AntennaCoord;
+        TreshRun;
+        TreshWalk;
+    end
+    
+    methods
+        %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Determine according to sleeping and hiding when it is at the arenaREPLACE_WITH_DASH_DASH
+        function InArena=InArena(obj)
+        InArena=zeros(length(obj.AntennaNumber),1);  
+        LogicalIndex=~(cell2mat(obj.IsHiding) + cell2mat(obj.IsSleeping));
+        if ~isempty(LogicalIndex)
+        InArena(LogicalIndex)=1;
+        end 
+        end
+        %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHDetermine arena events intervalREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+        function InArenaInterval=InArenaInterval(obj,InArena)
+            
+            [EventsBeg EventsEnd]=getEventsIndexesGV(InArena,length(InArena));  
+            InArenaInterval=[EventsBeg EventsEnd];   
+            
+        end
+        
+        
+        
+        %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Find the duplicates in the coordinatesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+        function InArenaDuplic=InArenaDuplic(obj,X,Y,NumberMouse,LengthMouse,InArena)
+            InArenaDuplic=zeros(length(X(:,1)),1);
+            clear IndexLogical1;
+            clear IndexLogical2;
+            clear IndexLogical3;
+            clear IndexLogical4;
+            clear InArena1
+            
+            if ~isempty(find(InArena)==1)
+            ML=[1:LengthMouse];
+            ML=ML(ML~=NumberMouse); %only the list for compare
+         %Remove Non defined coord. as million and larger than 2000 in the arena
+         IndexLogical4=(X(:,NumberMouse)<2000)& (Y(:,NumberMouse)<2000);
+         InArena1=InArena & IndexLogical4; 
+          
+            
+            XMouse=repmat(X(:,NumberMouse),1,length(ML));
+            YMouse=repmat(Y(:,NumberMouse),1,length(ML));
+            Xother=X(:,ML);
+            Yother=Y(:,ML);
+            
+         
+            
+            IndexLogical1=(XMouse==Xother) & (YMouse==Yother);
+            IndexLogical2=sum(IndexLogical1,2)>0;
+            IndexLogical3=InArena1 & IndexLogical2;
+            
+            if ~isempty(IndexLogical3)
+            InArenaDuplic(IndexLogical3,1)=1;
+            end
+           
+            else
+             InArenaDuplic=zeros(length(X(:,1)),1);  
+        end
+       end
+    
+   %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHFind  Non defined in the arenaREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+   function InArenaNonDefined=InArenaNonDefined(obj,X,Y,NumberMouse,InArena)
+    InArenaNonDefined=zeros(length(InArena),1);
+    clear IndexLogical1;
+    clear IndexLogical2;
+    
+    IndexLogical1=(X(:,NumberMouse)>10000)| (Y(:,NumberMouse)>10000); %consider 20000 and million 
+    IndexLogical2=InArena & IndexLogical1;
+    
+    if ~isempty(IndexLogical2)
+    InArenaNonDefined(IndexLogical2,1)=1;
+    end
+   
+   
+    
+   end
+
+   %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-find intervals of all the duplicatesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+   function InArenaDuplicatesInterval=InArenaDuplicatesInterval(obj,InArenaDuplic)
+       
+       [EventsBeg EventsEnd]=getEventsIndexesGV(InArenaDuplic,length(InArenaDuplic));
+       
+       InArenaDuplicatesInterval=[EventsBeg EventsEnd];
+       
+   end
+   
+   %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Calculate velocity without repeatsREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+   function InArenaVelocity=InArenaVelocity(obj,RepeatedFrames,XMouse,YMouse,ElapTime)
+      InArenaVelocity=zeros(length(XMouse),1);
+      
+      XMouseWithoutRepeats=XMouse(RepeatedFrames);
+      YMouseWithoutRepeats=YMouse(RepeatedFrames);
+      
+      TimeWithoutRepeats=ElapTime(RepeatedFrames);
+    
+      
+      DiffTime=diff(TimeWithoutRepeats);
+      AuxVelocity=(sqrt(sum([diff(XMouseWithoutRepeats) diff(YMouseWithoutRepeats)].^2,2))); %velocity in cm/sec
+      AuxVelocity=(AuxVelocity./DiffTime)*100;
+       InArenaVelocity(RepeatedFrames(2:length(RepeatedFrames),1))=AuxVelocity;
+       
+       
+   end
+   %%    %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Calculate velocity without repeats with constant time framesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+   function InArenaVelocityR=InArenaVelocityR(obj,RepeatedFrames,XMouse,YMouse,ElapTime,InArena)
+      InArenaVelocityR=zeros(length(XMouse),1);
+      
+      XMouseWithoutRepeats=XMouse(RepeatedFrames);
+      YMouseWithoutRepeats=YMouse(RepeatedFrames);
+      
+      TimeWithoutRepeats=ElapTime;
+    
+      
+      DiffTime=TimeWithoutRepeats;
+      AuxVelocity=(sqrt(sum([diff(XMouseWithoutRepeats) diff(YMouseWithoutRepeats)].^2,2))); %velocity in cm/sec
+      AuxVelocity=(AuxVelocity/DiffTime)*100;
+       InArenaVelocityR(RepeatedFrames(2:length(RepeatedFrames),1))=AuxVelocity;
+       
+       %%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Final corrections of velocity
+    
+       InArenaVelocityR(~InArena,1)=0;%adjust velocity to zero when it is not in the arena
+      
+       InArenaVelocityR(InArenaVelocityR>1000,1)=0; %in general at the exit of the cages the velocity is  very big and not real
+     
+   end
+   %% 
+   
+   %%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH Refill the repeated places with the velocityREPLACE_WITH_DASH_DASH-
+   function InArenaVelocityAllFrames=InArenaVelocityAllFrames(obj,RepeatedFrames,InArenaVelocityR)
+       
+       InArenaVelocityAllFrames=InArenaVelocityR;
+       
+       for i=1:length(RepeatedFrames)
+           
+           if i==length(RepeatedFrames)
+           InArenaVelocityAllFrames(RepeatedFrames(i):end,1)=InArenaVelocityR(RepeatedFrames(i),1);
+           else
+            InArenaVelocityAllFrames(RepeatedFrames(i):RepeatedFrames(i+1)-1,1)=InArenaVelocityR(RepeatedFrames(i),1);   
+           end 
+           
+       end
+       
+       
+       
+       
+   end
+   
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Before determine the mouse activity interpolate the velocity inside the arena  since sometimes the velocity drops to zero and it is not goodREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+function InArenaVelocityRInterp=InArenaVelocityRInterp(obj,RepeatedFrames,InArenaVelocityR,InArenaWithCorrections)
+    
+ %REPLACE_WITH_DASH_DASH-Clear variablesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+ clear VelocitySelect
+ clear AuxVector
+ clear IndexVelNull
+ clear Velocityint
+ clear InArenaVelocityRInterp
+ clear I1
+ 
+ %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+    
+ 
+ InArenaVelocityRInterp=InArenaVelocityR;   
+    
+ VelocitySelect=InArenaVelocityR(RepeatedFrames,1);
+ AuxVector=[1:length(VelocitySelect)]';
+ 
+ 
+ IndexVelNull=find(VelocitySelect==0 & InArenaWithCorrections(RepeatedFrames,1)==1);%found inside the arena null velocities (which are due because repeated frames)-this values will be interpolated
+ 
+
+ 
+ if ~isempty(IndexVelNull)
+
+VelocitySelect(IndexVelNull,1)=NaN;
+
+try
+ Velocityint=interp1(AuxVector,VelocitySelect,AuxVector(IndexVelNull),'cubic');
+ %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Remove very negative values from the velocityREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+ I1=find(Velocityint<-100); %This happen at the beggining a file.
+ if ~isempty(I1)
+ Velocityint(I1)=0;    
+ end
+ 
+ 
+ VelocitySelect(IndexVelNull,1)=Velocityint;
+catch
+ %error interpolation
+ end
+ end
+ InArenaVelocityRInterp(RepeatedFrames,1)=VelocitySelect;
+    
+end
+   
+   
+   %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Determine Activity of the mouse in the arena with the velocity calculated in the arenaREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+   function InArenaActivity=InArenaActivity(obj,RepeatedFrames,InArenaVelocityR,InArenaWithCorrections)
+       
+       RunInd=zeros(length(InArenaVelocityR),1);
+       WalkInd=zeros(length(InArenaVelocityR),1);
+       StopInd=zeros(length(InArenaVelocityR),1);
+        
+       for i=1:length(RepeatedFrames)
+          
+
+         
+           if (InArenaVelocityR(RepeatedFrames(i)) >= obj.TreshRun & InArenaWithCorrections(RepeatedFrames(i))==1 & InArenaVelocityR(RepeatedFrames(i))<200)%THE VELOCITY CANNOT BE MORE THAN 200CM/SEC
+               if i==length(RepeatedFrames)
+                RunInd( RepeatedFrames(i):end)=1;   
+                   
+               else    
+               RunInd( RepeatedFrames(i):RepeatedFrames(i+1)-1)=1;
+               end
+               
+           elseif (InArenaVelocityR(RepeatedFrames(i)) < obj.TreshWalk & InArenaWithCorrections(RepeatedFrames(i))==1)
+                if i==length(RepeatedFrames)
+                StopInd( RepeatedFrames(i):end)=1;   
+                   
+               else  
+               StopInd( RepeatedFrames(i):RepeatedFrames(i+1)-1)=1;
+                end
+               
+           elseif (InArenaVelocityR(RepeatedFrames(i)) >= obj.TreshWalk & InArenaVelocityR(RepeatedFrames(i))< obj.TreshRun & InArenaWithCorrections(RepeatedFrames(i))==1)
+               
+                if i==length(RepeatedFrames)
+                WalkInd(RepeatedFrames(i):end)=1;   
+                   
+               else  
+               WalkInd(RepeatedFrames(i):RepeatedFrames(i+1)-1)=1;
+               
+                end
+               
+           end
+           
+           
+       end
+       
+       
+     InArenaActivity=[StopInd,WalkInd,RunInd];
+     
+     
+       
+   end
+   
+   
+   
+   %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Calculate auxiliary parameters for chasingREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+   function InArenaAuxiliary=InArenaAuxiliary(obj,RepeatedFrames,XMouse,YMouse)
+       XMouseWithoutRepeats=XMouse(RepeatedFrames);
+       YMouseWithoutRepeats=YMouse(RepeatedFrames); 
+       
+       Distance=(sqrt(sum([diff(XMouseWithoutRepeats) diff(YMouseWithoutRepeats)].^2,2)));
+       %Calculation vector for chasing
+       vectorx=diff( XMouseWithoutRepeats);
+       vectory=diff( YMouseWithoutRepeats);
+       vectorx1=vectorx;
+       vectory1=vectory;
+       Inozero=vectorx~=0 & vectory~=0;
+       vector=[vectorx(Inozero) vectory(Inozero)]; 
+       norm_vec=sqrt(sum(vector.^2,2));
+       vectorx(Inozero)=vector(:,1)./norm_vec;
+       vectory(Inozero)=vector(:,2)./norm_vec;
+       
+       InArenaAuxiliary=[Distance vectorx vectory vectorx1 vectory1];
+   end
+   %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHCalculate distance to antennaREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+   function InArenaAntennaDistance=InArenaAntennaDistance(obj,XMouse,YMouse,InArenaDuplic,AntennaNumber)
+       clear N;
+       clear XAntennaSel;
+       clear YAntennaSel;
+       
+       N=cellfun(@conversion,AntennaNumber);
+       
+       XAntenna=obj.AntennaCoord(N,1);
+       YAntenna=obj.AntennaCoord(N,2);
+       
+       InArenaAntennaDistance=zeros(length(InArenaDuplic),1);
+     
+       if ~isempty((find(InArenaDuplic==1)))
+       Index=find(InArenaDuplic==1);
+       XSelected=XMouse(Index);
+       YSelected=YMouse(Index);
+       XAntennaSel=XAntenna(Index);
+       YAntennaSel=YAntenna(Index);
+       
+       
+       dist=(sqrt(sum([(XSelected-XAntennaSel) (YSelected-YAntennaSel)].^2,2)));
+       InArenaAntennaDistance(Index,1)=dist;
+       end
+   end
+   %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Arrange repeated and non defined placesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+   function InArenaCorrectedCoord=InArenaCorrectedCoord(obj,X,Y,RepeatedFrames,DistanceToAntenna,IndexDuplicate,IndexNonDefine,TimeFrame,AntennaNumber)
+       
+           
+   clear XR
+   clear YR
+   clear DistanceToAntennaR
+   clear IndexDuplicateR
+   clear IndexNonDefineR
+   clear TimeFrameR
+   clear I
+   clear I1
+   clear N
+       
+   XR=X(RepeatedFrames);
+   YR=Y(RepeatedFrames);
+   DistanceToAntennaR=DistanceToAntenna(RepeatedFrames);
+   IndexDuplicateR=IndexDuplicate(RepeatedFrames);
+   IndexNonDefineR=IndexNonDefine(RepeatedFrames);
+   TimeFrameR=TimeFrame(RepeatedFrames);
+   
+   %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH- antenna coord.REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+   
+    N=cellfun(@conversion,AntennaNumber);
+   AntennaPositionX=obj.AntennaCoord(N,1);
+    AntennaPositionY=obj.AntennaCoord(N,2);
+   
+   AntennaPositionXR=AntennaPositionX(RepeatedFrames);
+   AntennaPositionYR=AntennaPositionY(RepeatedFrames);
+   
+   %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHfind the duplicatesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+   
+   ILogical1=(IndexDuplicateR==1)&(DistanceToAntennaR>120) & (TimeFrameR<80) ;
+   ILogical2=(IndexDuplicateR==1)&(DistanceToAntennaR>120) & (TimeFrameR>80) ;
+  %determine what to do with duplicates
+  if ~isempty(find( ILogical1==1))
+    I= find( ILogical1==1);
+   XR(I)=AntennaPositionXR(I);   %in the case the information of antenna is almost sure we replaced the coordinates
+   YR(I)=AntennaPositionYR(I);   
+  end
+  if  ~isempty(find( ILogical2==1))
+      I2=find(ILogical2==1);
+       XR(I2)=NaN;   %in the case the information of antenna is not sure
+       YR(I2)=NaN;  
+      
+  end
+   
+   %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Correct non-defined positionsREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+      ILogical3=(IndexNonDefineR==1)&(TimeFrameR<80);
+      ILogical4=(IndexNonDefineR==1)&(TimeFrameR>80);
+  %determine what to do with duplicates
+  if ~isempty(find(ILogical3==1))
+      I3= find(ILogical3==1);
+   XR(I3)=AntennaPositionXR(I3);   %in the case the information of antenna is almost sure we replaced the coordinates
+   YR(I3)=AntennaPositionYR(I3);   
+  end
+  if  ~isempty(find(ILogical4==1))
+       I4= find(ILogical4==1);
+       XR(I4)=NaN;   %in the case the information of antenna is not sure
+       YR(I4)=NaN;  
+      
+  end
+   %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHReturn the repeats coordinatesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+   Xaux=zeros(length(X),1);
+   Yaux=zeros(length(Y),1);
+    
+   
+    Xaux(RepeatedFrames)=XR;
+    Yaux(RepeatedFrames)=YR;
+   
+   InArenaCorrectedCoord=[Xaux,Yaux];
+   
+   
+   %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+   
+   
+   end
+   %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Interpolate REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+   
+   function InArenaInterpolation=InArenaInterpolation(obj,RepeatedFrames,TimeFrame,X,Y)
+      clear XR;
+      clear YR;
+      clear TimeR;
+      clear XR;
+      clear YR;
+      clear InArenaInterpolation;
+      
+      XR=X(RepeatedFrames);
+      YR=Y(RepeatedFrames);
+      TimeR=TimeFrame(RepeatedFrames);
+      
+      IndexNaN=find(isnan(XR)==1); %these are the indexes for interpolation
+     
+     if ~isempty(IndexNaN) & length(XR)>100 %for interpolation need enough data
+        
+     XRint=interp1(TimeR,XR,TimeR(IndexNaN),'cubic');
+     YRint=interp1(TimeR,YR,TimeR(IndexNaN),'cubic');  
+     
+     XR(IndexNaN)=XRint;%add the correction
+     YR(IndexNaN)=YRint;
+     end
+      %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHReturn the repeats coordinatesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+   Xaux=zeros(length(X),1);
+   Yaux=zeros(length(Y),1);
+    
+   
+    Xaux(RepeatedFrames)=XR;
+    Yaux(RepeatedFrames)=YR;
+   
+   InArenaInterpolation=[Xaux,Yaux];
+   
+   
+   %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+     
+     
+   end
+   %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHReturn repeated framesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+   function InArenaAddRepeats=InArenaAddRepeats(obj,RepeatedFrames,Xinterp,Yinterp)
+       XinterpR=Xinterp;
+       YinterpR=Yinterp;
+       
+    for i=1:length(RepeatedFrames)
+        if i==length(RepeatedFrames)
+       XinterpR(RepeatedFrames(i)+1:length(Xinterp))=repmat(Xinterp(RepeatedFrames(i)),(length(Xinterp)-RepeatedFrames(i)),1); 
+       YinterpR(RepeatedFrames(i)+1:length(Xinterp))=repmat(Yinterp(RepeatedFrames(i)),(length(Xinterp)-RepeatedFrames(i)),1);  
+        else
+       XinterpR(RepeatedFrames(i):RepeatedFrames(i+1)-1)=repmat(Xinterp(RepeatedFrames(i)),(RepeatedFrames(i+1)-RepeatedFrames(i)),1); 
+       YinterpR(RepeatedFrames(i):RepeatedFrames(i+1)-1)=repmat(Yinterp(RepeatedFrames(i)),(RepeatedFrames(i+1)-RepeatedFrames(i)),1);  
+            
+        end
+    end
+     
+    
+    InArenaAddRepeats=[XinterpR,YinterpR];
+       
+       
+   end
+   
+   
+    end
+end
+%% %% AUXILIARY FUNCTIONS
+function [EventsBeg EventsEnd]=getEventsIndexesGV(IndLogical,n)
+
+EventsBeg=find(diff(IndLogical)==1)+1;
+EventsEnd=find(diff(IndLogical)==-1);
+
+if isempty(EventsBeg)||isempty(EventsEnd)
+    if(isempty(EventsBeg)&&~isempty(EventsEnd))
+        EventsBeg=[1;EventsBeg];
+    elseif(isempty(EventsEnd)&&~isempty(EventsBeg))
+        EventsEnd=[EventsEnd;n];
+    else
+        if sum(IndLogical)==n
+            EventsBeg=1;
+            EventsEnd=n;
+        end
+    end
+else
+    if(EventsBeg(1)>EventsEnd(1))
+        EventsBeg=[1;EventsBeg];
+    end
+    
+    if(EventsBeg(end)>EventsEnd(end))
+        EventsEnd=[EventsEnd;n];
+    end
+end
+
+end
+
+%% Convert to number
+
+function a=conversion(x)
+
+a=str2num(x);
+
+
+end
+
+##### SOURCE END #####
+--></body></html>

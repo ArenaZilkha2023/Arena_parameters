@@ -1,0 +1,230 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>GetEvents</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-06-25"><meta name="DC.source" content="GetEvents.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#4">------------------------------------Read mat files----------------------</a></li><li><a href="#5">-------------------------------Loop over the mat files---------------------------------------</a></li><li><a href="#7">-----------------------------loop over the mice---------------------------</a></li><li><a href="#8">clear variables</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> AllChasing = GetEvents
+</pre><pre class="codeinput"><span class="comment">%Create Excel file with chasing events</span>
+</pre><pre class="codeinput"><span class="comment">%%------------------Parameters----------------------------</span>
+Params=ParametersComputeAll;
+</pre><pre class="codeoutput error">Reference to non-existent field 'editAllRFID2'.
+
+Error in ParametersComputeAll (line 8)
+Params.exp_name=get(h.editAllRFID2,'string') %load experiment;
+
+Error in GetEvents (line 5)
+Params=ParametersComputeAll;
+</pre><h2>------------------------------------Read mat files----------------------<a name="4"></a></h2><pre class="codeinput">MatFilesobj=FilesTreat; <span class="comment">%use class Files Treat</span>
+MatFilesobj.directory=Params.resultsDir; <span class="comment">%where are the results</span>
+MatFilesobj.extension=<span class="string">'.mat'</span>;
+NumMat=MatFilesobj.NumFiles(MatFilesobj.ListFiles);
+<span class="comment">% DateFiles=MatFilesobj.DateFiles(MatFilesobj.ListFiles,NumMat);</span>
+AllFiles=MatFilesobj.ListFiles;
+AllChasing={};
+</pre><h2>-------------------------------Loop over the mat files---------------------------------------<a name="5"></a></h2><pre class="codeinput"><span class="keyword">for</span> i=1:NumMat <span class="comment">%loop over the mat files</span>
+</pre><pre class="codeinput">load(strcat(Params.resultsDir,<span class="string">'\'</span>,AllFiles(i).name));
+names=Locomotion.miceList;
+clear <span class="string">AllChasingAux</span>
+AllChasingAux={};
+</pre><h2>-----------------------------loop over the mice---------------------------<a name="7"></a></h2><pre class="codeinput"><span class="keyword">for</span> doing=1:length(names)
+</pre><h2>clear variables<a name="8"></a></h2><pre class="codeinput">    clear <span class="string">AuxMatrix</span>
+
+    clear <span class="string">chased</span>
+    clear <span class="string">BegFrame</span>
+    clear <span class="string">EndFrame</span>
+    clear <span class="string">chasing</span>
+
+    clear <span class="string">ExpDate</span>
+    clear <span class="string">InitialTime</span>
+    clear <span class="string">FinalTime</span>
+    clear <span class="string">CorrectSign</span>
+
+    <span class="keyword">if</span> ~isempty(Locomotion.ChasingAll{1,doing})
+
+
+      chased=Locomotion.ChasingAll{1,doing}(:,3)
+
+      BegFrameA=Locomotion.ChasingAll{1,doing}(:,1);
+      BegFrame=Locomotion.RepeatedFrames(BegFrameA);<span class="comment">%real frame</span>
+      EndFrameA=Locomotion.ChasingAll{1,doing}(:,2);
+      EndFrame=Locomotion.RepeatedFrames(EndFrameA);<span class="comment">%real frame</span>
+
+      chasing=repmat(doing,length(chased),1);
+      ExpDate=repmat(AllFiles(i).name,length(chased),1);
+      InitialTime=Locomotion.TimeWithoutRepeats(BegFrameA,1);
+      FinalTime=Locomotion.TimeWithoutRepeats(EndFrameA,1);
+      CorrectSign=repmat(<span class="string">'Y'</span>,length(chased),1); <span class="comment">%add Y to be corrected later</span>
+      MarkSmallEvents=Locomotion.ChasingAll{1,doing}(:,6);
+
+      AuxMatrix=cat(2,cellstr(ExpDate),InitialTime,FinalTime,strcat(<span class="string">''''</span>,(names(chasing))',<span class="string">''''</span>),strcat(<span class="string">''''</span>,(names(chased))',<span class="string">''''</span>),cellstr(CorrectSign),num2cell(BegFrame),num2cell(EndFrame),num2cell(MarkSmallEvents));
+
+<span class="comment">%      AuxMatrix=sortrows(AuxMatrix,7);%sort according to column seven</span>
+     AllChasingAux=[AllChasingAux; AuxMatrix];
+
+
+    <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+ <span class="comment">%%-------------------------------Sort after each file------------</span>
+ <span class="keyword">if</span> ~isempty(AllChasingAux)
+ A=AllChasingAux(:,2)
+ TimeAux=datenum(AllChasingAux(:,2));
+ [B,I]=sort(TimeAux);
+ AllChasingAux=AllChasingAux(I,:); <span class="comment">%sort for each date</span>
+ AllChasing=[AllChasing; AllChasingAux];
+ <span class="keyword">else</span>
+     <span class="keyword">continue</span>;
+ <span class="keyword">end</span>
+ i
+</pre><pre class="codeinput">    <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function AllChasing = GetEvents
+%Create Excel file with chasing events
+%% 
+%%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHParametersREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+Params=ParametersComputeAll;
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHRead mat filesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+MatFilesobj=FilesTreat; %use class Files Treat
+MatFilesobj.directory=Params.resultsDir; %where are the results
+MatFilesobj.extension='.mat';
+NumMat=MatFilesobj.NumFiles(MatFilesobj.ListFiles);
+% DateFiles=MatFilesobj.DateFiles(MatFilesobj.ListFiles,NumMat);
+AllFiles=MatFilesobj.ListFiles;
+AllChasing={};
+
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Loop over the mat filesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+for i=1:NumMat %loop over the mat files
+load(strcat(Params.resultsDir,'\',AllFiles(i).name));
+names=Locomotion.miceList;
+clear AllChasingAux
+AllChasingAux={};
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-loop over the miceREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+for doing=1:length(names)
+    %% clear variables
+    clear AuxMatrix
+ 
+    clear chased
+    clear BegFrame
+    clear EndFrame
+    clear chasing
+    
+    clear ExpDate
+    clear InitialTime
+    clear FinalTime
+    clear CorrectSign
+    
+    if ~isempty(Locomotion.ChasingAll{1,doing})
+      
+        
+      chased=Locomotion.ChasingAll{1,doing}(:,3)
+      
+      BegFrameA=Locomotion.ChasingAll{1,doing}(:,1);
+      BegFrame=Locomotion.RepeatedFrames(BegFrameA);%real frame
+      EndFrameA=Locomotion.ChasingAll{1,doing}(:,2);
+      EndFrame=Locomotion.RepeatedFrames(EndFrameA);%real frame
+      
+      chasing=repmat(doing,length(chased),1);
+      ExpDate=repmat(AllFiles(i).name,length(chased),1);
+      InitialTime=Locomotion.TimeWithoutRepeats(BegFrameA,1);
+      FinalTime=Locomotion.TimeWithoutRepeats(EndFrameA,1);
+      CorrectSign=repmat('Y',length(chased),1); %add Y to be corrected later
+      MarkSmallEvents=Locomotion.ChasingAll{1,doing}(:,6);
+      
+      AuxMatrix=cat(2,cellstr(ExpDate),InitialTime,FinalTime,strcat('''',(names(chasing))',''''),strcat('''',(names(chased))',''''),cellstr(CorrectSign),num2cell(BegFrame),num2cell(EndFrame),num2cell(MarkSmallEvents));
+
+%      AuxMatrix=sortrows(AuxMatrix,7);%sort according to column seven
+     AllChasingAux=[AllChasingAux; AuxMatrix]; 
+        
+        
+    end    
+
+
+
+
+end
+ %%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Sort after each fileREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+ if ~isempty(AllChasingAux)
+ A=AllChasingAux(:,2)
+ TimeAux=datenum(AllChasingAux(:,2));
+ [B,I]=sort(TimeAux);
+ AllChasingAux=AllChasingAux(I,:); %sort for each date
+ AllChasing=[AllChasing; AllChasingAux]; 
+ else
+     continue;
+ end
+ i
+    end
+%% 
+
+
+end
+
+
+
+
+##### SOURCE END #####
+--></body></html>

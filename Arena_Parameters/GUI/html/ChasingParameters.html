@@ -1,0 +1,195 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>ChasingParameters</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-11"><meta name="DC.source" content="ChasingParameters.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">Creation of a figure</a></li><li><a href="#6">Retrieve Data</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> [ output_args ] = ChasingParameters( ~,~ )
+</pre><pre class="codeinput"><span class="comment">%Panel for chasing parameters</span>
+
+<span class="keyword">global</span> h1
+<span class="keyword">global</span> angle1
+<span class="keyword">global</span> angle2
+<span class="keyword">global</span> par1
+<span class="keyword">global</span> par2
+<span class="keyword">global</span> par3
+<span class="keyword">global</span> par4
+<span class="keyword">global</span> par5
+</pre><h2>Creation of a figure<a name="3"></a></h2><pre class="codeinput">h1.Layout1= figure(<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="string">'MenuBar'</span>,<span class="string">'None'</span>,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+                                   <span class="string">'Toolbar'</span>,<span class="string">'none'</span>,<span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>,<span class="keyword">...</span>
+                                    <span class="string">'Color'</span>,get(0,<span class="string">'defaultuicontrolbackgroundcolor'</span>),<span class="keyword">...</span>
+                                    <span class="string">'name'</span>,<span class="string">'Chasing Parameters'</span>,<span class="keyword">...</span>
+                                    <span class="string">'Position'</span>,[320 320 500 500]);
+</pre><img vspace="5" hspace="5" src="ChasingParameters_01.png" alt=""> <pre class="codeinput">  uicontrol(h1.Layout1,<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'String'</span>,<span class="string">'Angle(degree) between line joining mice 1-2 and movement vector of mice 1'</span>,<span class="string">'position'</span>,[10,450,200,50],<span class="string">'FontSize'</span>,9,<span class="string">'ForegroundColor'</span>,<span class="string">'blue'</span>);
+  h1.editChasingAng1=uicontrol(h1.Layout1,<span class="string">'Style'</span>,<span class="string">'edit'</span>,<span class="string">'String'</span>,<span class="string">'20'</span>,<span class="string">'position'</span>,[250,470,60,20]);
+
+   uicontrol(h1.Layout1,<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'String'</span>,<span class="string">'Angle(degree) between movement vector of mice 1 and movement vector of mice 2'</span>,<span class="string">'position'</span>,[10,380,200,50],<span class="string">'FontSize'</span>,9,<span class="string">'ForegroundColor'</span>,<span class="string">'blue'</span>);
+  h1.editChasingAng2=uicontrol(h1.Layout1,<span class="string">'Style'</span>,<span class="string">'edit'</span>,<span class="string">'String'</span>,<span class="string">'20'</span>,<span class="string">'position'</span>,[250,400,60,20]);
+
+   uicontrol(h1.Layout1,<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'String'</span>,<span class="string">'Minimum path in (mm) to be considered as chasing'</span>,<span class="string">'position'</span>,[10,310,200,50],<span class="string">'FontSize'</span>,9,<span class="string">'ForegroundColor'</span>,<span class="string">'blue'</span>);
+  h1.editpar1=uicontrol(h1.Layout1,<span class="string">'Style'</span>,<span class="string">'edit'</span>,<span class="string">'String'</span>,<span class="string">'200'</span>,<span class="string">'position'</span>,[250,330,60,20]);
+
+   uicontrol(h1.Layout1,<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'String'</span>,<span class="string">'Maximum distance between trajectory of the mice 1-2 to be considered chasing (mm)'</span>,<span class="string">'position'</span>,[10,240,200,50],<span class="string">'FontSize'</span>,9,<span class="string">'ForegroundColor'</span>,<span class="string">'blue'</span>);
+  h1.editpar2=uicontrol(h1.Layout1,<span class="string">'Style'</span>,<span class="string">'edit'</span>,<span class="string">'String'</span>,<span class="string">'400'</span>,<span class="string">'position'</span>,[250,250,60,20]);
+
+   uicontrol(h1.Layout1,<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'String'</span>,<span class="string">'Velocity Threshold of mice 1-2 (cm/sec)'</span>,<span class="string">'position'</span>,[10,170,200,50],<span class="string">'FontSize'</span>,9,<span class="string">'ForegroundColor'</span>,<span class="string">'blue'</span>);
+  h1.editpar3=uicontrol(h1.Layout1,<span class="string">'Style'</span>,<span class="string">'edit'</span>,<span class="string">'String'</span>,<span class="string">'10'</span>,<span class="string">'position'</span>,[250,190,60,20]);
+
+     uicontrol(h1.Layout1,<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'String'</span>,<span class="string">'Maximum number of frames allowed to join events'</span>,<span class="string">'position'</span>,[10,100,200,50],<span class="string">'FontSize'</span>,9,<span class="string">'ForegroundColor'</span>,<span class="string">'blue'</span>);
+  h1.editpar4=uicontrol(h1.Layout1,<span class="string">'Style'</span>,<span class="string">'edit'</span>,<span class="string">'String'</span>,<span class="string">'100'</span>,<span class="string">'position'</span>,[250,120,60,20]);
+
+       uicontrol(h1.Layout1,<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'String'</span>,<span class="string">'Maximum trajectory allowed to join events (mm)h'</span>,<span class="string">'position'</span>,[10,30,200,50],<span class="string">'FontSize'</span>,9,<span class="string">'ForegroundColor'</span>,<span class="string">'blue'</span>);
+ h1.editpar5=uicontrol(h1.Layout1,<span class="string">'Style'</span>,<span class="string">'edit'</span>,<span class="string">'String'</span>,<span class="string">'200'</span>,<span class="string">'position'</span>,[250,60,60,20]);
+
+ uicontrol(h1.Layout1,<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'String'</span>,<span class="string">'Ok'</span>,<span class="string">'background'</span>,<span class="string">'magenta'</span>,<span class="string">'position'</span>,[400,30,60,20],<span class="string">'callback'</span>,@RetrieveData);
+</pre><img vspace="5" hspace="5" src="ChasingParameters_02.png" alt=""> <pre class="codeinput"><span class="keyword">end</span>
+</pre><h2>Retrieve Data<a name="6"></a></h2><pre class="codeinput"><span class="keyword">function</span> RetrieveData(~,~)
+<span class="keyword">global</span> h1
+<span class="keyword">global</span> angle1
+<span class="keyword">global</span> angle2
+<span class="keyword">global</span> par1
+<span class="keyword">global</span> par2
+<span class="keyword">global</span> par3
+<span class="keyword">global</span> par4
+<span class="keyword">global</span> par5
+
+angle1=str2num(get(h1.editChasingAng1,<span class="string">'string'</span>));
+angle2=str2num(get(h1.editChasingAng2,<span class="string">'string'</span>));
+par1=str2num(get(h1.editpar1,<span class="string">'string'</span>));
+par2=str2num(get(h1.editpar1,<span class="string">'string'</span>));
+par3=str2num(get(h1.editpar1,<span class="string">'string'</span>));
+par4=str2num(get(h1.editpar1,<span class="string">'string'</span>));
+par5=str2num(get(h1.editpar1,<span class="string">'string'</span>));
+
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function [ output_args ] = ChasingParameters( ~,~ )
+%Panel for chasing parameters
+
+global h1
+global angle1
+global angle2
+global par1
+global par2
+global par3
+global par4
+global par5
+%% Creation of a figure
+h1.Layout1= figure('Visible','on','MenuBar','None','NumberTitle','off',...
+                                   'Toolbar','none','HandleVisibility','callback',...
+                                    'Color',get(0,'defaultuicontrolbackgroundcolor'),...
+                                    'name','Chasing Parameters',...
+                                    'Position',[320 320 500 500]);
+                                
+  %%
+  uicontrol(h1.Layout1,'Style','text','String','Angle(degree) between line joining mice 1-2 and movement vector of mice 1','position',[10,450,200,50],'FontSize',9,'ForegroundColor','blue');  
+  h1.editChasingAng1=uicontrol(h1.Layout1,'Style','edit','String','20','position',[250,470,60,20]);                                
+
+   uicontrol(h1.Layout1,'Style','text','String','Angle(degree) between movement vector of mice 1 and movement vector of mice 2','position',[10,380,200,50],'FontSize',9,'ForegroundColor','blue');  
+  h1.editChasingAng2=uicontrol(h1.Layout1,'Style','edit','String','20','position',[250,400,60,20]); 
+
+   uicontrol(h1.Layout1,'Style','text','String','Minimum path in (mm) to be considered as chasing','position',[10,310,200,50],'FontSize',9,'ForegroundColor','blue');  
+  h1.editpar1=uicontrol(h1.Layout1,'Style','edit','String','200','position',[250,330,60,20]); 
+
+   uicontrol(h1.Layout1,'Style','text','String','Maximum distance between trajectory of the mice 1-2 to be considered chasing (mm)','position',[10,240,200,50],'FontSize',9,'ForegroundColor','blue');  
+  h1.editpar2=uicontrol(h1.Layout1,'Style','edit','String','400','position',[250,250,60,20]); 
+  
+   uicontrol(h1.Layout1,'Style','text','String','Velocity Threshold of mice 1-2 (cm/sec)','position',[10,170,200,50],'FontSize',9,'ForegroundColor','blue');  
+  h1.editpar3=uicontrol(h1.Layout1,'Style','edit','String','10','position',[250,190,60,20]);
+  
+     uicontrol(h1.Layout1,'Style','text','String','Maximum number of frames allowed to join events','position',[10,100,200,50],'FontSize',9,'ForegroundColor','blue');  
+  h1.editpar4=uicontrol(h1.Layout1,'Style','edit','String','100','position',[250,120,60,20]);
+  
+       uicontrol(h1.Layout1,'Style','text','String','Maximum trajectory allowed to join events (mm)h','position',[10,30,200,50],'FontSize',9,'ForegroundColor','blue');  
+ h1.editpar5=uicontrol(h1.Layout1,'Style','edit','String','200','position',[250,60,60,20]);
+ 
+ uicontrol(h1.Layout1,'Style','pushbutton','String','Ok','background','magenta','position',[400,30,60,20],'callback',@RetrieveData);
+  
+end
+
+%% Retrieve Data
+function RetrieveData(~,~)
+global h1
+global angle1
+global angle2
+global par1
+global par2
+global par3
+global par4
+global par5
+
+angle1=str2num(get(h1.editChasingAng1,'string'));
+angle2=str2num(get(h1.editChasingAng2,'string'));
+par1=str2num(get(h1.editpar1,'string'));
+par2=str2num(get(h1.editpar1,'string'));
+par3=str2num(get(h1.editpar1,'string'));
+par4=str2num(get(h1.editpar1,'string'));
+par5=str2num(get(h1.editpar1,'string'));
+
+end
+
+##### SOURCE END #####
+--></body></html>

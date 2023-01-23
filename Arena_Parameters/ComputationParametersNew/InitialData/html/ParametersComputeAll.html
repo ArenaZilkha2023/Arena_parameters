@@ -1,0 +1,846 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>ParametersComputeAll</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-11-20"><meta name="DC.source" content="ParametersComputeAll.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">------------------Uicontrol parameters--------------</a></li><li><a href="#4">-------------------------Mice identity--------------------</a></li><li><a href="#5">--------------------------------------Getting the cooordinates of the arena-------------------------------------</a></li><li><a href="#7">%  %% ----------------Insert antenna cooordinates in mm--</a></li><li><a href="#8">Parameters related with chasing</a></li><li><a href="#9">Parameters for distinguish mouse activity (either stop,walk or run)</a></li><li><a href="#10">------------Parameters related with eating/drinking</a></li><li><a href="#13">Parameters related with avoidance</a></li><li><a href="#14">----Parameters related with approaching-----------------</a></li><li><a href="#16">Parameters for running for walking etc.. found in ethograms script</a></li><li><a href="#17">Parameters for elorating</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> Params=ParametersComputeAll()
+</pre><pre class="codeinput"><span class="comment">%%----------------Variables------------------</span>
+<span class="keyword">global</span> h
+</pre><h2>------------------Uicontrol parameters--------------<a name="3"></a></h2><pre class="codeinput">Params.exp_name=get(h.editAllRFID2,<span class="string">'string'</span>) <span class="comment">%load experiment;</span>
+DIR=get( h.editAllRFID1,<span class="string">'string'</span>); <span class="comment">%get the directory of all the experimental data</span>
+
+
+Params.DataDir=fullfile(DIR, <span class="string">'\'</span>, [Params.exp_name <span class="string">'Video'</span>]);<span class="comment">%where is the csv data</span>
+Params.DataRFID=fullfile(DIR, <span class="string">'\'</span>, [Params.exp_name <span class="string">'RFID'</span>]);<span class="comment">%where is the RFID data</span>
+Params.DataMissingPosition=fullfile(DIR, <span class="string">'\'</span>, [Params.exp_name <span class="string">'MissingPosition'</span>]);<span class="comment">%where is the Missing position</span>
+
+Params.resultsDir=fullfile(DIR, <span class="string">'\'</span>,[Params.exp_name <span class="string">'ResultsMatlab'</span>]);<span class="comment">%where are the results</span>
+Params.ForSomeFile=get( h.Checkbox2,<span class="string">'Value'</span>); <span class="comment">%if there is taking separated files</span>
+Params.ForMissingPosition=get( h.Checkbox3,<span class="string">'Value'</span>); <span class="comment">%if we consider the csv file which contains information of missing positions(In Erans program)</span>
+
+contents = get(h.popupAll,<span class="string">'String'</span>); <span class="comment">%to get if the user wants information of either males or females</span>
+Params.ChoiceList= contents{get(h.popupAll,<span class="string">'Value'</span>)};
+Params.SaveDirectory=get(h.edit3x,<span class="string">'string'</span>);
+</pre><pre class="codeoutput error">Error using matlab.ui.control.UIControl/get
+Invalid or deleted object.
+
+Error in ParametersComputeAll (line 8)
+Params.exp_name=get(h.editAllRFID2,'string') %load experiment;
+</pre><h2>-------------------------Mice identity--------------------<a name="4"></a></h2><pre class="codeinput"><span class="comment">% numbers of mice to be displayed:</span>
+Params.mices = <span class="string">'all'</span>;
+
+<span class="comment">% Mice identity that it is on excel file</span>
+<span class="comment">%the sheet is from the gui</span>
+contents = get(h.popupmenuRFID1,<span class="string">'String'</span>);
+popupmenu1value = contents{get(h.popupmenuRFID1,<span class="string">'Value'</span>)};
+sheet= popupmenu1value;
+
+[miceType,malesList,femalesList, mice_3_chips,malesListRibs,femalesListRibs,malesListRibsSecond,femalesListRibsSecond] = getMiceIDsComputeAll(DIR,sheet);
+
+Params.miceType = miceType;
+Params.malesList = malesList;
+Params.femalesList = femalesList;
+Params.mice_3_chips = mice_3_chips;
+Params.malesListRibs=malesListRibs
+Params.femalesListRibs=femalesListRibs;
+Params.malesListRibsSecond=malesListRibsSecond;
+Params.femalesListRibsSecond=femalesListRibsSecond;
+</pre><h2>--------------------------------------Getting the cooordinates of the arena-------------------------------------<a name="5"></a></h2><pre class="codeinput">Params.ArenaLength=1140;
+ max_width=Params.ArenaLength;
+<span class="comment">% if Params.exp_name(end)=='L'</span>
+<span class="comment">%   max_width=Params.ArenaLength;</span>
+<span class="comment">%   Params.ArenaLength=1140;</span>
+<span class="comment">%</span>
+<span class="comment">% HidingCoordinates=[184.1501458	486.2376093;... % 24 points(xy)-6 boxes: 4 shelters without 2 bridges</span>
+<span class="comment">% 213.5379009	434.1793003;...                        % (in pixels)</span>
+<span class="comment">% 245.4446064	460.2084548;...</span>
+<span class="comment">% 216.0568513	507.228863;...</span>
+<span class="comment">% % 172.3950437	339.2988338;...</span>
+<span class="comment">% % 169.8760933	232.6632653;...</span>
+<span class="comment">% % 258.0393586	232.6632653;...</span>
+<span class="comment">% % 257.1997085	341.8177843;...</span>
+<span class="comment">% 202.622449	135.2638484;...</span>
+<span class="comment">% 185.8294461	82.36588921;...</span>
+<span class="comment">% 220.255102	67.25218659;...</span>
+<span class="comment">% 237.8877551	120.1501458;...</span>
+<span class="comment">% 461.2346939	108.3950437;...</span>
+<span class="comment">% 494.8206997	56.33673469;...</span>
+<span class="comment">% 527.5670554	81.52623907;...</span>
+<span class="comment">% 493.1413994	134.4241983;...</span>
+<span class="comment">% % 478.8673469	348.5349854;...</span>
+<span class="comment">% % 478.0276968	212.5116618;...</span>
+<span class="comment">% % 507.4154519	212.5116618;...</span>
+<span class="comment">% % 512.4533528	349.3746356;...</span>
+<span class="comment">% 495.6603499	507.228863;...</span>
+<span class="comment">% 462.9139942	450.9723032;...</span>
+<span class="comment">% 493.9810496	429.9810496;...</span>
+<span class="comment">% 528.4067055	479.5204082];</span>
+<span class="comment">%</span>
+<span class="comment">% %HidingCoordinatesCentral=[212 482;501 485;503 92; 211 99];</span>
+<span class="comment">% HidingCoordinatesCentral=[211 99;503 92;501 485;212 482];</span>
+<span class="comment">% HidingCoordinates1=[211 438; 254 466;208 534 ;168 508];</span>
+<span class="comment">% HidingCoordinates2=[459 469; 506 437;548 500;499 535];</span>
+<span class="comment">% HidingCoordinates3=[502 50; 551 84;499 146;461 114];</span>
+<span class="comment">% HidingCoordinates4=[172 78; 222 52;250 124;203 149];</span>
+<span class="comment">%</span>
+<span class="comment">% XYCorners=[123.6953353	30.30758017;...,</span>
+<span class="comment">% 591.3804665	25.2696793;...,</span>
+<span class="comment">% 591.3804665	536.6166181;...,</span>
+<span class="comment">% 126.2142857	539.9752187];</span>
+<span class="comment">%</span>
+<span class="comment">% FoodCoordinates=[319.3338192 242.7390671;...</span>
+<span class="comment">% 317.654519 211.6720117;...</span>
+<span class="comment">% 394.0626822 215.8702624;...</span>
+<span class="comment">% 394.0626822 246.0976676];</span>
+<span class="comment">%</span>
+<span class="comment">% WaterCoordinates=[352.9198251 305.712828];</span>
+<span class="comment">%</span>
+<span class="comment">% CoordSleepingCells=[222	31;...,</span>
+<span class="comment">% 495	29;...,</span>
+<span class="comment">% 594	151;...,</span>
+<span class="comment">% 594	418;...,</span>
+<span class="comment">% 480	532;...,</span>
+<span class="comment">% 234	540;...,</span>
+<span class="comment">% 126	418;...,</span>
+<span class="comment">% 127	141];%Left</span>
+<span class="comment">%</span>
+<span class="comment">% BridgesCoordinatesNarrow=[210 211;241 211;210 355;241 355];</span>
+<span class="comment">% BridgesCoordinatesLarger=[464 239;558 239;464 351;558 351];</span>
+<span class="comment">% BridgesCoordinates=[BridgesCoordinatesNarrow BridgesCoordinatesLarger];</span>
+<span class="comment">%</span>
+<span class="comment">%</span>
+<span class="comment">%</span>
+<span class="comment">%</span>
+<span class="comment">% % pixels--&gt; cm. rescaling based on max_wd (cm) and XYCorners (pix-ref) data</span>
+<span class="comment">% HidingCoordinates=rescaleCoordinatesGV(HidingCoordinates,XYCorners,max_width);</span>
+<span class="comment">% FoodCoordinates=rescaleCoordinatesGV(FoodCoordinates,XYCorners,max_width);</span>
+<span class="comment">% WaterCoordinates=rescaleCoordinatesGV(WaterCoordinates,XYCorners,max_width);</span>
+<span class="comment">% CoordSleepingCells=rescaleCoordinatesGV(CoordSleepingCells,XYCorners,max_width);</span>
+<span class="comment">% HidingCoordinatesCentral=rescaleCoordinatesGV(HidingCoordinatesCentral,XYCorners,max_width);</span>
+<span class="comment">%</span>
+<span class="comment">%</span>
+<span class="comment">%</span>
+<span class="comment">% Params.Coordinates.HidingCoordinates=HidingCoordinates;</span>
+<span class="comment">% Params.Coordinates.FoodCoordinates=FoodCoordinates;</span>
+<span class="comment">% Params.Coordinates.WaterCoordinates=WaterCoordinates;</span>
+<span class="comment">% Params.Coordinates.CoordSleepingCells=CoordSleepingCells;</span>
+<span class="comment">% Params.Coordinates.XYCorners=XYCorners;</span>
+<span class="comment">% Params.HidingCoordinatesCentral=HidingCoordinatesCentral;</span>
+<span class="comment">% else</span>
+<span class="comment">%</span>
+<span class="comment">%   Params.ArenaLength=1140;</span>
+<span class="comment">%    max_width=Params.ArenaLength;</span>
+<span class="comment">%  HidingCoordinates=[165.6778426 443.4154519;...</span>
+<span class="comment">% 187.5087464 463.5670554;...</span>
+<span class="comment">% 158.9606414	501.351312;...</span>
+<span class="comment">% 137.9693878	483.7186589;...</span>
+<span class="comment">% % 120.3367347	249.4562682;...</span>
+<span class="comment">% % 190.0276968	246.0976676;...</span>
+<span class="comment">% % 193.3862974	340.138484;...</span>
+<span class="comment">% % 124.5349854	342.6574344;...</span>
+<span class="comment">% 132.0918367	91.60204082;...</span>
+<span class="comment">% 157.2813411	73.96938776;...</span>
+<span class="comment">% 180.7915452	115.951895;...</span>
+<span class="comment">% 160.6399417	134.4241983;...</span>
+<span class="comment">% 453.6778426	79.00728863;...</span>
+<span class="comment">% 468.7915452	99.99854227;...</span>
+<span class="comment">% 441.9227405	129.3862974;...</span>
+<span class="comment">% 425.1297376	110.074344;...</span>
+<span class="comment">% % 436.0451895	225.9460641;...</span>
+<span class="comment">% % 455.3571429	226.7857143;...</span>
+<span class="comment">% % 454.5174927	350.2142857;...</span>
+<span class="comment">% % 431.8469388	350.2142857;...</span>
+<span class="comment">% 428.4883382	465.2463557;...</span>
+<span class="comment">% 451.1588921	449.2930029;...</span>
+<span class="comment">% 472.1501458	482.0393586;...</span>
+<span class="comment">% 449.4795918	499.6720117];</span>
+<span class="comment">%</span>
+<span class="comment">%</span>
+<span class="comment">% HidingCoordinatesCentral=[205 102;495 105;497 476;203 476];</span>
+<span class="comment">% % HidingCoordinates1=[211 438; 254 466;208 534 ;168 508]; Arrange</span>
+<span class="comment">% % HidingCoordinates2=[459 469; 506 437;548 500;499 535];</span>
+<span class="comment">% % HidingCoordinates3=[502 50; 551 84;499 146;461 114];</span>
+<span class="comment">% % HidingCoordinates4=[172 78; 222 52;250 124;203 149];</span>
+<span class="comment">%</span>
+<span class="comment">% XYCorners=[114 34;593 27;594 555;120 545];</span>
+<span class="comment">%</span>
+<span class="comment">% FoodCoordinates=[305 235;386 233;384 261;306 263];</span>
+<span class="comment">%</span>
+<span class="comment">% WaterCoordinates=[341 312];</span>
+<span class="comment">%</span>
+<span class="comment">% CoordSleepingCells=[218 28;483 23;600 147;596 444;477 561;219 555;114 436; 110 153];%Right</span>
+<span class="comment">%</span>
+<span class="comment">%  BridgesCoordinatesNarrow=[212 218;241 218;242 360;214 358];</span>
+<span class="comment">%  BridgesCoordinatesLarger=[454 239;546 240;545 357;448 355];</span>
+<span class="comment">%  BridgesCoordinates=[BridgesCoordinatesNarrow BridgesCoordinatesLarger];</span>
+<span class="comment">%</span>
+<span class="comment">% % pixels--&gt; cm. rescaling based on max_wd (cm) and XYCorners (pix-ref) data</span>
+<span class="comment">% HidingCoordinates=rescaleCoordinatesGV(HidingCoordinates,XYCorners,max_width);</span>
+<span class="comment">% FoodCoordinates=rescaleCoordinatesGV(FoodCoordinates,XYCorners,max_width);</span>
+<span class="comment">% WaterCoordinates=rescaleCoordinatesGV(WaterCoordinates,XYCorners,max_width);</span>
+<span class="comment">% CoordSleepingCells=rescaleCoordinatesGV(CoordSleepingCells,XYCorners,max_width);</span>
+<span class="comment">% HidingCoordinatesCentral=rescaleCoordinatesGV(HidingCoordinatesCentral,XYCorners,max_width);</span>
+<span class="comment">%</span>
+<span class="comment">%</span>
+<span class="comment">% Params.Coordinates.HidingCoordinates=HidingCoordinates;</span>
+<span class="comment">% Params.Coordinates.FoodCoordinates=FoodCoordinates;</span>
+<span class="comment">% Params.Coordinates.WaterCoordinates=WaterCoordinates;</span>
+<span class="comment">% Params.Coordinates.CoordSleepingCells=CoordSleepingCells;</span>
+<span class="comment">% Params.Coordinates.XYCorners=XYCorners;</span>
+<span class="comment">% Params.HidingCoordinatesCentral=HidingCoordinatesCentral;</span>
+<span class="comment">% end</span>
+
+<span class="comment">%----------Load mat file-----------------------</span>
+
+FolderParams=strcat(DIR, <span class="string">'\'</span>,<span class="string">'Parameters'</span>,<span class="string">'\'</span>);
+
+S=load(strcat(FolderParams,Params.exp_name,<span class="string">'ArenaCoord.mat'</span>));
+HidingCoordinatesCentral=S.HidingCoordinatesCentral;
+XYCorners=S.Corn
+FoodCoordinates=S.FoodCoordinates;
+WaterCoordinates=S.WaterCoordinates;
+CoordSleepingCells=S.CoordSleepingCells;
+BridgesCoordinatesNarrow=S.BridgesCoordinatesNarrow;
+BridgesCoordinatesLarger=S.BridgesCoordinatesLarger;
+HidingCoordinates=S.HidingCoordinates;
+HidingCoordinates=S.HidingCoordinates;
+ZoneCoord=S.MarkCoordPixel;
+
+<span class="comment">% % pixels--&gt; mm rescaling based on max_wd (cm) and XYCorners (pix-ref) data</span>
+ HidingCoordinates=rescaleCoordinatesGV(HidingCoordinates,XYCorners,max_width);
+ FoodCoordinates=rescaleCoordinatesGV(FoodCoordinates,XYCorners,max_width);
+ WaterCoordinates=rescaleCoordinatesGV(WaterCoordinates,XYCorners,max_width);
+ CoordSleepingCells=rescaleCoordinatesGV(CoordSleepingCells,XYCorners,max_width);
+ HidingCoordinatesCentral=rescaleCoordinatesGV(HidingCoordinatesCentral,XYCorners,max_width);
+ ZoneCoord=rescaleCoordinatesGV(ZoneCoord,XYCorners,max_width);
+
+<span class="comment">%</span>
+<span class="comment">%</span>
+ Params.Coordinates.HidingCoordinates=HidingCoordinates;
+ Params.Coordinates.FoodCoordinates=FoodCoordinates;
+Params.Coordinates.WaterCoordinates=WaterCoordinates;
+ Params.Coordinates.CoordSleepingCells=CoordSleepingCells;
+ Params.Coordinates.XYCorners=XYCorners;
+Params.HidingCoordinatesCentral=HidingCoordinatesCentral;
+Params.ZoneCoord=ZoneCoord;
+
+ clear <span class="string">HidingCoordinates</span> <span class="string">FoodCoordinates</span> <span class="string">WaterCoordinates</span> <span class="string">CoordSleepingCells</span> <span class="string">XYCorners</span>
+</pre><pre class="codeinput"> <span class="comment">%%-------- Information of the antenna----------------</span>
+ Params.AntennaCage=[2,5,7,35,47,45,43,8];<span class="comment">%order according to the cages order-Order according to clock way</span>
+ Params.SideBoxAntenna=[49,50,51,52,53,54,55,56];<span class="comment">%this is detected if the mouse is jumping- Order according to clock way</span>
+ Params.AntennaHidingBox=[9,13,41,37];
+</pre><h2>%  %% ----------------Insert antenna cooordinates in mm--<a name="7"></a></h2><pre class="codeinput">  AntennaCoord=zeros(56,2);
+<span class="comment">%</span>
+  AntennaCoord(1,:)=[70.6 69.9];
+  AntennaCoord(3,:)=[403.2 69.9];
+  AntennaCoord(4,:)=[735.8 69.9];
+  AntennaCoord(6,:)=[1068.4 69.9];
+
+  AntennaCoord(15,:)=[70.6 269.7];
+  AntennaCoord(10,:)=[403.2 269.7];
+  AntennaCoord(12,:)=[735.8 269.7];
+  AntennaCoord(14,:)=[1068.4 269.7];
+
+  AntennaCoord(9,:)=[236.9 169.8];
+  AntennaCoord(11,:)=[569.5 169.8];
+  AntennaCoord(13,:)=[902.1 169.8];
+
+  AntennaCoord(48,:)=[236.9 369.6];
+  AntennaCoord(18,:)=[569.5 369.6];
+  AntennaCoord(20,:)=[902.1 369.6];
+
+  AntennaCoord(22,:)=[70.6 469.5];
+  AntennaCoord(17,:)=[403.2 469.5];
+  AntennaCoord(19,:)=[735.8 469.5];
+  AntennaCoord(21,:)=[1068.4 469.5];
+
+  AntennaCoord(24,:)=[236.9 569.4];
+  AntennaCoord(26,:)=[569.5 569.4];
+  AntennaCoord(28,:)=[902.1 569.4];
+
+  AntennaCoord(23,:)=[70.6 669.3];
+  AntennaCoord(25,:)=[403.2 669.3];
+  AntennaCoord(27,:)=[735.8 669.3];
+  AntennaCoord(33,:)=[1068.4 669.3];
+
+  AntennaCoord(29,:)=[236.9 769.2];
+  AntennaCoord(30,:)=[569.5 769.2];
+  AntennaCoord(32,:)=[902.1 769.2];
+
+  AntennaCoord(36,:)=[70.6 869.1];
+  AntennaCoord(38,:)=[403.2 869.1];
+  AntennaCoord(31,:)=[735.8 869.1];
+  AntennaCoord(34,:)=[1068.4 869.1];
+
+  AntennaCoord(37,:)=[236.9 969];
+  AntennaCoord(39,:)=[569.5 969];
+  AntennaCoord(41,:)=[902.1 969];
+
+  AntennaCoord(44,:)=[70.6 1068.9];
+  AntennaCoord(46,:)=[403.2 1068.9];
+  AntennaCoord(40,:)=[735.8 1068.9];
+  AntennaCoord(42,:)=[1068.4 1068.9];
+
+
+  <span class="keyword">if</span> Params.exp_name(end)==<span class="string">'L'</span>
+      CoordSleepingCells1=Params.Coordinates.CoordSleepingCells;
+    AntennaCoord(2,:)=[CoordSleepingCells1(1,1) CoordSleepingCells1(1,2)];
+    AntennaCoord(5,:)=[CoordSleepingCells1(2,1) CoordSleepingCells1(2,2)];
+    AntennaCoord(7,:)=[CoordSleepingCells1(3,1) CoordSleepingCells1(3,2)];
+    AntennaCoord(35,:)=[CoordSleepingCells1(4,1) CoordSleepingCells1(4,2)];
+    AntennaCoord(47,:)=[CoordSleepingCells1(5,1) CoordSleepingCells1(5,2)];
+    AntennaCoord(45,:)=[CoordSleepingCells1(6,1) CoordSleepingCells1(6,2)];
+    AntennaCoord(43,:)=[CoordSleepingCells1(7,1) CoordSleepingCells1(7,2)];
+    AntennaCoord(8,:)=[CoordSleepingCells1(8,1) CoordSleepingCells1(8,2)];
+  <span class="keyword">end</span>
+
+
+ Params. AntennaCoord= AntennaCoord;
+</pre><h2>Parameters related with chasing<a name="8"></a></h2><pre class="codeinput"> Params.AngleMaximum1=str2num(get(h.editChasingAng1,<span class="string">'string'</span>));
+ Params.AngleMaximum2=str2num(get(h.editChasingAng2,<span class="string">'string'</span>));
+ Params.editpar1=str2num(get(h.editpar1,<span class="string">'string'</span>));
+ Params.editpar2=str2num(get(h.editpar2,<span class="string">'string'</span>));
+ Params.editpar3=str2num(get(h.editpar3,<span class="string">'string'</span>));
+ Params.editpar4=str2num(get(h.editpar4,<span class="string">'string'</span>));
+ Params.editpar5=str2num(get(h.editpar5,<span class="string">'string'</span>));
+ Params.editpar6=str2num(get(h.editpar6,<span class="string">'string'</span>));
+ Params.editpar7=str2num(get(h.editpar7,<span class="string">'string'</span>));
+</pre><h2>Parameters for distinguish mouse activity (either stop,walk or run)<a name="9"></a></h2><pre class="codeinput"> Params.TreshRun=40; <span class="comment">%40cm/sec</span>
+ Params.TreshWalk=0.5; <span class="comment">%walking minimum 0.5cm/sec</span>
+</pre><h2>------------Parameters related with eating/drinking<a name="10"></a></h2><pre class="codeinput">Params.VelocityThreshFood=5;  <span class="comment">%velocity when is either eating or drinking in cm/sec</span>
+Params.radiusD=40; <span class="comment">%radius around drinking  in mm</span>
+</pre><pre class="codeinput"> Params.DistanceToBeTogheter=100; <span class="comment">%distance to be considered together in mm</span>
+</pre><h2>Parameters related with avoidance<a name="13"></a></h2><pre>Params.Distance_thresh_For_Avoidance=400; %in mm
+Params.Dist_thresh_Fine_Tuning_For_Avoidance=100; %in mm
+Params.Velocity_For_Avoidance=35; %in cm/sec
+Params.Radius_Within_Avoidance=300; %in mm</pre><pre class="codeinput"> Params.Distance_thresh_For_Avoidance=str2num(get(h.Avoidance1,<span class="string">'string'</span>)); <span class="comment">%in mm</span>
+ Params.Dist_thresh_Fine_Tuning_For_Avoidance=str2num(get(h.Avoidance4,<span class="string">'string'</span>)); <span class="comment">%in mm</span>
+ Params.Velocity_For_Avoidance=str2num(get(h.Avoidance2,<span class="string">'string'</span>)); <span class="comment">%in cm/sec</span>
+ Params.Radius_Within_Avoidance=str2num(get(h.Avoidance3,<span class="string">'string'</span>)); <span class="comment">%in mm</span>
+</pre><h2>----Parameters related with approaching-----------------<a name="14"></a></h2><pre>Params.Distance_thresh_For_Approaching=400; %According to GV this is 40cm
+Params.Distance_Thresh_For_Approaching_Fine_Tuning=100;%According to GV this is 10cm
+Params.CorrFactor_between_mice_For_Approaching=0.3; %According to GV this is 0.3
+Params.Velocity_Thresh_To_beSamePlace_For_Approaching=25; %According to GV this is 25cm/sec</pre><pre class="codeinput">  Params.Distance_thresh_For_Approaching=str2num(get(h.Approaching1,<span class="string">'string'</span>)); <span class="comment">%According to GV this is 40cm</span>
+  Params.Distance_Thresh_For_Approaching_Fine_Tuning=str2num(get(h.Approaching4,<span class="string">'string'</span>));<span class="comment">%According to GV this is 10cm</span>
+  Params.CorrFactor_between_mice_For_Approaching=str2num(get(h.Approaching2,<span class="string">'string'</span>)); <span class="comment">%According to GV this is 0.3</span>
+  Params.Velocity_Thresh_To_beSamePlace_For_Approaching=str2num(get(h.Approaching3,<span class="string">'string'</span>)); <span class="comment">%According to GV this is 25cm/sec</span>
+</pre><pre class="codeinput"><span class="comment">%  %% Params.FPS=30; % hardcoding - not so good (must be external parameter)</span>
+<span class="comment">%  Params.FPS=30; %it is 30ms per frame 30 frames per second</span>
+<span class="comment">%  %% Parameter for cleaning original data</span>
+<span class="comment">%  Params.NoDetection=1e6; %x y data larger than 1e6 is not considered. It is considered as NAN</span>
+<span class="comment">%  Params.XYLimit=2e3;</span>
+<span class="comment">%  Params.MaximumArena=1146.2; %in mm maximum can go</span>
+<span class="comment">%  Params.MinimumArena=-9.4; %minimum can go</span>
+<span class="comment">%  %%</span>
+<span class="comment">%  %Parameters for detection of sleeping</span>
+<span class="comment">%  Params.ThresholdDistance=1.5e4;</span>
+<span class="comment">%  Params.DistSleep=10; %distance between coordinates sleeping and..........It is in the case the first value is not detected.</span>
+<span class="comment">%  %%</span>
+<span class="comment">%  %Kalman filter to trajectories</span>
+<span class="comment">%  % Kalman filter initialization</span>
+<span class="comment">% Params.KalmanR=[[0.2845,0.0045]',[0.0045,0.0455]'];</span>
+<span class="comment">% Params.KalmanH=[[1,0]',[0,1]',[0,0]',[0,0]'];</span>
+<span class="comment">% Params.KalmanQ=0.01*eye(4);</span>
+<span class="comment">% Params.KalmanP = 100*eye(4);</span>
+<span class="comment">% Params.Kalmandt=1;</span>
+<span class="comment">% dt=1;</span>
+<span class="comment">% Params.KalmanA=[[1,0,0,0]',[0,1,0,0]',[dt,0,1,0]',[0,dt,0,1]'];</span>
+<span class="comment">% Params.Kalmang = .6; % pixels^2/time step</span>
+<span class="comment">% g=0.6;</span>
+<span class="comment">% Params.KalmanBu = [0,0,0,g]';</span>
+<span class="comment">% Params.Kalmankfinit=0;</span>
+<span class="comment">% %%</span>
+<span class="comment">% Params.VelocityThreshFood=1 %velocity is less this when eating.</span>
+<span class="comment">%  Params.DistTreshDrinking=1; %distance is less this when drinking.</span>
+<span class="comment">%  Params.running=30;</span>
+<span class="comment">%  Params.CenterCoords=[15 15;114-15 15;114-15 114-15;15 114-15];</span>
+</pre><h2>Parameters for running for walking etc.. found in ethograms script<a name="16"></a></h2><pre>Params.TreshRun=40;
+Params.TreshWalk=.5;</pre><h2>Parameters for elorating<a name="17"></a></h2><p>Params.k=100; Params.initial_rating=1000;</p><pre class="codeinput"> <span class="comment">%save('Parameters','Params')</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="comment">%%-------------------------- Auxiliary functions---------------------------</span>
+<span class="keyword">function</span> XY=rescaleCoordinatesGV(XY,Corners,max_width)
+XY=(XY-repmat(Corners(1,:),size(XY,1),1))<span class="keyword">...</span><span class="comment">,</span>
+    ./repmat(Corners(3,:)-Corners(1,:),size(XY,1),1)*max_width; <span class="comment">% max_wd - cm. ACCORDING TO THIS THE DIAGONAL GIVES THE MAX WIDITH</span>
+<span class="comment">% XY(:,2)=max_width-XY(:,2); % my comment-03.01.13: obviously flip for y-dimension To begin the zero from the bottom left</span>
+<span class="comment">% XY(XY&gt;max_width)=max_width;</span>
+<span class="comment">% XY(XY&lt;0)=0;</span>
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+
+function Params=ParametersComputeAll()
+
+%%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHVariablesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+global h
+
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHUicontrol parametersREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+Params.exp_name=get(h.editAllRFID2,'string') %load experiment;
+DIR=get( h.editAllRFID1,'string'); %get the directory of all the experimental data
+
+
+Params.DataDir=fullfile(DIR, '\', [Params.exp_name 'Video']);%where is the csv data
+Params.DataRFID=fullfile(DIR, '\', [Params.exp_name 'RFID']);%where is the RFID data
+Params.DataMissingPosition=fullfile(DIR, '\', [Params.exp_name 'MissingPosition']);%where is the Missing position
+
+Params.resultsDir=fullfile(DIR, '\',[Params.exp_name 'ResultsMatlab']);%where are the results
+Params.ForSomeFile=get( h.Checkbox2,'Value'); %if there is taking separated files
+Params.ForMissingPosition=get( h.Checkbox3,'Value'); %if we consider the csv file which contains information of missing positions(In Erans program)
+
+contents = get(h.popupAll,'String'); %to get if the user wants information of either males or females
+Params.ChoiceList= contents{get(h.popupAll,'Value')};
+Params.SaveDirectory=get(h.edit3x,'string');
+
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Mice identityREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+
+% numbers of mice to be displayed:
+Params.mices = 'all';
+
+% Mice identity that it is on excel file
+%the sheet is from the gui
+contents = get(h.popupmenuRFID1,'String'); 
+popupmenu1value = contents{get(h.popupmenuRFID1,'Value')};
+sheet= popupmenu1value;
+
+[miceType,malesList,femalesList, mice_3_chips,malesListRibs,femalesListRibs,malesListRibsSecond,femalesListRibsSecond] = getMiceIDsComputeAll(DIR,sheet);
+
+Params.miceType = miceType;
+Params.malesList = malesList;
+Params.femalesList = femalesList;
+Params.mice_3_chips = mice_3_chips;
+Params.malesListRibs=malesListRibs
+Params.femalesListRibs=femalesListRibs;
+Params.malesListRibsSecond=malesListRibsSecond;
+Params.femalesListRibsSecond=femalesListRibsSecond;
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHGetting the cooordinates of the arenaREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%
+Params.ArenaLength=1140; 
+ max_width=Params.ArenaLength;  
+% if Params.exp_name(end)=='L'
+%   max_width=Params.ArenaLength;  
+%   Params.ArenaLength=1140; 
+% 
+% HidingCoordinates=[184.1501458	486.2376093;... % 24 points(xy)-6 boxes: 4 shelters without 2 bridges
+% 213.5379009	434.1793003;...                        % (in pixels)
+% 245.4446064	460.2084548;...
+% 216.0568513	507.228863;...
+% % 172.3950437	339.2988338;...
+% % 169.8760933	232.6632653;...
+% % 258.0393586	232.6632653;...
+% % 257.1997085	341.8177843;...
+% 202.622449	135.2638484;...
+% 185.8294461	82.36588921;...
+% 220.255102	67.25218659;...
+% 237.8877551	120.1501458;...
+% 461.2346939	108.3950437;...
+% 494.8206997	56.33673469;...
+% 527.5670554	81.52623907;...
+% 493.1413994	134.4241983;...
+% % 478.8673469	348.5349854;...
+% % 478.0276968	212.5116618;...
+% % 507.4154519	212.5116618;...
+% % 512.4533528	349.3746356;...
+% 495.6603499	507.228863;...
+% 462.9139942	450.9723032;...
+% 493.9810496	429.9810496;...
+% 528.4067055	479.5204082];
+% 
+% %HidingCoordinatesCentral=[212 482;501 485;503 92; 211 99];
+% HidingCoordinatesCentral=[211 99;503 92;501 485;212 482];
+% HidingCoordinates1=[211 438; 254 466;208 534 ;168 508];    
+% HidingCoordinates2=[459 469; 506 437;548 500;499 535];
+% HidingCoordinates3=[502 50; 551 84;499 146;461 114];
+% HidingCoordinates4=[172 78; 222 52;250 124;203 149];
+% 
+% XYCorners=[123.6953353	30.30758017;...,
+% 591.3804665	25.2696793;...,
+% 591.3804665	536.6166181;...,
+% 126.2142857	539.9752187];
+% 
+% FoodCoordinates=[319.3338192 242.7390671;...
+% 317.654519 211.6720117;...
+% 394.0626822 215.8702624;...
+% 394.0626822 246.0976676];
+% 
+% WaterCoordinates=[352.9198251 305.712828];
+% 
+% CoordSleepingCells=[222	31;...,
+% 495	29;...,
+% 594	151;...,
+% 594	418;...,
+% 480	532;...,
+% 234	540;...,
+% 126	418;...,
+% 127	141];%Left
+% 
+% BridgesCoordinatesNarrow=[210 211;241 211;210 355;241 355];
+% BridgesCoordinatesLarger=[464 239;558 239;464 351;558 351];
+% BridgesCoordinates=[BridgesCoordinatesNarrow BridgesCoordinatesLarger];
+% 
+% 
+% 
+% 
+% % pixelsREPLACE_WITH_DASH_DASH> cm. rescaling based on max_wd (cm) and XYCorners (pix-ref) data
+% HidingCoordinates=rescaleCoordinatesGV(HidingCoordinates,XYCorners,max_width); 
+% FoodCoordinates=rescaleCoordinatesGV(FoodCoordinates,XYCorners,max_width);
+% WaterCoordinates=rescaleCoordinatesGV(WaterCoordinates,XYCorners,max_width);
+% CoordSleepingCells=rescaleCoordinatesGV(CoordSleepingCells,XYCorners,max_width);
+% HidingCoordinatesCentral=rescaleCoordinatesGV(HidingCoordinatesCentral,XYCorners,max_width);
+% 
+% 
+% 
+% Params.Coordinates.HidingCoordinates=HidingCoordinates;
+% Params.Coordinates.FoodCoordinates=FoodCoordinates;
+% Params.Coordinates.WaterCoordinates=WaterCoordinates;
+% Params.Coordinates.CoordSleepingCells=CoordSleepingCells;
+% Params.Coordinates.XYCorners=XYCorners;
+% Params.HidingCoordinatesCentral=HidingCoordinatesCentral;
+% else
+%       
+%   Params.ArenaLength=1140;
+%    max_width=Params.ArenaLength;
+%  HidingCoordinates=[165.6778426 443.4154519;...
+% 187.5087464 463.5670554;...
+% 158.9606414	501.351312;...
+% 137.9693878	483.7186589;...
+% % 120.3367347	249.4562682;...
+% % 190.0276968	246.0976676;...
+% % 193.3862974	340.138484;...
+% % 124.5349854	342.6574344;...
+% 132.0918367	91.60204082;...
+% 157.2813411	73.96938776;...
+% 180.7915452	115.951895;...
+% 160.6399417	134.4241983;...
+% 453.6778426	79.00728863;...
+% 468.7915452	99.99854227;...
+% 441.9227405	129.3862974;...
+% 425.1297376	110.074344;...
+% % 436.0451895	225.9460641;...
+% % 455.3571429	226.7857143;...
+% % 454.5174927	350.2142857;...
+% % 431.8469388	350.2142857;...
+% 428.4883382	465.2463557;...
+% 451.1588921	449.2930029;...
+% 472.1501458	482.0393586;...
+% 449.4795918	499.6720117];
+% 
+% 
+% HidingCoordinatesCentral=[205 102;495 105;497 476;203 476];
+% % HidingCoordinates1=[211 438; 254 466;208 534 ;168 508]; Arrange   
+% % HidingCoordinates2=[459 469; 506 437;548 500;499 535];
+% % HidingCoordinates3=[502 50; 551 84;499 146;461 114];
+% % HidingCoordinates4=[172 78; 222 52;250 124;203 149];
+% 
+% XYCorners=[114 34;593 27;594 555;120 545];
+% 
+% FoodCoordinates=[305 235;386 233;384 261;306 263];
+% 
+% WaterCoordinates=[341 312];
+% 
+% CoordSleepingCells=[218 28;483 23;600 147;596 444;477 561;219 555;114 436; 110 153];%Right
+% 
+%  BridgesCoordinatesNarrow=[212 218;241 218;242 360;214 358];
+%  BridgesCoordinatesLarger=[454 239;546 240;545 357;448 355];
+%  BridgesCoordinates=[BridgesCoordinatesNarrow BridgesCoordinatesLarger];
+% 
+% % pixelsREPLACE_WITH_DASH_DASH> cm. rescaling based on max_wd (cm) and XYCorners (pix-ref) data
+% HidingCoordinates=rescaleCoordinatesGV(HidingCoordinates,XYCorners,max_width); 
+% FoodCoordinates=rescaleCoordinatesGV(FoodCoordinates,XYCorners,max_width);
+% WaterCoordinates=rescaleCoordinatesGV(WaterCoordinates,XYCorners,max_width);
+% CoordSleepingCells=rescaleCoordinatesGV(CoordSleepingCells,XYCorners,max_width);
+% HidingCoordinatesCentral=rescaleCoordinatesGV(HidingCoordinatesCentral,XYCorners,max_width);
+% 
+%  
+% Params.Coordinates.HidingCoordinates=HidingCoordinates;
+% Params.Coordinates.FoodCoordinates=FoodCoordinates;
+% Params.Coordinates.WaterCoordinates=WaterCoordinates;
+% Params.Coordinates.CoordSleepingCells=CoordSleepingCells;
+% Params.Coordinates.XYCorners=XYCorners;
+% Params.HidingCoordinatesCentral=HidingCoordinatesCentral; 
+% end
+
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHLoad mat fileREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+
+FolderParams=strcat(DIR, '\','Parameters','\');
+
+S=load(strcat(FolderParams,Params.exp_name,'ArenaCoord.mat'));
+HidingCoordinatesCentral=S.HidingCoordinatesCentral;
+XYCorners=S.Corn
+FoodCoordinates=S.FoodCoordinates;
+WaterCoordinates=S.WaterCoordinates;
+CoordSleepingCells=S.CoordSleepingCells;
+BridgesCoordinatesNarrow=S.BridgesCoordinatesNarrow;
+BridgesCoordinatesLarger=S.BridgesCoordinatesLarger;
+HidingCoordinates=S.HidingCoordinates;
+HidingCoordinates=S.HidingCoordinates;
+ZoneCoord=S.MarkCoordPixel;
+
+% % pixelsREPLACE_WITH_DASH_DASH> mm rescaling based on max_wd (cm) and XYCorners (pix-ref) data
+ HidingCoordinates=rescaleCoordinatesGV(HidingCoordinates,XYCorners,max_width); 
+ FoodCoordinates=rescaleCoordinatesGV(FoodCoordinates,XYCorners,max_width);
+ WaterCoordinates=rescaleCoordinatesGV(WaterCoordinates,XYCorners,max_width);
+ CoordSleepingCells=rescaleCoordinatesGV(CoordSleepingCells,XYCorners,max_width);
+ HidingCoordinatesCentral=rescaleCoordinatesGV(HidingCoordinatesCentral,XYCorners,max_width);
+ ZoneCoord=rescaleCoordinatesGV(ZoneCoord,XYCorners,max_width);
+ 
+% 
+%  
+ Params.Coordinates.HidingCoordinates=HidingCoordinates;
+ Params.Coordinates.FoodCoordinates=FoodCoordinates;
+Params.Coordinates.WaterCoordinates=WaterCoordinates;
+ Params.Coordinates.CoordSleepingCells=CoordSleepingCells;
+ Params.Coordinates.XYCorners=XYCorners;
+Params.HidingCoordinatesCentral=HidingCoordinatesCentral; 
+Params.ZoneCoord=ZoneCoord; 
+
+ clear HidingCoordinates FoodCoordinates WaterCoordinates CoordSleepingCells XYCorners
+%% 
+ %%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH Information of the antennaREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+ Params.AntennaCage=[2,5,7,35,47,45,43,8];%order according to the cages order-Order according to clock way
+ Params.SideBoxAntenna=[49,50,51,52,53,54,55,56];%this is detected if the mouse is jumping- Order according to clock way
+ Params.AntennaHidingBox=[9,13,41,37];
+ %% %  %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHInsert antenna cooordinates in mmREPLACE_WITH_DASH_DASH
+  AntennaCoord=zeros(56,2);
+%  
+  AntennaCoord(1,:)=[70.6 69.9];
+  AntennaCoord(3,:)=[403.2 69.9];
+  AntennaCoord(4,:)=[735.8 69.9];
+  AntennaCoord(6,:)=[1068.4 69.9];
+ 
+  AntennaCoord(15,:)=[70.6 269.7];
+  AntennaCoord(10,:)=[403.2 269.7];
+  AntennaCoord(12,:)=[735.8 269.7];
+  AntennaCoord(14,:)=[1068.4 269.7];
+  
+  AntennaCoord(9,:)=[236.9 169.8];
+  AntennaCoord(11,:)=[569.5 169.8];
+  AntennaCoord(13,:)=[902.1 169.8];
+  
+  AntennaCoord(48,:)=[236.9 369.6];
+  AntennaCoord(18,:)=[569.5 369.6];
+  AntennaCoord(20,:)=[902.1 369.6];
+  
+  AntennaCoord(22,:)=[70.6 469.5];
+  AntennaCoord(17,:)=[403.2 469.5];
+  AntennaCoord(19,:)=[735.8 469.5];
+  AntennaCoord(21,:)=[1068.4 469.5];
+  
+  AntennaCoord(24,:)=[236.9 569.4];
+  AntennaCoord(26,:)=[569.5 569.4];
+  AntennaCoord(28,:)=[902.1 569.4];
+  
+  AntennaCoord(23,:)=[70.6 669.3];
+  AntennaCoord(25,:)=[403.2 669.3];
+  AntennaCoord(27,:)=[735.8 669.3];
+  AntennaCoord(33,:)=[1068.4 669.3];
+  
+  AntennaCoord(29,:)=[236.9 769.2];
+  AntennaCoord(30,:)=[569.5 769.2];
+  AntennaCoord(32,:)=[902.1 769.2];
+  
+  AntennaCoord(36,:)=[70.6 869.1];
+  AntennaCoord(38,:)=[403.2 869.1];
+  AntennaCoord(31,:)=[735.8 869.1];
+  AntennaCoord(34,:)=[1068.4 869.1];
+  
+  AntennaCoord(37,:)=[236.9 969];
+  AntennaCoord(39,:)=[569.5 969];
+  AntennaCoord(41,:)=[902.1 969];
+  
+  AntennaCoord(44,:)=[70.6 1068.9];
+  AntennaCoord(46,:)=[403.2 1068.9];
+  AntennaCoord(40,:)=[735.8 1068.9];
+  AntennaCoord(42,:)=[1068.4 1068.9];
+  
+  
+  if Params.exp_name(end)=='L'
+      CoordSleepingCells1=Params.Coordinates.CoordSleepingCells;
+    AntennaCoord(2,:)=[CoordSleepingCells1(1,1) CoordSleepingCells1(1,2)];  
+    AntennaCoord(5,:)=[CoordSleepingCells1(2,1) CoordSleepingCells1(2,2)];   
+    AntennaCoord(7,:)=[CoordSleepingCells1(3,1) CoordSleepingCells1(3,2)];    
+    AntennaCoord(35,:)=[CoordSleepingCells1(4,1) CoordSleepingCells1(4,2)]; 
+    AntennaCoord(47,:)=[CoordSleepingCells1(5,1) CoordSleepingCells1(5,2)];    
+    AntennaCoord(45,:)=[CoordSleepingCells1(6,1) CoordSleepingCells1(6,2)];
+    AntennaCoord(43,:)=[CoordSleepingCells1(7,1) CoordSleepingCells1(7,2)]; 
+    AntennaCoord(8,:)=[CoordSleepingCells1(8,1) CoordSleepingCells1(8,2)];  
+  end    
+  
+  
+ Params. AntennaCoord= AntennaCoord;
+ 
+ 
+ %% Parameters related with chasing
+ 
+ Params.AngleMaximum1=str2num(get(h.editChasingAng1,'string'));
+ Params.AngleMaximum2=str2num(get(h.editChasingAng2,'string'));
+ Params.editpar1=str2num(get(h.editpar1,'string'));
+ Params.editpar2=str2num(get(h.editpar2,'string'));
+ Params.editpar3=str2num(get(h.editpar3,'string'));
+ Params.editpar4=str2num(get(h.editpar4,'string'));
+ Params.editpar5=str2num(get(h.editpar5,'string'));
+ Params.editpar6=str2num(get(h.editpar6,'string'));
+ Params.editpar7=str2num(get(h.editpar7,'string'));
+ %% Parameters for distinguish mouse activity (either stop,walk or run)
+ Params.TreshRun=40; %40cm/sec
+ Params.TreshWalk=0.5; %walking minimum 0.5cm/sec
+ 
+ %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHParameters related with eating/drinking
+Params.VelocityThreshFood=5;  %velocity when is either eating or drinking in cm/sec
+Params.radiusD=40; %radius around drinking  in mm
+ %% 
+ %% 
+ Params.DistanceToBeTogheter=100; %distance to be considered together in mm
+ 
+ %% Parameters related with avoidance
+%  Params.Distance_thresh_For_Avoidance=400; %in mm 
+%  Params.Dist_thresh_Fine_Tuning_For_Avoidance=100; %in mm
+%  Params.Velocity_For_Avoidance=35; %in cm/sec
+%  Params.Radius_Within_Avoidance=300; %in mm
+
+ Params.Distance_thresh_For_Avoidance=str2num(get(h.Avoidance1,'string')); %in mm 
+ Params.Dist_thresh_Fine_Tuning_For_Avoidance=str2num(get(h.Avoidance4,'string')); %in mm
+ Params.Velocity_For_Avoidance=str2num(get(h.Avoidance2,'string')); %in cm/sec
+ Params.Radius_Within_Avoidance=str2num(get(h.Avoidance3,'string')); %in mm
+
+
+
+
+
+ %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHParameters related with approachingREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%  Params.Distance_thresh_For_Approaching=400; %According to GV this is 40cm
+%  Params.Distance_Thresh_For_Approaching_Fine_Tuning=100;%According to GV this is 10cm
+%  Params.CorrFactor_between_mice_For_Approaching=0.3; %According to GV this is 0.3
+%  Params.Velocity_Thresh_To_beSamePlace_For_Approaching=25; %According to GV this is 25cm/sec
+
+ 
+ 
+  Params.Distance_thresh_For_Approaching=str2num(get(h.Approaching1,'string')); %According to GV this is 40cm
+  Params.Distance_Thresh_For_Approaching_Fine_Tuning=str2num(get(h.Approaching4,'string'));%According to GV this is 10cm
+  Params.CorrFactor_between_mice_For_Approaching=str2num(get(h.Approaching2,'string')); %According to GV this is 0.3
+  Params.Velocity_Thresh_To_beSamePlace_For_Approaching=str2num(get(h.Approaching3,'string')); %According to GV this is 25cm/sec
+ 
+ 
+ 
+ %% 
+ 
+%  %% Params.FPS=30; % hardcoding - not so good (must be external parameter)
+%  Params.FPS=30; %it is 30ms per frame 30 frames per second
+%  %% Parameter for cleaning original data
+%  Params.NoDetection=1e6; %x y data larger than 1e6 is not considered. It is considered as NAN
+%  Params.XYLimit=2e3;
+%  Params.MaximumArena=1146.2; %in mm maximum can go
+%  Params.MinimumArena=-9.4; %minimum can go
+%  %% 
+%  %Parameters for detection of sleeping
+%  Params.ThresholdDistance=1.5e4;
+%  Params.DistSleep=10; %distance between coordinates sleeping and..........It is in the case the first value is not detected.
+%  %%
+%  %Kalman filter to trajectories
+%  % Kalman filter initialization
+% Params.KalmanR=[[0.2845,0.0045]',[0.0045,0.0455]'];
+% Params.KalmanH=[[1,0]',[0,1]',[0,0]',[0,0]'];
+% Params.KalmanQ=0.01*eye(4);
+% Params.KalmanP = 100*eye(4);
+% Params.Kalmandt=1;
+% dt=1;
+% Params.KalmanA=[[1,0,0,0]',[0,1,0,0]',[dt,0,1,0]',[0,dt,0,1]'];
+% Params.Kalmang = .6; % pixels^2/time step
+% g=0.6;
+% Params.KalmanBu = [0,0,0,g]';
+% Params.Kalmankfinit=0;
+% %%
+% Params.VelocityThreshFood=1 %velocity is less this when eating.
+%  Params.DistTreshDrinking=1; %distance is less this when drinking.
+%  Params.running=30; 
+%  Params.CenterCoords=[15 15;114-15 15;114-15 114-15;15 114-15];
+ %% Parameters for running for walking etc.. found in ethograms script
+%  Params.TreshRun=40;
+% Params.TreshWalk=.5;
+%% Parameters for elorating
+% Params.k=100;
+% Params.initial_rating=1000;
+ 
+ %save('Parameters','Params')
+end
+%% 
+%%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH Auxiliary functionsREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+function XY=rescaleCoordinatesGV(XY,Corners,max_width)
+XY=(XY-repmat(Corners(1,:),size(XY,1),1))...,
+    ./repmat(Corners(3,:)-Corners(1,:),size(XY,1),1)*max_width; % max_wd - cm. ACCORDING TO THIS THE DIAGONAL GIVES THE MAX WIDITH
+% XY(:,2)=max_width-XY(:,2); % my comment-03.01.13: obviously flip for y-dimension To begin the zero from the bottom left
+% XY(XY>max_width)=max_width;
+% XY(XY<0)=0;
+end 
+
+
+
+
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>

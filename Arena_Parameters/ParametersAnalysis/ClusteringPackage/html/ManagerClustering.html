@@ -1,0 +1,259 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>ManagerClustering</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-07-11"><meta name="DC.source" content="ManagerClustering.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#4">-----------Clear variables--------------</a></li><li><a href="#5">-------------Prepare auxiliary vector ------------------</a></li><li><a href="#6">---------------Read variables and join variables-----------------</a></li><li><a href="#9">---Plot Chasing all versus being chasing---------------</a></li><li><a href="#12">------Cluster the data by k means algoritm---------------------</a></li><li><a href="#13">--------------------For Final Matrix-------------------------------</a></li><li><a href="#15">-----Plot each mouse with a different color in which the first is the alpha, beta etc,,'</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span>  ManagerClustering(~,~)
+</pre><pre class="codeinput"><span class="comment">%Open parameters and do clustering</span>
+</pre><pre class="codeinput"><span class="comment">%%--- Variables-----------------</span>
+<span class="keyword">global</span> h
+NumberMouse=get(h.editMousePCA,<span class="string">'String'</span>);
+NumberDays=get(h.editDaysPCA,<span class="string">'String'</span>);
+
+<span class="comment">%-------------------Select the experiments-------------------</span>
+index_selected = get(h.listRunParamsPCA,<span class="string">'Value'</span>);
+list = get(h.listRunParamsPCA,<span class="string">'String'</span>);
+item_selected = list(index_selected,1); <span class="comment">% Convert from cell array</span>
+
+ExpList=item_selected'; <span class="comment">%Input Data</span>
+</pre><pre class="codeoutput error">Error using matlab.ui.control.UIControl/get
+Invalid or deleted object.
+
+Error in ManagerClustering (line 6)
+NumberMouse=get(h.editMousePCA,'String');
+</pre><h2>-----------Clear variables--------------<a name="4"></a></h2><pre class="codeinput">Z=[,];
+Aux1=[];
+Exp=[];
+FinalMatrix=cell(length(item_selected)*str2num(NumberDays)*str2num(NumberMouse),5)
+</pre><h2>-------------Prepare auxiliary vector ------------------<a name="5"></a></h2><pre class="codeinput"><span class="comment">%-REMBER THE FIRST MOUSE OF THE LIST IS THE DOMINANT----------------</span>
+<span class="keyword">for</span> t=1:str2num(NumberMouse)
+    <span class="keyword">if</span> t==1
+  Aux1=t*ones(1,str2num(NumberDays)-2);
+    <span class="keyword">else</span>
+       Aux1=[Aux1;t*ones(1,str2num(NumberDays)-2)];
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+Aux1=reshape(Aux1,[size(Aux1,1)*size(Aux1,2),1]);
+</pre><h2>---------------Read variables and join variables-----------------<a name="6"></a></h2><pre class="codeinput"><span class="keyword">for</span> i=1:length(item_selected)
+</pre><pre class="codeinput">    X=[];
+    Y=[];
+    V=[];
+    W=[];
+</pre><pre class="codeinput">   sheet=char(ExpList(i));
+  [num,txt,raw]=xlsread(get(h.editRunParamsPCA,<span class="string">'string'</span>),sheet);
+  IndexChasingAll=find(strcmp(<span class="string">'chasing all (N events)'</span>,raw(:,1))==1);
+  IndexBeingChasing=find(strcmp(<span class="string">'being chased all(N events)'</span>,raw(:,1))==1);
+</pre><h2>---Plot Chasing all versus being chasing---------------<a name="9"></a></h2><pre class="codeinput">  X=cell2mat(raw(IndexBeingChasing:IndexBeingChasing+str2num(NumberMouse)-1,5:2+str2num(NumberDays)));
+  Y=cell2mat(raw(IndexChasingAll:IndexChasingAll+str2num(NumberMouse)-1,5:2+str2num(NumberDays)));
+  Exp=[Exp;repmat(ExpList(i),size(Y,1)*size(Y,2),1)];
+  Z=[Z;[reshape(X,[size(X,1)*size(X,2),1]),reshape(Y,[size(Y,1)*size(Y,2),1]),Aux1]];
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><h2>------Cluster the data by k means algoritm---------------------<a name="12"></a></h2><pre class="codeinput"> opts = statset(<span class="string">'Display'</span>,<span class="string">'final'</span>);
+  [idx,C] = kmeans(Z,3,<span class="string">'Distance'</span>,<span class="string">'cityblock'</span>,<span class="keyword">...</span>
+    <span class="string">'Replicates'</span>,5,<span class="string">'Options'</span>,opts);
+</pre><h2>--------------------For Final Matrix-------------------------------<a name="13"></a></h2><pre class="codeinput">FinalMatrix(1,1)={<span class="string">'Being Chasing'</span>};
+FinalMatrix(1,2)={<span class="string">'Chasing All'</span>};
+FinalMatrix(1,3)={<span class="string">'Number of mouse'</span>};
+FinalMatrix(1,4)={<span class="string">'Number of Experiment'</span>};
+FinalMatrix(1,5)={<span class="string">'Number of Cluster'</span>};
+
+FinalMatrix(2:size(Z,1)+1,1:3)=num2cell(Z);
+FinalMatrix(2:size(Exp,1)+1,4)=Exp;
+FinalMatrix(2:size(idx,1)+1,5)=num2cell(idx);
+</pre><pre class="codeinput"> figure
+</pre><h2>-----Plot each mouse with a different color in which the first is the alpha, beta etc,,'<a name="15"></a></h2><pre>Z=Z(str2num(NumberMouse)+1:end,:);
+idx=idx(str2num(NumberMouse)+1:end,:);</pre><pre class="codeinput"> <span class="keyword">for</span> j=1:str2num(NumberMouse)
+     I=find(Z(:,3)==1);
+  plot(Z(I,1),Z(I,2),<span class="string">'g.'</span>,<span class="string">'MarkerSize'</span>,25);
+  hold <span class="string">on</span>;
+ <span class="keyword">end</span>
+</pre><pre class="codeinput">hold <span class="string">on</span>
+plot(Z(idx==1,1),Z(idx==1,2),<span class="string">'r.'</span>,<span class="string">'MarkerSize'</span>,12)
+hold <span class="string">on</span>
+plot(Z(idx==2,1),Z(idx==2,2),<span class="string">'b.'</span>,<span class="string">'MarkerSize'</span>,12)
+<span class="comment">% hold on</span>
+ plot(Z(idx==3,1),Z(idx==3,2),<span class="string">'y.'</span>,<span class="string">'MarkerSize'</span>,12)
+plot(C(:,1),C(:,2),<span class="string">'kx'</span>,<span class="keyword">...</span>
+     <span class="string">'MarkerSize'</span>,15,<span class="string">'LineWidth'</span>,3)
+legend(<span class="string">'Cluster 1'</span>,<span class="string">'Cluster 2'</span>,<span class="string">'Centroids'</span>,<span class="keyword">...</span>
+       <span class="string">'Location'</span>,<span class="string">'NW'</span>)
+title <span class="string">'Cluster Assignments and Centroids'</span>
+hold <span class="string">off</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function  ManagerClustering(~,~)
+%Open parameters and do clustering
+%% 
+%%REPLACE_WITH_DASH_DASH- VariablesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+global h
+NumberMouse=get(h.editMousePCA,'String');
+NumberDays=get(h.editDaysPCA,'String');
+
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Select the experimentsREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+index_selected = get(h.listRunParamsPCA,'Value');
+list = get(h.listRunParamsPCA,'String');
+item_selected = list(index_selected,1); % Convert from cell array
+
+ExpList=item_selected'; %Input Data
+
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Clear variablesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+Z=[,];
+Aux1=[];
+Exp=[];
+FinalMatrix=cell(length(item_selected)*str2num(NumberDays)*str2num(NumberMouse),5)
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Prepare auxiliary vector REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+%-REMBER THE FIRST MOUSE OF THE LIST IS THE DOMINANTREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+for t=1:str2num(NumberMouse)
+    if t==1
+  Aux1=t*ones(1,str2num(NumberDays)-2);  
+    else
+       Aux1=[Aux1;t*ones(1,str2num(NumberDays)-2)];  
+    end
+end
+Aux1=reshape(Aux1,[size(Aux1,1)*size(Aux1,2),1]);
+
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Read variables and join variablesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+for i=1:length(item_selected)
+    
+    X=[];
+    Y=[];
+    V=[];
+    W=[];
+    %% 
+    
+   sheet=char(ExpList(i));
+  [num,txt,raw]=xlsread(get(h.editRunParamsPCA,'string'),sheet); 
+  IndexChasingAll=find(strcmp('chasing all (N events)',raw(:,1))==1);  
+  IndexBeingChasing=find(strcmp('being chased all(N events)',raw(:,1))==1); 
+  %% REPLACE_WITH_DASH_DASH-Plot Chasing all versus being chasingREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+  X=cell2mat(raw(IndexBeingChasing:IndexBeingChasing+str2num(NumberMouse)-1,5:2+str2num(NumberDays)));
+  Y=cell2mat(raw(IndexChasingAll:IndexChasingAll+str2num(NumberMouse)-1,5:2+str2num(NumberDays)));
+  Exp=[Exp;repmat(ExpList(i),size(Y,1)*size(Y,2),1)];
+  Z=[Z;[reshape(X,[size(X,1)*size(X,2),1]),reshape(Y,[size(Y,1)*size(Y,2),1]),Aux1]];
+  
+  
+  
+   
+end
+
+%% 
+
+
+
+
+
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHCluster the data by k means algoritmREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+ opts = statset('Display','final');
+  [idx,C] = kmeans(Z,3,'Distance','cityblock',...
+    'Replicates',5,'Options',opts);
+
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHFor Final MatrixREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+FinalMatrix(1,1)={'Being Chasing'};
+FinalMatrix(1,2)={'Chasing All'};
+FinalMatrix(1,3)={'Number of mouse'};
+FinalMatrix(1,4)={'Number of Experiment'};
+FinalMatrix(1,5)={'Number of Cluster'};
+
+FinalMatrix(2:size(Z,1)+1,1:3)=num2cell(Z);
+FinalMatrix(2:size(Exp,1)+1,4)=Exp;
+FinalMatrix(2:size(idx,1)+1,5)=num2cell(idx);
+
+
+%% 
+
+ figure
+ 
+ %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Plot each mouse with a different color in which the first is the alpha, beta etc,,'
+%  Z=Z(str2num(NumberMouse)+1:end,:);
+%  idx=idx(str2num(NumberMouse)+1:end,:);
+
+ for j=1:str2num(NumberMouse)
+     I=find(Z(:,3)==1);
+  plot(Z(I,1),Z(I,2),'g.','MarkerSize',25);
+  hold on;
+ end
+  %% 
+
+hold on
+plot(Z(idx==1,1),Z(idx==1,2),'r.','MarkerSize',12)
+hold on
+plot(Z(idx==2,1),Z(idx==2,2),'b.','MarkerSize',12)
+% hold on
+ plot(Z(idx==3,1),Z(idx==3,2),'y.','MarkerSize',12)
+plot(C(:,1),C(:,2),'kx',...
+     'MarkerSize',15,'LineWidth',3)
+legend('Cluster 1','Cluster 2','Centroids',...
+       'Location','NW')
+title 'Cluster Assignments and Centroids'
+hold off
+
+end
+
+
+
+##### SOURCE END #####
+--></body></html>

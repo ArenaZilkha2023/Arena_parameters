@@ -1,0 +1,368 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>RunParameters</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-06-07"><meta name="DC.source" content="RunParameters.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#4">Variables</a></li><li><a href="#5">-----------------------Select the dates of the mat file -----------------------</a></li><li><a href="#6">-------------------------aux data-----------------------------</a></li><li><a href="#7">-------------------Activate Alex Script-----------------</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> RunParameters(~,~)
+</pre><pre class="codeinput"><span class="comment">%--------------------To calculate all the parameters by using all</span>
+<span class="comment">%GUI--------</span>
+</pre><pre class="codeinput"><span class="keyword">global</span> h
+</pre><h2>Variables<a name="4"></a></h2><pre class="codeinput"><span class="comment">%-------------------Select the experiments-------------------</span>
+index_selected = get(h.listRunParams,<span class="string">'Value'</span>);
+list = get(h.listRunParams,<span class="string">'String'</span>);
+item_selected = list(index_selected,1); <span class="comment">% Convert from cell array</span>
+
+Exp_arrA=item_selected'; <span class="comment">%Input Data</span>
+</pre><h2>-----------------------Select the dates of the mat file -----------------------<a name="5"></a></h2><pre class="codeinput"><span class="keyword">for</span> j=1:length(item_selected)
+Folder_Data=strcat(get(h.editRunParams,<span class="string">'string'</span>),<span class="string">'\'</span>,item_selected(j),<span class="string">'\'</span>,<span class="string">'Results'</span>,<span class="string">'\'</span>);
+Folder_Data=char(Folder_Data);
+ListFiles=dir([Folder_Data,<span class="string">'*.mat'</span>]);
+
+clear <span class="string">ListDates</span>
+<span class="keyword">for</span> i=3:length(ListFiles(not([ListFiles.isdir])))
+I=strfind(ListFiles(i).name,<span class="string">'_'</span>);
+Aux=char(ListFiles(i).name);
+ListDates(i-2)=cellstr(Aux(1:I(3)-1));
+<span class="keyword">end</span>
+subStr_arrA{1,j}=unique(ListDates);
+
+<span class="keyword">end</span>
+<span class="comment">%A=(subStr_arr{1,1})</span>
+</pre><pre class="codeoutput error">Undefined function or variable 'ListDates'.
+
+Error in RunParameters (line 28)
+subStr_arrA{1,j}=unique(ListDates);
+</pre><h2>-------------------------aux data-----------------------------<a name="6"></a></h2><pre class="codeinput">aux_data.rootPath=strcat(get(h.editRunParams,<span class="string">'string'</span>),<span class="string">'\'</span>);
+aux_data.mm_nmb=5; <span class="comment">%consider that males and females the same for all the experiments.</span>
+aux_data.mf_nmb=0;
+aux_data.excel_file=<span class="string">'AllParametersGV.xlsx'</span>;
+aux_data.save_to=strcat(get(h.editSave,<span class="string">'string'</span>),<span class="string">'\'</span>)
+</pre><h2>-------------------Activate Alex Script-----------------<a name="7"></a></h2><pre class="codeinput"><span class="keyword">for</span> w=1:length(item_selected)
+</pre><pre class="codeinput">data4excel=[];
+Exp_arr=Exp_arrA(w)
+subStr_arr=subStr_arrA(w)
+</pre><pre class="codeinput">[prmsGV37_data,T,Y,non_empty_days,aux_data]=func_extractPrms_byAllParameters15_1_14(Exp_arr,subStr_arr,aux_data);
+
+ aa=prmsGV37_data{1}(:,:,logical(non_empty_days)); prmsGV37_data{1}=aa;
+</pre><pre class="codeinput">                prms.time_interval_mode=0; prms.time_interval_mode=0; <span class="comment">%length(subStr_arr);</span>
+                prms.Exp=Exp_arr;
+                prms.rootPath=aux_data.rootPath;
+                prms.mm_nmb=5;
+                prms.mf_nmb=0;
+                prms.excel_file_path=strcat(aux_data.save_to,aux_data.excel_file);
+                prms.write2excel_Mode=1
+</pre><pre class="codeinput">                [Ok,data4excel]=writeGV372excel(prmsGV37_data,T,Y,prms,1,data4excel,subStr_arr,Exp_arr);
+                writing2excel_done=1;data4mat(1).prmsGV37_data=prmsGV37_data{1}; data4mat(1).T=T; data4mat(1).Y=Y; data4mat(1).non_empty_days=non_empty_days;
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+
+
+<span class="comment">%%----------AUXILIARY FUNCTIONS------------------</span>
+</pre><pre class="codeinput"><span class="keyword">function</span> [Ok data4excel]=writeGV372excel(prmsGV37_data,T,Y,prms,visitN,data4excel,subStr_arr,Exp_arr)
+<span class="comment">% write to excel_file</span>
+ dd=prmsGV37_data;
+
+Ok=0;
+
+<span class="keyword">if</span>(nargin&lt;6), data4excel=[];  <span class="keyword">end</span>
+tt=data4excel;
+<span class="keyword">if</span>(nargin&lt;5 || isempty(visitN)), visitN=1; <span class="keyword">end</span>
+
+IDs_clmn = get_mIDs_by_ExpName(prms.Exp,prms.rootPath)';
+
+mNmb=prms.mm_nmb+prms.mf_nmb;
+sz=size(prmsGV37_data{1})
+<span class="comment">% assert(length(T)==sz(2),'Not the same number of Titles and Measurements !?');</span>
+<span class="comment">% assert(sz(1)==mNmb,'Problem with data size');</span>
+<span class="keyword">if</span>(prms.time_interval_mode&gt;0)
+    timeIntrvlsNmb=prms.time_interval_mode;
+<span class="comment">%     if(~isempty(headers)), headers{end+1}=prms.time_interval;</span>
+<span class="comment">%     else</span>
+      headers=cat(2,{<span class="string">' '</span>},{<span class="string">'head chip'</span>},{prms.time_interval});
+<span class="comment">%     end</span>
+<span class="keyword">else</span>
+    timeIntrvlsNmb=sz(3);
+    tn=mat2cell(1:timeIntrvlsNmb,1,ones(1,timeIntrvlsNmb)); headers=cat(2,{<span class="string">' '</span>},{<span class="string">'head chip'</span>},tn);
+<span class="keyword">end</span>
+
+excel_file=prms.excel_file_path;
+
+firstOffst=3; gapping=1; <span class="comment">% gapping - number of empty lines between 2 data chunks</span>
+<span class="comment">% currentStep=mNmb+gapping;  % is defined as number of lines between first line of previous data(including title) and first line of the next one</span>
+<span class="comment">% currentOffst=firstOffst;</span>
+
+head_ref=[<span class="string">'A'</span> num2str(firstOffst-1)];
+
+<span class="comment">% xlswrite(excel_file, headers, visitN, head_ref);</span>
+
+<span class="keyword">if</span>(~isempty(tt)), data4excel{1,end+1}=prms.time_interval;
+<span class="keyword">else</span>
+    data4excel=headers;
+<span class="keyword">end</span>
+[m n p]=size(cell2mat(dd))
+<span class="keyword">for</span> dn=1:n
+    <span class="keyword">if</span>(isempty(tt))
+        cr_data=cell(mNmb,1); cr_data{1}=[T{dn} <span class="string">'('</span> Y{dn} <span class="string">')'</span>]; <span class="comment">% &lt;-- first cell column with current parameter name</span>
+        cr_data=cat(2,cr_data,IDs_clmn); <span class="comment">% &lt;-- IDs column</span>
+    <span class="keyword">end</span>
+    <span class="keyword">if</span>(prms.time_interval_mode&gt;0)
+        aa=mat2cell(squeeze(prmsGV37_data{1}(:,dn)),ones(1,sz(1)),ones(1,timeIntrvlsNmb));
+    <span class="keyword">else</span>
+        aa=mat2cell(squeeze(prmsGV37_data{1}(:,dn,:)),ones(1,sz(1)),ones(1,timeIntrvlsNmb));
+    <span class="keyword">end</span>
+    <span class="keyword">if</span>(isempty(tt))
+        cr_data=cat(2,cr_data,aa); <span class="comment">% horizontal addition of params data</span>
+        cr_data=cat(1,cr_data,cell(gapping,size(headers,2)));
+        data4excel=cat(1,data4excel,cr_data);
+    <span class="keyword">else</span>
+        assert(mNmb==length(aa),<span class="string">'Problem with mNmb'</span>);
+        <span class="keyword">for</span> tk=1:mNmb
+            data4excel{tk+1+(dn-1)*(1+mNmb),end}=aa{tk};
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">% dd1=permute(dd{:,:,:},[2 1 3]);</span>
+<span class="comment">% dd2=reshape(dd1,[n,m*p]);</span>
+<span class="comment">% A=strcat(T,'(',Y,')');</span>
+<span class="comment">% ident=IDs_clmn';</span>
+<span class="comment">% subStr_arr{1};</span>
+<span class="comment">% raw(3:length(A)+2,1)=A';</span>
+<span class="comment">% raw(2,3:p*m+2)=repmat(ident,[1,p]);</span>
+<span class="comment">% raw(2,1)={'Head chip'};</span>
+<span class="comment">% raw(3:size(dd2,1)+2,2:size(dd2,2)+1)=num2cell(dd2);</span>
+<span class="comment">% raw(1,1)={'Dates'};</span>
+<span class="comment">% raw(1,3:length(ident):length(subStr_arr{1})+2)=subStr_arr{1};</span>
+
+sheet=Exp_arr{1};
+<span class="comment">% xlswrite(excel_file, data4excel, visitN, head_ref);</span>
+<span class="comment">% xlrange=[visitN,head_ref];</span>
+xlswrite(excel_file, data4excel,sheet);
+<span class="comment">% xlswrite(excel_file,raw,sheet);</span>
+Ok=1;
+
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function RunParameters(~,~)
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHTo calculate all the parameters by using all
+%GUIREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+%% 
+global h
+
+
+%% Variables
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Select the experimentsREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+index_selected = get(h.listRunParams,'Value');
+list = get(h.listRunParams,'String');
+item_selected = list(index_selected,1); % Convert from cell array
+
+Exp_arrA=item_selected'; %Input Data
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Select the dates of the mat file REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+
+for j=1:length(item_selected)
+Folder_Data=strcat(get(h.editRunParams,'string'),'\',item_selected(j),'\','Results','\');
+Folder_Data=char(Folder_Data);
+ListFiles=dir([Folder_Data,'*.mat']);
+
+clear ListDates
+for i=3:length(ListFiles(not([ListFiles.isdir])))
+I=strfind(ListFiles(i).name,'_');
+Aux=char(ListFiles(i).name);
+ListDates(i-2)=cellstr(Aux(1:I(3)-1));
+end
+subStr_arrA{1,j}=unique(ListDates);
+
+end
+%A=(subStr_arr{1,1})
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-aux dataREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+aux_data.rootPath=strcat(get(h.editRunParams,'string'),'\');
+aux_data.mm_nmb=5; %consider that males and females the same for all the experiments.
+aux_data.mf_nmb=0; 
+aux_data.excel_file='AllParametersGV.xlsx';
+aux_data.save_to=strcat(get(h.editSave,'string'),'\')
+
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Activate Alex ScriptREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+for w=1:length(item_selected)
+data4excel=[];
+Exp_arr=Exp_arrA(w)
+subStr_arr=subStr_arrA(w)
+
+%% 
+
+[prmsGV37_data,T,Y,non_empty_days,aux_data]=func_extractPrms_byAllParameters15_1_14(Exp_arr,subStr_arr,aux_data);
+
+ aa=prmsGV37_data{1}(:,:,logical(non_empty_days)); prmsGV37_data{1}=aa;
+ %% 
+ 
+                prms.time_interval_mode=0; prms.time_interval_mode=0; %length(subStr_arr);
+                prms.Exp=Exp_arr;
+                prms.rootPath=aux_data.rootPath;
+                prms.mm_nmb=5;
+                prms.mf_nmb=0;
+                prms.excel_file_path=strcat(aux_data.save_to,aux_data.excel_file);
+                prms.write2excel_Mode=1
+                %% 
+                
+                [Ok,data4excel]=writeGV372excel(prmsGV37_data,T,Y,prms,1,data4excel,subStr_arr,Exp_arr);
+                writing2excel_done=1;data4mat(1).prmsGV37_data=prmsGV37_data{1}; data4mat(1).T=T; data4mat(1).Y=Y; data4mat(1).non_empty_days=non_empty_days;
+
+    
+end              
+                
+end
+
+
+%%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHAUXILIARY FUNCTIONSREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+
+%% 
+function [Ok data4excel]=writeGV372excel(prmsGV37_data,T,Y,prms,visitN,data4excel,subStr_arr,Exp_arr)
+% write to excel_file 
+ dd=prmsGV37_data;
+
+Ok=0;
+
+if(nargin<6), data4excel=[];  end
+tt=data4excel;
+if(nargin<5 || isempty(visitN)), visitN=1; end
+
+IDs_clmn = get_mIDs_by_ExpName(prms.Exp,prms.rootPath)';
+
+mNmb=prms.mm_nmb+prms.mf_nmb;
+sz=size(prmsGV37_data{1})
+% assert(length(T)==sz(2),'Not the same number of Titles and Measurements !?');
+% assert(sz(1)==mNmb,'Problem with data size');
+if(prms.time_interval_mode>0)
+    timeIntrvlsNmb=prms.time_interval_mode;
+%     if(~isempty(headers)), headers{end+1}=prms.time_interval;
+%     else
+      headers=cat(2,{' '},{'head chip'},{prms.time_interval});
+%     end
+else
+    timeIntrvlsNmb=sz(3); 
+    tn=mat2cell(1:timeIntrvlsNmb,1,ones(1,timeIntrvlsNmb)); headers=cat(2,{' '},{'head chip'},tn);
+end
+
+excel_file=prms.excel_file_path;
+
+firstOffst=3; gapping=1; % gapping - number of empty lines between 2 data chunks
+% currentStep=mNmb+gapping;  % is defined as number of lines between first line of previous data(including title) and first line of the next one
+% currentOffst=firstOffst;
+
+head_ref=['A' num2str(firstOffst-1)];
+
+% xlswrite(excel_file, headers, visitN, head_ref);
+
+if(~isempty(tt)), data4excel{1,end+1}=prms.time_interval;
+else
+    data4excel=headers;
+end
+[m n p]=size(cell2mat(dd))
+for dn=1:n
+    if(isempty(tt))
+        cr_data=cell(mNmb,1); cr_data{1}=[T{dn} '(' Y{dn} ')']; % <REPLACE_WITH_DASH_DASH first cell column with current parameter name
+        cr_data=cat(2,cr_data,IDs_clmn); % <REPLACE_WITH_DASH_DASH IDs column
+    end
+    if(prms.time_interval_mode>0)
+        aa=mat2cell(squeeze(prmsGV37_data{1}(:,dn)),ones(1,sz(1)),ones(1,timeIntrvlsNmb));
+    else
+        aa=mat2cell(squeeze(prmsGV37_data{1}(:,dn,:)),ones(1,sz(1)),ones(1,timeIntrvlsNmb));
+    end
+    if(isempty(tt))
+        cr_data=cat(2,cr_data,aa); % horizontal addition of params data
+        cr_data=cat(1,cr_data,cell(gapping,size(headers,2)));
+        data4excel=cat(1,data4excel,cr_data);
+    else
+        assert(mNmb==length(aa),'Problem with mNmb');
+        for tk=1:mNmb
+            data4excel{tk+1+(dn-1)*(1+mNmb),end}=aa{tk};
+        end
+    end
+end
+
+% dd1=permute(dd{:,:,:},[2 1 3]);
+% dd2=reshape(dd1,[n,m*p]);
+% A=strcat(T,'(',Y,')');
+% ident=IDs_clmn';
+% subStr_arr{1};
+% raw(3:length(A)+2,1)=A';
+% raw(2,3:p*m+2)=repmat(ident,[1,p]);
+% raw(2,1)={'Head chip'};
+% raw(3:size(dd2,1)+2,2:size(dd2,2)+1)=num2cell(dd2);
+% raw(1,1)={'Dates'};
+% raw(1,3:length(ident):length(subStr_arr{1})+2)=subStr_arr{1};
+
+sheet=Exp_arr{1};
+% xlswrite(excel_file, data4excel, visitN, head_ref);
+% xlrange=[visitN,head_ref];
+xlswrite(excel_file, data4excel,sheet);
+% xlswrite(excel_file,raw,sheet);
+Ok=1;
+
+end
+
+##### SOURCE END #####
+--></body></html>

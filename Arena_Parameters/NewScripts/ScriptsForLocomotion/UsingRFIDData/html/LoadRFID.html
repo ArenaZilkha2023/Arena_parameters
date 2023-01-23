@@ -1,0 +1,166 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>LoadRFID</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-03-16"><meta name="DC.source" content="LoadRFID.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#5">Open each text file</a></li><li><a href="#6">%find only indexes for the intrested mouse with 2 identities.</a></li><li><a href="#7">Concatenate the files</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> RFIDData=LoadRFID(directory,ID1,ID2)
+</pre><pre class="codeinput"><span class="comment">%UNTITLED4 Summary of this function goes here</span>
+<span class="comment">%   Treat RFiD data</span>
+RFIDData={};
+</pre><pre class="codeinput">ListFiles=dir([directory,<span class="string">'\*.txt'</span>]);
+Num = length(ListFiles(not([ListFiles.isdir])));<span class="comment">%number of files</span>
+<span class="comment">%ListFiles.datenum</span>
+<span class="comment">%ListFiles.name</span>
+<span class="keyword">for</span> i=1:Num <span class="comment">%go over each file to take the header</span>
+</pre><pre class="codeinput"><span class="comment">%clear variables</span>
+
+ raw={}; <span class="comment">%auxiliary</span>
+ Data={};
+ I=[];
+</pre><h2>Open each text file<a name="5"></a></h2><pre class="codeinput">fid=fopen([directory,<span class="string">'\'</span>,ListFiles(i).name]);
+Data=textscan(fid,<span class="string">'%s %s %s %s'</span>,<span class="string">'delimiter'</span>,<span class="string">';'</span>,<span class="string">'EmptyValue'</span>,NaN);
+
+fclose(fid);
+<span class="comment">%remember first column is mice id, second is the date, third is the time</span>
+<span class="comment">%and last it is the antenna.</span>
+
+raw=[Data{1},Data{2},Data{3},Data{4}];
+</pre><h2>%find only indexes for the intrested mouse with 2 identities.<a name="6"></a></h2><pre class="codeinput">I=[find(strcmp(ID1,raw(:,1))==1);find(strcmp(ID2,raw(:,1))==1)];
+</pre><h2>Concatenate the files<a name="7"></a></h2><pre class="codeinput"><span class="keyword">if</span> i==1
+RFIDData=raw(I,:);
+<span class="keyword">else</span>
+RFIDData=[RFIDData;raw(I,:)];
+
+<span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+<span class="comment">%sort according to ascending time</span>
+values=[];
+Index=[];
+[values,Index]=sort(datenum(RFIDData(:,3)));
+RFIDData=RFIDData(Index,:);
+
+
+
+<span class="comment">%xlswrite('test1.xlsx',RFIDData)</span>
+</pre><pre class="codeoutput error">Not enough input arguments.
+
+Error in LoadRFID (line 7)
+ListFiles=dir([directory,'\*.txt']);
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function RFIDData=LoadRFID(directory,ID1,ID2)
+%UNTITLED4 Summary of this function goes here
+%   Treat RFiD data
+RFIDData={};
+%% 
+
+ListFiles=dir([directory,'\*.txt']);
+Num = length(ListFiles(not([ListFiles.isdir])));%number of files
+%ListFiles.datenum
+%ListFiles.name
+for i=1:Num %go over each file to take the header
+%clear variables
+
+ raw={}; %auxiliary 
+ Data={};
+ I=[];
+ %% Open each text file
+ 
+fid=fopen([directory,'\',ListFiles(i).name]);
+Data=textscan(fid,'%s %s %s %s','delimiter',';','EmptyValue',NaN);
+
+fclose(fid);
+%remember first column is mice id, second is the date, third is the time
+%and last it is the antenna.
+
+raw=[Data{1},Data{2},Data{3},Data{4}];
+%% %find only indexes for the intrested mouse with 2 identities.
+
+I=[find(strcmp(ID1,raw(:,1))==1);find(strcmp(ID2,raw(:,1))==1)];
+%% Concatenate the files
+
+if i==1
+RFIDData=raw(I,:);
+else
+RFIDData=[RFIDData;raw(I,:)];
+
+end
+end
+%sort according to ascending time
+values=[];
+Index=[];
+[values,Index]=sort(datenum(RFIDData(:,3)));
+RFIDData=RFIDData(Index,:);
+
+
+
+%xlswrite('test1.xlsx',RFIDData)
+end
+
+
+##### SOURCE END #####
+--></body></html>

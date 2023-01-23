@@ -1,0 +1,1656 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Chasing</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-08-20"><meta name="DC.source" content="Chasing.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#4">---------------------------------Settings used during these years----------------------</a></li><li><a href="#7">-----------------------------Calculate chasing without repeats ----------------------------</a></li><li><a href="#9">Variable definition</a></li><li><a href="#12">-----------------------Calculation of chasing according to second method------------------------------</a></li><li><a href="#16">variables</a></li><li><a href="#20">Looking for chasing when the distance is less than a given angle and the velocity and angle conditions are satisfied.</a></li><li><a href="#21">-------------------------Select events-remove less than 3 events--------------</a></li><li><a href="#22">----------------Treat different small events from larger events-----------------------</a></li><li><a href="#26">Eliminate very small events</a></li><li><a href="#27">Join the two chasing events with small and large events</a></li><li><a href="#35">-----------------Auxiliary functions-------------------</a></li><li><a href="#36">-----------Detect chasing----------------------------------------------------------</a></li><li><a href="#44">% vector of location between mouse</a></li><li><a href="#45">%calculate angle between vectors</a></li><li><a href="#50">% vector of movement second mouse</a></li><li><a href="#51">%calculate angle between vectors</a></li><li><a href="#54">-----------This function fill gaps between chasing events</a></li><li><a href="#56">-----------This function fill gaps between SMALL chasing events</a></li><li><a href="#57">----------------Second function for filtering</a></li><li><a href="#58">-------------First function for data filtering------------------</a></li><li><a href="#59">-------------------------Function to find the exact beggining and end of the chasing----------------------</a></li><li><a href="#60">---------- Determine if the events with duplicates are corrected--------------</a></li></ul></div><pre class="codeinput"><span class="keyword">classdef</span> Chasing
+</pre><pre class="codeinput"><span class="comment">%All related with the chasing</span>
+
+    properties
+</pre><pre class="codeinput">         numOfMice; <span class="comment">%number of mice</span>
+</pre><h2>---------------------------------Settings used during these years----------------------<a name="4"></a></h2><pre class="codeinput">         Dist_tresh1;<span class="comment">%40 in mm</span>
+         Velocity_Tresh;<span class="comment">%1</span>
+         PathTresh;<span class="comment">%80</span>
+         Dist_tresh2;
+
+          AngleMaximum1; <span class="comment">%This is the maximum angle, which is allowed, between the line joining the mice 1-2 and the vector of movement of mouse 1.</span>
+          AngleMaximum2; <span class="comment">%This is the maximum angle, which is allowed, between the vector of movement of mouse 1 and mouse 2.</span>
+          MinimumPath; <span class="comment">%This is the minimum path recording to be considered as chasing.</span>
+<span class="comment">%           GapPath=200; %This is the gap between the chasing that it is allow in units of mm</span>
+          GapPath;
+          GapPathEnd;
+          GapFrames;
+
+           GapPathEndS;
+          GapFramesS;
+
+         ThreshVelocity; <span class="comment">%threshold for the velocity</span>
+<span class="comment">%         if(use_RFID_only==0)</span>
+<span class="comment">%     Dist_tresh1=30;%40</span>
+<span class="comment">%     Velocity_Tresh=.5;%1</span>
+<span class="comment">%     PathTresh=60;%80</span>
+<span class="comment">%     Dist_tresh2=20;</span>
+<span class="comment">% elseif(RFID_SET==1) % RFID_1</span>
+<span class="comment">%     Dist_tresh1=60; %30;</span>
+<span class="comment">%     Velocity_Tresh=.1; %.5;</span>
+<span class="comment">%     PathTresh=50; %60;</span>
+<span class="comment">%     Dist_tresh2=0; %20;</span>
+<span class="comment">% elseif(RFID_SET==2) % RFID_1</span>
+<span class="comment">%     Dist_tresh1=50; %30;</span>
+<span class="comment">%     Velocity_Tresh=.25; %.5;</span>
+<span class="comment">%     PathTresh=50; %60;</span>
+<span class="comment">%     Dist_tresh2=10;</span>
+<span class="comment">% end</span>
+</pre><pre class="codeinput">     <span class="keyword">end</span>
+
+    <span class="comment">%----------------------------------------------------------------------</span>
+</pre><pre class="codeinput">methods
+</pre><h2>-----------------------------Calculate chasing without repeats ----------------------------<a name="7"></a></h2><pre class="codeinput">    <span class="keyword">function</span> ChasingCal=ChasingCal(obj,TrajectoryX,TrajectoryY,Velocity,isInArena,VectorX,VectorY,Distance,timeLine)
+</pre><pre class="codeinput">  hbar=waitbar(0,<span class="string">'Calculating Chasing'</span>)
+
+ Dist_tresh1=obj.Dist_tresh1;
+ Velocity_Tresh=obj.Velocity_Tresh;
+ PathTresh=obj.PathTresh;
+ Dist_tresh2=obj.Dist_tresh2;
+ miceList=obj.numOfMice;
+</pre><h2>Variable definition<a name="9"></a></h2><pre class="codeinput"> AllEvents=[];
+ Par=[];
+ chasing_all=cell(1,obj.numOfMice);
+
+ chased_all=chasing_all;
+ move_together_all=chasing_all;
+ chasing=zeros(obj.numOfMice);
+ IndexChasingAll=zeros(length(timeLine),obj.numOfMice);
+</pre><pre class="codeinput">  <span class="keyword">for</span> mouse1 = 1:obj.numOfMice
+    others = setdiff(1:obj.numOfMice,mouse1);
+    Trajectory1=[TrajectoryX(:,mouse1) TrajectoryY(:,mouse1)];
+    Trajectory1(isnan(Trajectory1(:,1))|~isInArena(:,mouse1))=0;<span class="comment">%if it is outside the arena</span>
+
+    <span class="keyword">if</span> sum(sum(Trajectory1))==0 <span class="comment">%in the case is not in the arena</span>
+       <span class="keyword">continue</span>;
+    <span class="keyword">else</span>
+        Velocity1=Velocity(:,mouse1);
+        Vector1=[VectorX(:,mouse1) VectorY(:,mouse1)];
+        dist1=Distance(:,mouse1);
+
+        <span class="keyword">for</span> mouse2 = others <span class="comment">%go over the other mouse</span>
+            Trajectory2=[TrajectoryX(:,mouse2) TrajectoryY(:,mouse2)];
+            Trajectory2(isnan(Trajectory2(:,1))|~isInArena(:,mouse2))=0;
+            <span class="keyword">if</span> sum(sum(Trajectory2))==0 <span class="comment">%if it is not in the arean</span>
+                <span class="keyword">continue</span>;
+            <span class="keyword">else</span>
+                Vector2=[VectorX(:,mouse2) VectorY(:,mouse2)];
+                Velocity2=Velocity(:,mouse2);
+                dist2=Distance(:,mouse2);
+                [chasing12 chasing21 together12 IndexChasing allevents par ]=detectChasing(Trajectory1,Trajectory2,Velocity1,Velocity2,Vector1,Vector2,timeLine,Dist_tresh1,Velocity_Tresh,PathTresh,Dist_tresh2, miceList);
+
+       <span class="comment">%CONTINUE FROM HERE</span>
+                <span class="keyword">if</span> ~isempty(chasing12)
+                    IndexChasingAll(IndexChasing,mouse1)=mouse2;
+                    chasing12=[chasing12 mouse2*ones(size(chasing12,1),1)];
+                    chasing(mouse1,mouse2)=size(chasing12,1);
+                    AllEvents=[AllEvents;allevents];
+                    Par=[Par;par];
+                <span class="keyword">end</span>
+
+                <span class="keyword">if</span> ~isempty(chasing21)
+                    chasing21=[chasing21 mouse2*ones(size(chasing21,1),1)];
+                <span class="keyword">end</span>
+
+                <span class="keyword">if</span>~isempty(together12)
+                    together12=[together12 mouse2*ones(size(together12,1),1)];
+                <span class="keyword">end</span>
+
+                move_together_all{mouse1}=[move_together_all{mouse1};together12];
+                chasing_all{mouse1}=[chasing_all{mouse1};chasing12];
+                chased_all{mouse1}=[chased_all{mouse1};chasing21];
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    waitbar(j/length(miceList));
+  <span class="keyword">end</span>
+close(hbar);
+    ChasingCal=[chasing_all,chased_all,move_together_all];
+</pre><pre class="codeinput">    <span class="keyword">end</span>
+</pre><h2>-----------------------Calculation of chasing according to second method------------------------------<a name="12"></a></h2><pre class="codeinput">    <span class="keyword">function</span> ChasingCalvs2=ChasingCalvs2( obj,TrajectoryX,TrajectoryY,DeltaX,DeltaY,isInArena,RepeatedFrames,Velocity,Duplicates )
+</pre><pre class="codeinput">    hbar=waitbar(0,<span class="string">'Calculating second version Chasing'</span>)
+        <span class="comment">%%Variable Definition</span>
+    chasing_all=cell(1,obj.numOfMice);
+    being_chasing_all=cell(1,obj.numOfMice);
+</pre><pre class="codeinput">  <span class="keyword">for</span> mouse1=1:obj.numOfMice
+</pre><pre class="codeinput"> <span class="comment">%for mouse1=1</span>
+</pre><h2>variables<a name="16"></a></h2><pre class="codeinput">     Trajectory1=[];
+
+
+
+          others=setdiff(1:obj.numOfMice,mouse1);
+          Trajectory1=[TrajectoryX(:,mouse1) TrajectoryY(:,mouse1)];
+          Trajectory1(~isInArena(:,mouse1))=0; <span class="comment">%in the case is not in the arena</span>
+            <span class="keyword">if</span> isempty(find(isInArena(:,mouse1)==1))<span class="comment">%in the case all the arena is zero and not mouse in the arena</span>
+            Trajectory1=0;
+            <span class="keyword">end</span>
+
+
+
+        <span class="keyword">if</span> sum(sum( Trajectory1))==0
+        <span class="keyword">continue</span>; <span class="comment">%continue with another mouse</span>
+        <span class="keyword">else</span>
+       <span class="keyword">for</span> mouse2=others
+</pre><pre class="codeinput"> <span class="comment">% for mouse2=5</span>
+         <span class="comment">%variables</span>
+        clear <span class="string">ChasingVector</span>;
+        clear <span class="string">angle1</span>;
+        clear <span class="string">angle2</span>;
+        clear <span class="string">BegChasing</span>;
+        clear <span class="string">EndChasing</span>;
+        clear <span class="string">BegChasingCorrected1</span>;
+        clear <span class="string">EndChasingCorrected1</span>;
+        clear <span class="string">BegChasingCorrected2</span>;
+        clear <span class="string">EndChasingCorrected2</span>;
+          clear <span class="string">BegChasingCorrected3</span>;
+        clear <span class="string">EndChasingCorrected3</span>;
+         clear <span class="string">BegChasingCorrected</span>;
+        clear <span class="string">EndChasingCorrected</span>;
+
+         clear <span class="string">BegChasingCorrected1S</span>;
+        clear <span class="string">EndChasingCorrected1S</span>;
+        clear <span class="string">BegChasingCorrected2S</span>;
+        clear <span class="string">EndChasingCorrected2S</span>;
+          clear <span class="string">BegChasingCorrected3S</span>;
+        clear <span class="string">EndChasingCorrected3S</span>;
+         clear <span class="string">BegChasingCorrectedS</span>;
+        clear <span class="string">EndChasingCorrectedS</span>;
+        clear  <span class="string">Distance</span>;
+        clear <span class="string">SmallEvents</span>;
+          clear <span class="string">BegChasingCorrected4S</span>;
+        clear <span class="string">EndChasingCorrected4S</span>;
+
+        ChasingVector=[];
+         angle1=[];
+         angle2=[];
+         Trajectory2=[];
+         chasing12=[];
+         beingchasing21=[];
+</pre><pre class="codeinput">          Trajectory2=[TrajectoryX(:,mouse2) TrajectoryY(:,mouse2)];
+          Trajectory2(~isInArena(:,mouse2))=0; <span class="comment">%in the case is not in the arena</span>
+           <span class="keyword">if</span> isempty(find(isInArena(:,mouse2)==1))<span class="comment">%in the case all the arena is zero and not mouse in the arena</span>
+            Trajectory2=0;
+           <span class="keyword">end</span>
+
+           <span class="keyword">if</span> sum(sum( Trajectory2))==0
+              <span class="keyword">continue</span>; <span class="comment">%continue with another mouse</span>
+           <span class="keyword">else</span>
+</pre><pre>              size(Trajectory1(:,1))
+              size(DeltaX,1)
+               size(Trajectory1(1:size(DeltaX,1),2))
+                size(Trajectory2(1:size(DeltaX,1),1))
+               size(Trajectory2(1:size(DeltaX,1),2))
+               size(DeltaX(:,mouse1))
+               size(DeltaY(:,mouse1))</pre><pre class="codeinput">             <span class="comment">%%Calculate angle between line joining 1 to 2 and mouse 1 movement direction</span>
+
+             angle1=cellfun(@FindAngle,num2cell(Trajectory1(1:size(DeltaX,1),1)),num2cell(Trajectory1(1:size(DeltaY,1),2)),num2cell(Trajectory2(1:size(DeltaX,1),1)),num2cell(Trajectory2(1:size(DeltaY,1),2)),num2cell(DeltaX(:,mouse1)),num2cell(DeltaY(:,mouse1)),<span class="string">'UniformOutput'</span>,false);
+
+             <span class="comment">%%Calculate angle between movement of mouse 1 and movement of</span>
+             <span class="comment">%%mouse 2</span>
+
+
+             angle2=cellfun(@FindAngleDirection,num2cell(DeltaX(:,mouse1)),num2cell(DeltaY(:,mouse1)),num2cell(DeltaX(:,mouse2)),num2cell(DeltaY(:,mouse2)),<span class="string">'UniformOutput'</span>,false);
+             dx1=DeltaX(:,mouse1);
+<span class="comment">%              Array=[Trajectory1(1:length(dx1),1),Trajectory1(1:length(dx1),2),Trajectory2(1:length(dx1),1),Trajectory2(1:length(dx1),2),dx1,dy1,dx2,dy2,angle1,angle2];</span>
+
+            <span class="comment">%-----------------------------Difference between the 2 trajectories------------------------------</span>
+             DistFun=@(t1,t2) sqrt(sum((t1-t2).^2,2));
+
+              Distance=DistFun(Trajectory1,Trajectory2);
+
+
+             <span class="comment">%---------------------------------------------------</span>
+</pre><h2>Looking for chasing when the distance is less than a given angle and the velocity and angle conditions are satisfied.<a name="20"></a></h2><pre class="codeinput">           ChasingVector=((cell2mat(angle1) &lt; obj.AngleMaximum1) &amp; (cell2mat(angle2) &lt; obj.AngleMaximum2) &amp; (isInArena(1:size(DeltaY,1),mouse1))==1 &amp; (isInArena(1:size(DeltaY,1),mouse2))==1 &amp; (Velocity(1:size(DeltaY,1),mouse1)&gt; obj.ThreshVelocity) &amp; (Velocity(1:size(DeltaY,1),mouse2)&gt;obj.ThreshVelocity) &amp;( Distance(1:size(DeltaY,1))&lt;obj.GapPath));<span class="comment">%this is a logical vector</span>
+
+              <span class="comment">%ChasingVector=((cell2mat(angle1) &lt; obj.AngleMaximum1) &amp; (cell2mat(angle2) &lt; obj.AngleMaximum2) &amp; (isInArena(1:size(DeltaY,1),mouse1))==1 &amp; (isInArena(1:size(DeltaY,1),mouse2))==1 &amp; (Velocity(1:size(DeltaY,1),mouse1)&gt; obj.ThreshVelocity) &amp; (Velocity(1:size(DeltaY,1),mouse2)&gt;obj.ThreshVelocity));%this is a logical vector</span>
+            [BegChasingCorrected2 EndChasingCorrected2]=getEventsIndexesGV(ChasingVector,length(ChasingVector));
+</pre><h2>-------------------------Select events-remove less than 3 events--------------<a name="21"></a></h2><pre class="codeinput">               [ChasingVector ChasingVectorWithSmallEvents]=RealEvents1(BegChasingCorrected2, EndChasingCorrected2,ChasingVector,DeltaX(:,mouse1),DeltaY(:,mouse1),DeltaX(:,mouse2),DeltaY(:,mouse2),obj.MinimumPath);
+</pre><h2>----------------Treat different small events from larger events-----------------------<a name="22"></a></h2><pre>              [BegChasingCorrected3S EndChasingCorrected3S]=getEventsIndexesGV(ChasingVectorWithSmallEvents,length(ChasingVectorWithSmallEvents));</pre><pre>               [BegChasingCorrected3 EndChasingCorrected3]=getEventsIndexesGV(ChasingVector,length(ChasingVector));</pre><pre class="codeinput">             <span class="comment">%--------------------Consider the case in which is chasing and the coordinates are duplicated then must decide if the event is correct or not</span>
+             <span class="comment">%----------for large events--------</span>
+              ChasingVector=CorrectDuplicates(ChasingVector,Duplicates(:,mouse1),Duplicates(:,mouse2),Trajectory1,Trajectory2);
+
+              [BegChasingCorrected1 EndChasingCorrected1]=getEventsIndexesGV(ChasingVector,length(ChasingVector));
+             <span class="comment">%----------------------for small events---------</span>
+                ChasingVectorWithSmallEvents=CorrectDuplicates(ChasingVectorWithSmallEvents,Duplicates(:,mouse1),Duplicates(:,mouse2),Trajectory1,Trajectory2);
+
+              [BegChasingCorrected1S EndChasingCorrected1S]=getEventsIndexesGV(ChasingVectorWithSmallEvents,length(ChasingVectorWithSmallEvents));
+
+
+             <span class="comment">%-----------------------------------------------------</span>
+<span class="comment">%</span>
+<span class="comment">%                 Array=[Trajectory1(1:length(dx1),1),Trajectory1(1:length(dx1),2),Trajectory2(1:length(dx1),1),Trajectory2(1:length(dx1),2),DeltaX(:,mouse1),DeltaY(:,mouse1),DeltaX(:,mouse2),DeltaY(:,mouse2),cell2mat(angle1),cell2mat(angle2),isInArena(1:size(DeltaY,1),mouse1),isInArena(1:size(DeltaY,1),mouse2),ChasingVector];</span>
+<span class="comment">%                xlswrite('test.xlsx',Array)</span>
+<span class="comment">%              %Again find  new chasing events</span>
+</pre><pre class="codeinput">             <span class="comment">%----------Unify events which are very near----------------</span>
+             <span class="comment">%------Large events</span>
+             ChasingVector=FillGap(BegChasingCorrected1, EndChasingCorrected1,ChasingVector,Trajectory1,Trajectory2,obj.GapPathEnd,obj.GapFrames);
+             [BegChasingCorrected3 EndChasingCorrected3]=getEventsIndexesGV(ChasingVector,length(ChasingVector));
+
+             <span class="comment">%----Small events-----------------</span>
+              ChasingVectorWithSmallEvents=FillGapSmall(BegChasingCorrected1S, EndChasingCorrected1S,ChasingVectorWithSmallEvents,Trajectory1,Trajectory2,obj.GapPathEndS,obj.GapFramesS);
+             [BegChasingCorrected3S EndChasingCorrected3S]=getEventsIndexesGV(ChasingVectorWithSmallEvents,length(ChasingVectorWithSmallEvents));
+</pre><pre class="codeinput"><span class="comment">%               Array=[Trajectory1(1:length(dx1),1),Trajectory1(1:length(dx1),2),Trajectory2(1:length(dx1),1),Trajectory2(1:length(dx1),2),DeltaX(:,mouse1),DeltaY(:,mouse1),DeltaX(:,mouse2),DeltaY(:,mouse2),cell2mat(angle1),cell2mat(angle2),isInArena(1:size(DeltaY,1),mouse1),isInArena(1:size(DeltaY,1),mouse2),ChasingVector];</span>
+<span class="comment">%                xlswrite('test.xlsx',Array)</span>
+             <span class="comment">%---------------------------------------------------------</span>
+<span class="comment">%</span>
+<span class="comment">%               ChasingVector=RealEvents(BegChasingCorrected2, EndChasingCorrected2,ChasingVector,DeltaX(:,mouse1),DeltaY(:,mouse1),DeltaX(:,mouse2),DeltaY(:,mouse2),obj.MinimumPath);</span>
+<span class="comment">%              [BegChasingCorrected3 EndChasingCorrected3]=getEventsIndexesGV(ChasingVector,length(ChasingVector));</span>
+
+
+
+
+             <span class="comment">%----------------------Once we know the chasing events find the beggining and end of each event</span>
+            ChasingVector=FindEnds(BegChasingCorrected3, EndChasingCorrected3,ChasingVector,Trajectory1,Trajectory2,obj.GapPathEnd);
+
+            ChasingVectorWithSmallEvents=FindEnds(BegChasingCorrected3S, EndChasingCorrected3S,ChasingVectorWithSmallEvents,Trajectory1,Trajectory2,obj.GapPathEnd);
+</pre><h2>Eliminate very small events<a name="26"></a></h2><pre class="codeinput">             [BegChasingCorrected4S EndChasingCorrected4S]=getEventsIndexesGV(ChasingVectorWithSmallEvents,length(ChasingVectorWithSmallEvents)); <span class="comment">%THIS ALL THE CHASING</span>
+
+
+             ChasingVectorWithSmallEvents=RealEvents(BegChasingCorrected4S, EndChasingCorrected4S,ChasingVectorWithSmallEvents,DeltaX(:,mouse1),DeltaY(:,mouse1),DeltaX(:,mouse2),DeltaY(:,mouse2),obj.MinimumPath,Velocity(1:size(DeltaY,1),mouse1),Velocity(1:size(DeltaY,1),mouse2),obj.ThreshVelocity);
+</pre><h2>Join the two chasing events with small and large events<a name="27"></a></h2><pre>           length(ChasingVector)
+           length(ChasingVectorWithSmallEvents)</pre><pre class="codeinput">            ChasingVector=or(ChasingVector,ChasingVectorWithSmallEvents);
+</pre><pre class="codeinput">             [BegChasingCorrected EndChasingCorrected]=getEventsIndexesGV(ChasingVector,length(ChasingVector)); <span class="comment">%THIS ALL THE CHASING</span>
+             [BegChasingCorrectedS EndChasingCorrectedS]=getEventsIndexesGV(ChasingVectorWithSmallEvents,length(ChasingVectorWithSmallEvents));<span class="comment">%For Small events</span>
+
+             <span class="comment">%make  a logical vector with small events</span>
+             SmallEvents=FoundSmallEvents(BegChasingCorrectedS,EndChasingCorrectedS,BegChasingCorrected, EndChasingCorrected);
+
+
+
+             <span class="comment">% Array=[Trajectory1(1:length(dx1),1),Trajectory1(1:length(dx1),2),Trajectory2(1:length(dx1),1),Trajectory2(1:length(dx1),2),DeltaX(:,mouse1),DeltaY(:,mouse1),DeltaX(:,mouse2),DeltaY(:,mouse2),cell2mat(angle1),cell2mat(angle2),isInArena(1:size(DeltaY,1),mouse1),isInArena(1:size(DeltaY,1),mouse2),ChasingVector,RepeatedFrames(1:size(DeltaY,1)),Distance(1:size(DeltaY,1))];</span>
+             <span class="comment">%xlswrite('test.xlsx',Array)</span>
+
+             <span class="comment">%-----------------------------------------------------------------</span>
+             <span class="keyword">if</span> ~isempty(BegChasingCorrected)
+              chasing12=[BegChasingCorrected EndChasingCorrected mouse2*ones(length(BegChasingCorrected),1)  RepeatedFrames(BegChasingCorrected) RepeatedFrames(EndChasingCorrected) SmallEvents];<span class="comment">%Return real frames</span>
+              beingchasing21=[BegChasingCorrected EndChasingCorrected mouse1*ones(length(BegChasingCorrected),1)  RepeatedFrames(BegChasingCorrected) RepeatedFrames(EndChasingCorrected) SmallEvents];
+
+             <span class="keyword">end</span>
+
+            chasing_all{mouse1}=[chasing_all{mouse1};chasing12];
+            being_chasing_all{mouse2}=[ being_chasing_all{mouse2};beingchasing21];
+</pre><pre class="codeinput">           <span class="keyword">end</span>
+</pre><pre class="codeinput">       <span class="keyword">end</span>
+
+      <span class="keyword">end</span>
+    waitbar(j/length(length(obj.numOfMice)));
+</pre><pre class="codeinput"><span class="keyword">end</span>
+close(hbar);
+ChasingCalvs2=[chasing_all,being_chasing_all];
+</pre><pre class="codeinput"><span class="keyword">end</span>
+<span class="comment">%Finish Silvia's script</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><pre class="codeoutput">
+ans = 
+
+  Chasing with properties:
+
+         numOfMice: []
+       Dist_tresh1: []
+    Velocity_Tresh: []
+         PathTresh: []
+       Dist_tresh2: []
+     AngleMaximum1: []
+     AngleMaximum2: []
+       MinimumPath: []
+           GapPath: []
+        GapPathEnd: []
+         GapFrames: []
+       GapPathEndS: []
+        GapFramesS: []
+    ThreshVelocity: []
+
+</pre><h2>-----------------Auxiliary functions-------------------<a name="35"></a></h2><h2>-----------Detect chasing----------------------------------------------------------<a name="36"></a></h2><pre class="codeinput"><span class="keyword">function</span> [chasing chasedby together IndexChasing allevents Par ]=detectChasing(Trajectory1,Trajectory2,Velocity1,Velocity2,Vector1,Vector2,timeLine,Dist_tresh1,Velocity_Tresh,PathTresh,Dist_tresh2,miceList)
+
+
+<span class="comment">%-----------Difference between the 2 trajectories------------------------</span>
+DistFun=@(t1,t2) sqrt(sum((t1-t2).^2,2));
+Distance=DistFun(Trajectory1,Trajectory2);
+<span class="comment">%----------------------------------find near trajectories-------------------</span>
+
+Index_proximity=Distance&lt;Dist_tresh1;
+[Index_proximityBeg Index_proximityEnd]=getEventsIndexesGV(Index_proximity,length(timeLine));<span class="comment">%find events</span>
+
+<span class="comment">%--------------------------------------------------------------------------------------------</span>
+
+j1=1;j2=1;j3=1;j=0;
+
+chasing=[];
+chasedby=[];
+together=[];
+IndexChasing=[];
+allevents=[];
+Par=zeros(1,5); <span class="comment">%for 5 mice</span>
+
+
+
+<span class="keyword">for</span> i=1:length(Index_proximityBeg) <span class="comment">%loop for each interval</span>
+    Ind_Seg=Index_proximityBeg(i):Index_proximityEnd(i); <span class="comment">%wehere the proximity is near</span>
+    IndHighVelocity=Velocity1(Ind_Seg)&gt;Velocity_Tresh&amp;Velocity2(Ind_Seg)&gt;Velocity_Tresh;
+    [Index_HVBeg Index_HVEnd]=getEventsIndexesGV(IndHighVelocity,length(Ind_Seg));<span class="comment">%index by considering the velocity and trajectory</span>
+    interval=Ind_Seg(Index_HVEnd)-Ind_Seg(Index_HVBeg); <span class="comment">%Original interval with velocity and trajectory assumptions</span>
+    <span class="keyword">if</span> ~isempty(interval)
+        [temp ind_max]=max(interval);
+        Seg=Index_HVBeg(ind_max(1)):Index_HVEnd(ind_max(1));
+        vel1=Velocity1(Ind_Seg(Seg),:);
+        vel2=Velocity2(Ind_Seg(Seg),:); <span class="comment">%consider the larger interval</span>
+        j=j+1;
+        allevents(j,:)=[Ind_Seg(Index_HVBeg(ind_max(1))) Ind_Seg(Index_HVEnd(ind_max(1))) 0];
+        <span class="keyword">if</span> (Ind_Seg(Seg(1))-1)&gt;0
+</pre><pre class="codeinput">            timeline=cat(1,timeLine(Ind_Seg(Seg(1))-1),timeLine(Ind_Seg(Seg),:));
+</pre><pre class="codeinput">            timeVec=etime(datevec(timeline(2:end)),datevec(timeline(1:end-1)));
+            dist1=sum(vel1.*timeVec);
+            dist2=sum(vel2.*timeVec);
+<span class="comment">%%Add by Silvia for without repeats</span>
+<span class="comment">%           timeVec=78; %use real time</span>
+<span class="comment">%             dist1=sum(vel1.*timeVec);</span>
+<span class="comment">%            dist2=sum(vel2.*timeVec); %ADD FOR THE CASE OF NON REPEATED</span>
+</pre><pre class="codeinput">            trajectory1=Trajectory1(Ind_Seg(Seg),:);
+            trajectory2=Trajectory2(Ind_Seg(Seg),:);
+            T1=trajectory1(1,:);
+            T2=trajectory1(1,:);<span class="comment">%NO HAY UN ERROR</span>
+            d1=DistFun(trajectory1,repmat(T1,size(trajectory1,1),1));
+            d2=DistFun(trajectory2,repmat(T2,size(trajectory2,1),1));
+            Par(j,1)=sum(d1&gt;=Dist_tresh2)&gt;0&amp;sum(d2&gt;=Dist_tresh2)&gt;0;
+            Par(j,2)=(dist1&gt;PathTresh&amp;&amp;dist2&gt;PathTresh)||(DistFun(trajectory1(1,:),trajectory1(end,:))&gt;=Dist_tresh2)&amp;&amp;(DistFun(trajectory2(1,:),trajectory2(end,:))&gt;=Dist_tresh2);
+            [F C D]=iscorrelated(trajectory1,trajectory2);
+            Par(j,3)=C;
+            Par(j,4)=D;
+            <span class="keyword">if</span> sum(d1&gt;=Dist_tresh2)&gt;0&amp;&amp;sum(d2&gt;=Dist_tresh2)&gt;0 <span class="comment">%out of 20 cm radius</span>
+                <span class="keyword">if</span>((dist1&gt;PathTresh&amp;&amp;dist2&gt;PathTresh)||<span class="keyword">...</span><span class="comment">,</span>
+                        (DistFun(trajectory1(1,:),trajectory1(end,:))&gt;=Dist_tresh2&amp;&amp;DistFun(trajectory2(1,:),trajectory2(end,:))&gt;=Dist_tresh2))
+                    <span class="keyword">if</span> (F)
+                        vec1=Vector1(Ind_Seg(Seg),:);
+                        vec2=trajectory2-trajectory1;
+                        vec2=vec2./[sqrt(sum(vec2.^2,2)) sqrt(sum(vec2.^2,2))];
+                        <span class="comment">%ii=~isnan(vec1)&amp;~isnan(vec2);</span>
+                        flag=dot(vec1,vec2,2);
+                        flag=sum(flag(~isnan(flag)));
+                        Par(j,5)=flag;
+
+                        <span class="keyword">if</span> flag&gt;0
+                            IndexChasing=[IndexChasing  Ind_Seg(Seg)];
+                            chasing(j1,:)=[Ind_Seg(Index_HVBeg(ind_max(1))) Ind_Seg(Index_HVEnd(ind_max(1)))];
+<span class="comment">%                             a=Ind_Seg(Index_HVBeg(ind_max(1)))</span>
+<span class="comment">%                             timeLine(a,1)</span>
+
+                            j1=j1+1;
+                            allevents(j,3)=1;
+                        <span class="keyword">elseif</span> flag&lt;0
+                            chasedby(j2,:)=[Ind_Seg(Index_HVBeg(ind_max(1))) Ind_Seg(Index_HVEnd(ind_max(1)))];
+
+                            j2=j2+1;
+                        <span class="keyword">else</span>
+                            together(j3,:)=[Ind_Seg(Index_HVBeg(ind_max(1))) Ind_Seg(Index_HVEnd(ind_max(1)))];
+
+                            j3=j3+1;
+                        <span class="keyword">end</span>
+                    <span class="keyword">end</span>
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+</pre><pre class="codeinput">        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">function</span> [flag C D]=iscorrelated(trajectory1,trajectory2)
+
+CorTresh=.7;<span class="comment">%.75</span>
+flag=false;
+C=0;
+
+D=dot(trajectory1(end,:)-trajectory1(1,:),trajectory2(end,:)-trajectory2(1,:));
+
+<span class="keyword">if</span> length(trajectory1)&gt;4
+    ccx=corrcoef(trajectory1(:,1),trajectory2(:,1));
+    ccy=corrcoef(trajectory1(:,2),trajectory2(:,2));
+    cc=(ccx+ccy)/2;
+    <span class="comment">%first is correlation second is for cutting out the cases of coming</span>
+    <span class="comment">%forward each other</span>
+    C=cc(2);
+    <span class="keyword">if</span> cc(2)&gt;CorTresh&amp;&amp;dot(trajectory1(end,:)-trajectory1(1,:),trajectory2(end,:)-trajectory2(1,:))&gt;0
+        flag=true;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">function</span> [result]=FindAngle(x,y,x1,y1,dx,dy)
+</pre><h2>% vector of location between mouse<a name="44"></a></h2><pre class="codeinput">vloc=[x1-x,y1-y];
+<span class="comment">%vector movement</span>
+vmov=[dx,dy];
+</pre><h2>%calculate angle between vectors<a name="45"></a></h2><pre class="codeinput">Modvloc=norm(vloc);
+Modvmov=norm(vmov);
+
+<span class="keyword">if</span> vloc==0 <span class="comment">%the same coordinates as the angle is zero</span>
+    result=0;
+<span class="keyword">elseif</span> vmov==0
+    result=1000;
+<span class="keyword">else</span>
+coseno=dot(vloc,vmov)/(Modvloc*Modvmov);
+result=acos(coseno)*180/pi;
+<span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">function</span> [result]=FindAngleDirection(dx,dy,dx1,dy1)
+</pre><h2>% vector of movement second mouse<a name="50"></a></h2><pre class="codeinput">vmov2=[dx1,dy1];
+<span class="comment">%vector movement</span>
+vmov=[dx,dy];
+</pre><h2>%calculate angle between vectors<a name="51"></a></h2><pre class="codeinput">Modvmov2=norm(vmov2);
+Modvmov=norm(vmov);
+<span class="keyword">if</span> Modvmov2~=0 &amp; Modvmov~=0
+coseno=dot(vmov,vmov2)/(Modvmov2*Modvmov);
+result=acos(coseno)*180/pi;
+<span class="keyword">else</span>
+    result=1000;
+<span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">function</span> [EventsBeg EventsEnd]=getEventsIndexesGV(IndLogical,n)
+
+EventsBeg=find(diff(IndLogical)==1)+1;
+EventsEnd=find(diff(IndLogical)==-1);
+
+<span class="keyword">if</span> isempty(EventsBeg)||isempty(EventsEnd)
+    <span class="keyword">if</span>(isempty(EventsBeg)&amp;&amp;~isempty(EventsEnd))
+        EventsBeg=[1;EventsBeg];
+    <span class="keyword">elseif</span>(isempty(EventsEnd)&amp;&amp;~isempty(EventsBeg))
+        EventsEnd=[EventsEnd;n];
+    <span class="keyword">else</span>
+        <span class="keyword">if</span> sum(IndLogical)==n
+            EventsBeg=1;
+            EventsEnd=n;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">else</span>
+    <span class="keyword">if</span>(EventsBeg(1)&gt;EventsEnd(1))
+        EventsBeg=[1;EventsBeg];
+    <span class="keyword">end</span>
+
+    <span class="keyword">if</span>(EventsBeg(end)&gt;EventsEnd(end))
+        EventsEnd=[EventsEnd;n];
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">end</span>
+</pre><h2>-----------This function fill gaps between chasing events<a name="54"></a></h2><pre class="codeinput"><span class="keyword">function</span> ChasingVector=FillGap(BegChasing, EndChasing,ChasingVector,Trajectory1,Trajectory2,GapPathEnd,GapFrames)
+
+<span class="keyword">if</span> ~isempty(BegChasing)&amp; length(BegChasing)&gt;1
+ <span class="keyword">for</span> i=1:length(BegChasing)-1
+    <span class="keyword">if</span> (BegChasing(i+1)-EndChasing(i))&lt;GapFrames <span class="comment">%if the difference in frames between gaps in the chasing is less than a given value</span>
+     <span class="comment">%check if the trajectories are near</span>
+
+   <span class="comment">%-----------Difference between the 2 trajectories------------------------</span>
+             DistFun=@(t1,t2) sqrt(sum((t1-t2).^2,2));
+<span class="comment">%              Trajectory1(EndChasing(i)+1:BegChasing(i+1)-1,:)</span>
+<span class="comment">%              Trajectory2(EndChasing(i)+1:BegChasing(i+1)-1,:)</span>
+             Distance=DistFun(Trajectory1(EndChasing(i)+1:BegChasing(i+1)-1,:),Trajectory2(EndChasing(i)+1:BegChasing(i+1)-1,:));
+<span class="comment">%----------------------------------find near trajectories-------------------</span>
+
+            Index_proximity=(Distance &gt; GapPathEnd); <span class="comment">%if this condition is empty the trajectory are near then the chasing is filled with one</span>
+
+
+              <span class="keyword">if</span> isempty(find(Index_proximity)==1)
+                ChasingVector(EndChasing(i)+1:BegChasing(i+1)-1)=1;
+
+              <span class="keyword">end</span>
+
+
+<span class="comment">%--------------------------------------------------------------------------------------------</span>
+
+
+
+
+
+   <span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2>-----------This function fill gaps between SMALL chasing events<a name="56"></a></h2><pre class="codeinput"><span class="keyword">function</span> ChasingVector=FillGapSmall(BegChasing, EndChasing,ChasingVector,Trajectory1,Trajectory2,GapPathEndS,GapFramesS)
+
+<span class="keyword">if</span> ~isempty(BegChasing)&amp; length(BegChasing)&gt;1
+ <span class="keyword">for</span> i=1:length(BegChasing)-1
+    <span class="keyword">if</span> (BegChasing(i+1)-EndChasing(i))&lt;GapFramesS <span class="comment">%if the difference in frames between gaps in the chasing is less than a given value REDUCE TEN TIMES THE GAP</span>
+     <span class="comment">%check if the trajectories are near</span>
+
+   <span class="comment">%-----------Difference between the 2 trajectories------------------------</span>
+             DistFun=@(t1,t2) sqrt(sum((t1-t2).^2,2));
+<span class="comment">%              Trajectory1(EndChasing(i)+1:BegChasing(i+1)-1,:)</span>
+<span class="comment">%              Trajectory2(EndChasing(i)+1:BegChasing(i+1)-1,:)</span>
+             Distance=DistFun(Trajectory1(EndChasing(i)+1:BegChasing(i+1)-1,:),Trajectory2(EndChasing(i)+1:BegChasing(i+1)-1,:));
+<span class="comment">%----------------------------------find near trajectories-------------------</span>
+
+            Index_proximity=(Distance &gt; GapPathEndS); <span class="comment">%if this condition is empty the trajectory are near then the chasing is filled with one</span>
+
+
+              <span class="keyword">if</span> isempty(find(Index_proximity)==1)
+                ChasingVector(EndChasing(i)+1:BegChasing(i+1)-1)=1;
+
+              <span class="keyword">end</span>
+
+
+<span class="comment">%--------------------------------------------------------------------------------------------</span>
+
+
+
+
+
+   <span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2>----------------Second function for filtering<a name="57"></a></h2><pre class="codeinput"><span class="keyword">function</span> ChasingVector=RealEvents(BegChasing, EndChasing,ChasingVector,Dx1,Dy1,Dx2,Dy2,MinimumPath,V1,V2,VelocityThresh)
+clear <span class="string">DeltaX1</span>;
+clear <span class="string">DeltaX2</span>;
+clear <span class="string">DeltaY1</span>;
+clear <span class="string">DeltaY2</span>;
+
+<span class="comment">% length(ChasingVector)</span>
+
+<span class="keyword">if</span> ~isempty(BegChasing)
+
+   <span class="keyword">for</span> i=1:length(BegChasing)
+
+
+     <span class="keyword">if</span>  (EndChasing(i)-BegChasing(i))&lt;10 <span class="comment">%for small events less than 10 no consider</span>
+
+        ChasingVector(BegChasing(i):EndChasing(i))=0; <span class="comment">%ELIMINATE CHASING EVENTS IF THERE AS LESS THAN 3 EVENTS</span>
+
+
+     <span class="keyword">else</span>
+
+
+    DeltaX1=Dx1(BegChasing(i):EndChasing(i));
+    DeltaY1=Dy1(BegChasing(i):EndChasing(i));
+
+    DeltaX2=Dx2(BegChasing(i):EndChasing(i));
+    DeltaY2=Dy2(BegChasing(i):EndChasing(i));
+
+   MedV1= median(V1(BegChasing(i):EndChasing(i)));
+   MedV2= median(V2(BegChasing(i):EndChasing(i)));
+
+    DistFun1=sum(sqrt((DeltaX1).^2+(DeltaY1).^2));<span class="comment">%all the distance done during this chasing</span>
+    DistFun2=sum(sqrt((DeltaX2).^2+(DeltaY2).^2));
+
+    <span class="keyword">if</span> DistFun1&lt; MinimumPath | DistFun2&lt; MinimumPath
+
+      ChasingVector(BegChasing(i):EndChasing(i))=0; <span class="comment">%ELIMINATE CHASING EVENTS IF THE TRAYECTORY ARE VERY SMALL</span>
+    <span class="keyword">elseif</span>   MedV1 &lt; VelocityThresh | MedV2&lt; VelocityThresh                   <span class="comment">%check velocity median bigger than the thrheshold during this period if not it was not moving</span>
+         ChasingVector(BegChasing(i):EndChasing(i))=0; <span class="comment">%ELIMINATE CHASING EVENTS IF THE mouse is not moving enough for cases it is in the eating place all the time.</span>
+    <span class="keyword">end</span>
+
+   <span class="keyword">end</span>
+
+
+
+<span class="keyword">end</span>
+
+<span class="keyword">end</span>
+
+<span class="keyword">end</span>
+</pre><h2>-------------First function for data filtering------------------<a name="58"></a></h2><pre class="codeinput"><span class="keyword">function</span> [ChasingVector ChasingVectorWithSmallEvents] =RealEvents1(BegChasing, EndChasing,ChasingVector,Dx1,Dy1,Dx2,Dy2,MinimumPath)
+
+ChasingVectorWithSmallEvents=[];
+
+ChasingVectorWithSmallEvents=zeros(length(ChasingVector),1);
+
+
+<span class="keyword">if</span> ~isempty(BegChasing)
+
+   <span class="keyword">for</span> i=1:length(BegChasing)
+
+
+     <span class="keyword">if</span>  (EndChasing(i)-BegChasing(i))&lt;3
+
+        ChasingVector(BegChasing(i):EndChasing(i))=0; <span class="comment">%ELIMINATE CHASING EVENTS IF THERE AS LESS THAN 3 EVENTS</span>
+
+
+     <span class="keyword">else</span>
+
+    DeltaX1=Dx1(BegChasing(i):EndChasing(i));
+    DeltaY1=Dy1(BegChasing(i):EndChasing(i));
+
+    DeltaX2=Dx2(BegChasing(i):EndChasing(i));
+    DeltaY2=Dy2(BegChasing(i):EndChasing(i));
+
+    DistFun1=sum(sqrt((DeltaX1).^2+(DeltaY1).^2));<span class="comment">%all the distance done during this chasing</span>
+    DistFun2=sum(sqrt((DeltaX2).^2+(DeltaY2).^2));
+
+    <span class="keyword">if</span> DistFun1&lt; MinimumPath | DistFun2&lt; MinimumPath
+
+      ChasingVector(BegChasing(i):EndChasing(i))=0; <span class="comment">%ELIMINATE CHASING EVENTS IF THE TRAYECTORY ARE VERY SMALL</span>
+      ChasingVectorWithSmallEvents(BegChasing(i):EndChasing(i))=1; <span class="comment">%CONSIDER ONLY SMALL EVENTS</span>
+
+    <span class="keyword">end</span>
+
+   <span class="keyword">end</span>
+
+
+
+<span class="keyword">end</span>
+
+<span class="keyword">end</span>
+
+<span class="keyword">end</span>
+</pre><h2>-------------------------Function to find the exact beggining and end of the chasing----------------------<a name="59"></a></h2><pre class="codeinput"><span class="keyword">function</span> ChasingVector=FindEnds(BegChasing, EndChasing,ChasingVector,Trajectory1,Trajectory2,GapPath)
+
+   <span class="comment">%-----------Distance between the 2 trajectories------------------------</span>
+             DistFun=@(t1,t2) sqrt(sum((t1-t2).^2,2));
+<span class="comment">%</span>
+            DistanceT=DistFun(Trajectory1(1:end,:),Trajectory2(1:end,:));
+  A=length(ChasingVector);
+<span class="keyword">if</span> ~isempty(BegChasing)
+
+   <span class="keyword">for</span> i=1:length(BegChasing)
+
+<span class="comment">%----------------Correct the beggining of the chasing---------------</span>
+     <span class="keyword">if</span> (BegChasing(i)&gt;1)
+        IndBeginChasing=find(DistanceT(1:BegChasing(i)-1)&gt;GapPath,1,<span class="string">'last'</span>);<span class="comment">%the idea is to found the moment the trajectory are near</span>
+
+         <span class="keyword">if</span> ~isempty( IndBeginChasing)
+            ChasingVector(IndBeginChasing:BegChasing(i)-1)=1; <span class="comment">%correct chasing vector</span>
+         <span class="keyword">end</span>
+
+     <span class="keyword">end</span>
+
+<span class="comment">%---------------------------------------</span>
+
+<span class="comment">%----------------Correct the end  of the chasing---------------</span>
+     <span class="keyword">if</span> (EndChasing(i)&lt;length(ChasingVector))
+        IndEndChasing=find(DistanceT(EndChasing(i)+1:end)&gt;GapPath,1,<span class="string">'first'</span>);<span class="comment">%the idea is to found the moment the trajectory are separated at the end of the chasing</span>
+
+         <span class="keyword">if</span> ~isempty(IndEndChasing)
+             <span class="keyword">if</span> (EndChasing(i)+1+IndEndChasing-1)&lt;=A <span class="comment">%to avoid go out of the chasing size</span>
+            ChasingVector(EndChasing(i)+1:EndChasing(i)+1+IndEndChasing-1)=1; <span class="comment">%correct chasing vector</span>
+             <span class="keyword">end</span>
+          <span class="keyword">end</span>
+
+     <span class="keyword">end</span>
+   <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">% B=length(ChasingVector)</span>
+
+<span class="keyword">end</span>
+
+
+<span class="comment">%---------------------------------------</span>
+</pre><h2>---------- Determine if the events with duplicates are corrected--------------<a name="60"></a></h2><pre class="codeinput"><span class="keyword">function</span> ChasingVector=CorrectDuplicates(ChasingVector,Duplicates1,Duplicates2,Trajectory1,Trajectory2)
+ChasingVector=ChasingVector;
+
+DistFun=@(t1,t2) sqrt(sum((t1-t2).^2,2));
+
+<span class="keyword">if</span> ~isempty(ChasingVector)
+
+<span class="comment">%--find events which are chasing and also duplicated coord</span>
+Ind=(ChasingVector(1:length(ChasingVector))==1 &amp; Duplicates1(1:length(ChasingVector))==1 &amp; Duplicates2(1:length(ChasingVector))==1);
+
+[EventsBegCD EventsEndCD]=getEventsIndexesGV(Ind,length(Ind));
+<span class="keyword">if</span> ~isempty(EventsBegCD)
+  <span class="keyword">for</span> i=1:length(EventsBegCD)
+    <span class="keyword">if</span> EventsBegCD(i)&gt;1 &amp; EventsEndCD(i)&lt;length(ChasingVector) <span class="comment">%assure that it is a middle event not in the extrem</span>
+      Iinitial=find(Duplicates1(1:EventsBegCD(i)-1)==0,1,<span class="string">'last'</span>);<span class="comment">%find when the duplicates are finish or begin around the chasing event</span>
+      Ifinal=find(Duplicates1(EventsEndCD(i)+1:end)==0,1,<span class="string">'first'</span>);
+
+<span class="comment">%       EventsEndCD(i)+1+Ifinal-1</span>
+<span class="comment">%       EventsBegCD(i)</span>
+<span class="comment">%         EventsEndCD(i)</span>
+
+
+      <span class="keyword">if</span> ~isempty(Ifinal) &amp; ~isempty(Iinitial)
+      <span class="comment">%--------determine if the event is real compare if the delta vector from mouse 1 to 2 before and after has the same sense or are opposite------------</span>
+
+     <span class="comment">%-------------measure the distance------------------</span>
+
+    D1=DistFun(Trajectory1(Iinitial,:),Trajectory1(EventsBegCD(i),:));
+     D2=DistFun(Trajectory2(Iinitial,:),Trajectory2(EventsBegCD(i),:));
+
+         D1f=DistFun(Trajectory1(EventsEndCD(i)+1+Ifinal-1,:),Trajectory1(EventsEndCD(i),:));
+     D2f=DistFun(Trajectory2(EventsEndCD(i)+1+Ifinal-1,:),Trajectory2(EventsEndCD(i),:));
+<span class="comment">%</span>
+<span class="comment">%      A=(Trajectory1(EventsEndCD(i)+1+Ifinal-1,:)-Trajectory1(EventsEndCD(i),:))</span>
+<span class="comment">%      B=(Trajectory2(EventsEndCD(i)+1+Ifinal-1,:)-Trajectory2(EventsEndCD(i),:))</span>
+      beta=dot((Trajectory1(EventsEndCD(i)+1+Ifinal-1,:)-Trajectory1(EventsEndCD(i),:)),(Trajectory2(EventsEndCD(i)+1+Ifinal-1,:)-Trajectory2(EventsEndCD(i),:)));
+   <span class="comment">% beta=dot((Trajectory1(EventsEndCD(i)+1+Ifinal-1,:)-Trajectory1(EventsEndCD(i),:)),(Trajectory2(EventsEndCD(i)+1+Ifinal-1,:)-Trajectory2(EventsEndCD(i),:)))/(norm(Trajectory1(EventsEndCD(i)+1+Ifinal-1,:)-Trajectory1(EventsEndCD(i),:))*norm(Trajectory2(EventsEndCD(i)+1+Ifinal-1,:)-Trajectory2(EventsEndCD(i),:)))</span>
+
+     <span class="keyword">if</span> ~ (D1&gt;D2 &amp; D1f&lt;D2f &amp; beta&gt;0)
+      <span class="comment">%if ~ (D1&gt;D2 &amp; D1f&lt;D2f) %IF MOUSE 1 IS CHASING 1 must be before2-also add the final angle is positive to be considered as chasing,beta ADD BETA TO ELIMINATE EFFECTS OF THAT ARE RUNNING AT THE END IN OPPOSITE DIRECTIONS</span>
+
+        ChasingVector(EventsBegCD(i):EventsEndCD(i))=0;
+
+      <span class="keyword">end</span>
+
+<span class="comment">%       Alpha=dot((Trajectory2(Iinitial,:)-Trajectory1(Iinitial,:)),(Trajectory2(EventsEndCD(i)+1+Ifinal-1,:)-Trajectory1(EventsEndCD(i)+1+Ifinal-1,:)))</span>
+
+<span class="comment">%       if Alpha&lt;0 %the event is not correct</span>
+<span class="comment">%</span>
+<span class="comment">%</span>
+<span class="comment">%         ChasingVector(EventsBegCD(i):EventsEndCD(i))=0;</span>
+<span class="comment">%</span>
+<span class="comment">%       end</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+<span class="keyword">end</span>
+
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">function</span> SmallEvents=FoundSmallEvents(BegChasingCorrectedS,EndChasingCorrectedS,BegChasingCorrected, EndChasingCorrected)
+
+    SmallEvents=zeros(length(BegChasingCorrected),1);
+<span class="keyword">if</span> ~isempty(BegChasingCorrectedS)
+   <span class="keyword">for</span> i=1:length(BegChasingCorrectedS)
+   Index=find(BegChasingCorrected==BegChasingCorrectedS(i));
+
+   SmallEvents(Index)=1;
+
+   <span class="keyword">end</span>
+
+
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+classdef Chasing
+%All related with the chasing
+
+    properties
+        
+         numOfMice; %number of mice
+        %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Settings used during these yearsREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+         Dist_tresh1;%40 in mm
+         Velocity_Tresh;%1
+         PathTresh;%80
+         Dist_tresh2;
+         
+          AngleMaximum1; %This is the maximum angle, which is allowed, between the line joining the mice 1-2 and the vector of movement of mouse 1.
+          AngleMaximum2; %This is the maximum angle, which is allowed, between the vector of movement of mouse 1 and mouse 2.
+          MinimumPath; %This is the minimum path recording to be considered as chasing.
+%           GapPath=200; %This is the gap between the chasing that it is allow in units of mm
+          GapPath;
+          GapPathEnd;
+          GapFrames;
+          
+           GapPathEndS;
+          GapFramesS;
+          
+         ThreshVelocity; %threshold for the velocity 
+%         if(use_RFID_only==0)
+%     Dist_tresh1=30;%40
+%     Velocity_Tresh=.5;%1
+%     PathTresh=60;%80
+%     Dist_tresh2=20;
+% elseif(RFID_SET==1) % RFID_1
+%     Dist_tresh1=60; %30; 
+%     Velocity_Tresh=.1; %.5;
+%     PathTresh=50; %60;
+%     Dist_tresh2=0; %20;
+% elseif(RFID_SET==2) % RFID_1
+%     Dist_tresh1=50; %30; 
+%     Velocity_Tresh=.25; %.5;
+%     PathTresh=50; %60;
+%     Dist_tresh2=10;
+% end
+     end
+    
+    %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+    %% 
+    
+
+methods
+    %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Calculate chasing without repeats REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+    
+    function ChasingCal=ChasingCal(obj,TrajectoryX,TrajectoryY,Velocity,isInArena,VectorX,VectorY,Distance,timeLine)
+  hbar=waitbar(0,'Calculating Chasing')
+  
+ Dist_tresh1=obj.Dist_tresh1;
+ Velocity_Tresh=obj.Velocity_Tresh;
+ PathTresh=obj.PathTresh;
+ Dist_tresh2=obj.Dist_tresh2;
+ miceList=obj.numOfMice;
+ %% Variable definition
+ AllEvents=[];
+ Par=[];
+ chasing_all=cell(1,obj.numOfMice);
+
+ chased_all=chasing_all;
+ move_together_all=chasing_all;
+ chasing=zeros(obj.numOfMice);
+ IndexChasingAll=zeros(length(timeLine),obj.numOfMice);
+ 
+  
+  %% 
+  for mouse1 = 1:obj.numOfMice
+    others = setdiff(1:obj.numOfMice,mouse1);
+    Trajectory1=[TrajectoryX(:,mouse1) TrajectoryY(:,mouse1)];
+    Trajectory1(isnan(Trajectory1(:,1))|~isInArena(:,mouse1))=0;%if it is outside the arena
+    
+    if sum(sum(Trajectory1))==0 %in the case is not in the arena
+       continue;
+    else
+        Velocity1=Velocity(:,mouse1); 
+        Vector1=[VectorX(:,mouse1) VectorY(:,mouse1)];
+        dist1=Distance(:,mouse1);
+        
+        for mouse2 = others %go over the other mouse
+            Trajectory2=[TrajectoryX(:,mouse2) TrajectoryY(:,mouse2)];
+            Trajectory2(isnan(Trajectory2(:,1))|~isInArena(:,mouse2))=0;
+            if sum(sum(Trajectory2))==0 %if it is not in the arean
+                continue;
+            else
+                Vector2=[VectorX(:,mouse2) VectorY(:,mouse2)];
+                Velocity2=Velocity(:,mouse2);
+                dist2=Distance(:,mouse2);
+                [chasing12 chasing21 together12 IndexChasing allevents par ]=detectChasing(Trajectory1,Trajectory2,Velocity1,Velocity2,Vector1,Vector2,timeLine,Dist_tresh1,Velocity_Tresh,PathTresh,Dist_tresh2, miceList);
+               
+       %CONTINUE FROM HERE         
+                if ~isempty(chasing12)
+                    IndexChasingAll(IndexChasing,mouse1)=mouse2;
+                    chasing12=[chasing12 mouse2*ones(size(chasing12,1),1)];
+                    chasing(mouse1,mouse2)=size(chasing12,1);
+                    AllEvents=[AllEvents;allevents];
+                    Par=[Par;par];
+                end
+                
+                if ~isempty(chasing21)
+                    chasing21=[chasing21 mouse2*ones(size(chasing21,1),1)];
+                end
+                
+                if~isempty(together12)
+                    together12=[together12 mouse2*ones(size(together12,1),1)];
+                end
+                
+                move_together_all{mouse1}=[move_together_all{mouse1};together12];
+                chasing_all{mouse1}=[chasing_all{mouse1};chasing12];
+                chased_all{mouse1}=[chased_all{mouse1};chasing21];
+            end
+        end
+    end
+    waitbar(j/length(miceList));
+  end
+close(hbar);
+    ChasingCal=[chasing_all,chased_all,move_together_all];
+    
+    end
+    %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Calculation of chasing according to second methodREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+    
+    function ChasingCalvs2=ChasingCalvs2( obj,TrajectoryX,TrajectoryY,DeltaX,DeltaY,isInArena,RepeatedFrames,Velocity,Duplicates )
+        
+    hbar=waitbar(0,'Calculating second version Chasing')
+        %%Variable Definition
+    chasing_all=cell(1,obj.numOfMice);
+    being_chasing_all=cell(1,obj.numOfMice); 
+     
+     %%
+
+  for mouse1=1:obj.numOfMice
+ %for mouse1=1
+    %% variables
+     Trajectory1=[];
+        
+    
+    
+          others=setdiff(1:obj.numOfMice,mouse1);
+          Trajectory1=[TrajectoryX(:,mouse1) TrajectoryY(:,mouse1)];
+          Trajectory1(~isInArena(:,mouse1))=0; %in the case is not in the arena
+            if isempty(find(isInArena(:,mouse1)==1))%in the case all the arena is zero and not mouse in the arena
+            Trajectory1=0;    
+            end
+          
+                                               
+    
+        if sum(sum( Trajectory1))==0
+        continue; %continue with another mouse
+        else
+       for mouse2=others
+ % for mouse2=5
+         %variables
+        clear ChasingVector;
+        clear angle1;
+        clear angle2;
+        clear BegChasing;
+        clear EndChasing;
+        clear BegChasingCorrected1;
+        clear EndChasingCorrected1;
+        clear BegChasingCorrected2;
+        clear EndChasingCorrected2;
+          clear BegChasingCorrected3;
+        clear EndChasingCorrected3;
+         clear BegChasingCorrected;
+        clear EndChasingCorrected;
+        
+         clear BegChasingCorrected1S;
+        clear EndChasingCorrected1S;
+        clear BegChasingCorrected2S;
+        clear EndChasingCorrected2S;
+          clear BegChasingCorrected3S;
+        clear EndChasingCorrected3S;
+         clear BegChasingCorrectedS;
+        clear EndChasingCorrectedS;
+        clear  Distance;
+        clear SmallEvents;   
+          clear BegChasingCorrected4S;
+        clear EndChasingCorrected4S;
+        
+        ChasingVector=[];
+         angle1=[];
+         angle2=[];
+         Trajectory2=[];
+         chasing12=[];
+         beingchasing21=[];  
+           %% 
+           
+           
+          Trajectory2=[TrajectoryX(:,mouse2) TrajectoryY(:,mouse2)];
+          Trajectory2(~isInArena(:,mouse2))=0; %in the case is not in the arena
+           if isempty(find(isInArena(:,mouse2)==1))%in the case all the arena is zero and not mouse in the arena
+            Trajectory2=0;    
+           end
+            
+           if sum(sum( Trajectory2))==0
+              continue; %continue with another mouse
+           else
+               %% 
+%                size(Trajectory1(:,1))
+%                size(DeltaX,1)
+%                 size(Trajectory1(1:size(DeltaX,1),2))
+%                  size(Trajectory2(1:size(DeltaX,1),1))
+%                 size(Trajectory2(1:size(DeltaX,1),2))
+%                 size(DeltaX(:,mouse1))
+%                 size(DeltaY(:,mouse1))
+             %%Calculate angle between line joining 1 to 2 and mouse 1 movement direction
+             
+             angle1=cellfun(@FindAngle,num2cell(Trajectory1(1:size(DeltaX,1),1)),num2cell(Trajectory1(1:size(DeltaY,1),2)),num2cell(Trajectory2(1:size(DeltaX,1),1)),num2cell(Trajectory2(1:size(DeltaY,1),2)),num2cell(DeltaX(:,mouse1)),num2cell(DeltaY(:,mouse1)),'UniformOutput',false);
+             
+             %%Calculate angle between movement of mouse 1 and movement of
+             %%mouse 2
+           
+             
+             angle2=cellfun(@FindAngleDirection,num2cell(DeltaX(:,mouse1)),num2cell(DeltaY(:,mouse1)),num2cell(DeltaX(:,mouse2)),num2cell(DeltaY(:,mouse2)),'UniformOutput',false);
+             dx1=DeltaX(:,mouse1);
+%              Array=[Trajectory1(1:length(dx1),1),Trajectory1(1:length(dx1),2),Trajectory2(1:length(dx1),1),Trajectory2(1:length(dx1),2),dx1,dy1,dx2,dy2,angle1,angle2];
+ 
+            %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Difference between the 2 trajectoriesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+             DistFun=@(t1,t2) sqrt(sum((t1-t2).^2,2));
+             
+              Distance=DistFun(Trajectory1,Trajectory2);
+             
+             
+             %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+             
+             %% Looking for chasing when the distance is less than a given angle and the velocity and angle conditions are satisfied.
+
+           ChasingVector=((cell2mat(angle1) < obj.AngleMaximum1) & (cell2mat(angle2) < obj.AngleMaximum2) & (isInArena(1:size(DeltaY,1),mouse1))==1 & (isInArena(1:size(DeltaY,1),mouse2))==1 & (Velocity(1:size(DeltaY,1),mouse1)> obj.ThreshVelocity) & (Velocity(1:size(DeltaY,1),mouse2)>obj.ThreshVelocity) &( Distance(1:size(DeltaY,1))<obj.GapPath));%this is a logical vector
+            
+              %ChasingVector=((cell2mat(angle1) < obj.AngleMaximum1) & (cell2mat(angle2) < obj.AngleMaximum2) & (isInArena(1:size(DeltaY,1),mouse1))==1 & (isInArena(1:size(DeltaY,1),mouse2))==1 & (Velocity(1:size(DeltaY,1),mouse1)> obj.ThreshVelocity) & (Velocity(1:size(DeltaY,1),mouse2)>obj.ThreshVelocity));%this is a logical vector
+            [BegChasingCorrected2 EndChasingCorrected2]=getEventsIndexesGV(ChasingVector,length(ChasingVector));
+            
+            %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Select events-remove less than 3 eventsREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+               [ChasingVector ChasingVectorWithSmallEvents]=RealEvents1(BegChasingCorrected2, EndChasingCorrected2,ChasingVector,DeltaX(:,mouse1),DeltaY(:,mouse1),DeltaX(:,mouse2),DeltaY(:,mouse2),obj.MinimumPath);
+              
+               
+               %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHTreat different small events from larger eventsREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%                [BegChasingCorrected3S EndChasingCorrected3S]=getEventsIndexesGV(ChasingVectorWithSmallEvents,length(ChasingVectorWithSmallEvents)); 
+%                
+%                 [BegChasingCorrected3 EndChasingCorrected3]=getEventsIndexesGV(ChasingVector,length(ChasingVector)); 
+            %% 
+             
+             %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHConsider the case in which is chasing and the coordinates are duplicated then must decide if the event is correct or not
+             %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHfor large eventsREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+              ChasingVector=CorrectDuplicates(ChasingVector,Duplicates(:,mouse1),Duplicates(:,mouse2),Trajectory1,Trajectory2);
+             
+              [BegChasingCorrected1 EndChasingCorrected1]=getEventsIndexesGV(ChasingVector,length(ChasingVector)); 
+             %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHfor small eventsREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+                ChasingVectorWithSmallEvents=CorrectDuplicates(ChasingVectorWithSmallEvents,Duplicates(:,mouse1),Duplicates(:,mouse2),Trajectory1,Trajectory2);
+             
+              [BegChasingCorrected1S EndChasingCorrected1S]=getEventsIndexesGV(ChasingVectorWithSmallEvents,length(ChasingVectorWithSmallEvents)); 
+             
+             
+             %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%              
+%                 Array=[Trajectory1(1:length(dx1),1),Trajectory1(1:length(dx1),2),Trajectory2(1:length(dx1),1),Trajectory2(1:length(dx1),2),DeltaX(:,mouse1),DeltaY(:,mouse1),DeltaX(:,mouse2),DeltaY(:,mouse2),cell2mat(angle1),cell2mat(angle2),isInArena(1:size(DeltaY,1),mouse1),isInArena(1:size(DeltaY,1),mouse2),ChasingVector];
+%                xlswrite('test.xlsx',Array)
+%              %Again find  new chasing events
+             
+%%                         
+             %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHUnify events which are very nearREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+             %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHLarge events
+             ChasingVector=FillGap(BegChasingCorrected1, EndChasingCorrected1,ChasingVector,Trajectory1,Trajectory2,obj.GapPathEnd,obj.GapFrames);
+             [BegChasingCorrected3 EndChasingCorrected3]=getEventsIndexesGV(ChasingVector,length(ChasingVector)); 
+             
+             %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHSmall eventsREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+              ChasingVectorWithSmallEvents=FillGapSmall(BegChasingCorrected1S, EndChasingCorrected1S,ChasingVectorWithSmallEvents,Trajectory1,Trajectory2,obj.GapPathEndS,obj.GapFramesS);
+             [BegChasingCorrected3S EndChasingCorrected3S]=getEventsIndexesGV(ChasingVectorWithSmallEvents,length(ChasingVectorWithSmallEvents)); 
+             
+             
+             
+             %% 
+             
+              
+%               Array=[Trajectory1(1:length(dx1),1),Trajectory1(1:length(dx1),2),Trajectory2(1:length(dx1),1),Trajectory2(1:length(dx1),2),DeltaX(:,mouse1),DeltaY(:,mouse1),DeltaX(:,mouse2),DeltaY(:,mouse2),cell2mat(angle1),cell2mat(angle2),isInArena(1:size(DeltaY,1),mouse1),isInArena(1:size(DeltaY,1),mouse2),ChasingVector];
+%                xlswrite('test.xlsx',Array)
+             %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%              
+%               ChasingVector=RealEvents(BegChasingCorrected2, EndChasingCorrected2,ChasingVector,DeltaX(:,mouse1),DeltaY(:,mouse1),DeltaX(:,mouse2),DeltaY(:,mouse2),obj.MinimumPath);
+%              [BegChasingCorrected3 EndChasingCorrected3]=getEventsIndexesGV(ChasingVector,length(ChasingVector)); 
+             
+             
+             
+             
+             %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHOnce we know the chasing events find the beggining and end of each event
+            ChasingVector=FindEnds(BegChasingCorrected3, EndChasingCorrected3,ChasingVector,Trajectory1,Trajectory2,obj.GapPathEnd);
+          
+            ChasingVectorWithSmallEvents=FindEnds(BegChasingCorrected3S, EndChasingCorrected3S,ChasingVectorWithSmallEvents,Trajectory1,Trajectory2,obj.GapPathEnd);
+            
+            %% Eliminate very small events
+           
+             [BegChasingCorrected4S EndChasingCorrected4S]=getEventsIndexesGV(ChasingVectorWithSmallEvents,length(ChasingVectorWithSmallEvents)); %THIS ALL THE CHASING
+          
+             
+             ChasingVectorWithSmallEvents=RealEvents(BegChasingCorrected4S, EndChasingCorrected4S,ChasingVectorWithSmallEvents,DeltaX(:,mouse1),DeltaY(:,mouse1),DeltaX(:,mouse2),DeltaY(:,mouse2),obj.MinimumPath,Velocity(1:size(DeltaY,1),mouse1),Velocity(1:size(DeltaY,1),mouse2),obj.ThreshVelocity);
+           
+            
+            %% Join the two chasing events with small and large events
+%             length(ChasingVector)
+%             length(ChasingVectorWithSmallEvents)
+            ChasingVector=or(ChasingVector,ChasingVectorWithSmallEvents);
+            
+            %% 
+            
+            
+             [BegChasingCorrected EndChasingCorrected]=getEventsIndexesGV(ChasingVector,length(ChasingVector)); %THIS ALL THE CHASING
+             [BegChasingCorrectedS EndChasingCorrectedS]=getEventsIndexesGV(ChasingVectorWithSmallEvents,length(ChasingVectorWithSmallEvents));%For Small events
+             
+             %make  a logical vector with small events
+             SmallEvents=FoundSmallEvents(BegChasingCorrectedS,EndChasingCorrectedS,BegChasingCorrected, EndChasingCorrected);
+             
+             
+
+             % Array=[Trajectory1(1:length(dx1),1),Trajectory1(1:length(dx1),2),Trajectory2(1:length(dx1),1),Trajectory2(1:length(dx1),2),DeltaX(:,mouse1),DeltaY(:,mouse1),DeltaX(:,mouse2),DeltaY(:,mouse2),cell2mat(angle1),cell2mat(angle2),isInArena(1:size(DeltaY,1),mouse1),isInArena(1:size(DeltaY,1),mouse2),ChasingVector,RepeatedFrames(1:size(DeltaY,1)),Distance(1:size(DeltaY,1))];
+             %xlswrite('test.xlsx',Array)
+          
+             %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+             if ~isempty(BegChasingCorrected)
+              chasing12=[BegChasingCorrected EndChasingCorrected mouse2*ones(length(BegChasingCorrected),1)  RepeatedFrames(BegChasingCorrected) RepeatedFrames(EndChasingCorrected) SmallEvents];%Return real frames
+              beingchasing21=[BegChasingCorrected EndChasingCorrected mouse1*ones(length(BegChasingCorrected),1)  RepeatedFrames(BegChasingCorrected) RepeatedFrames(EndChasingCorrected) SmallEvents];  
+             
+             end
+             
+            chasing_all{mouse1}=[chasing_all{mouse1};chasing12];
+            being_chasing_all{mouse2}=[ being_chasing_all{mouse2};beingchasing21];
+           end
+       end
+        
+      end
+    waitbar(j/length(length(obj.numOfMice)));
+end
+close(hbar);
+ChasingCalvs2=[chasing_all,being_chasing_all];
+end
+%Finish Silvia's script
+end
+end
+
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Auxiliary functionsREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+
+
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Detect chasingREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+function [chasing chasedby together IndexChasing allevents Par ]=detectChasing(Trajectory1,Trajectory2,Velocity1,Velocity2,Vector1,Vector2,timeLine,Dist_tresh1,Velocity_Tresh,PathTresh,Dist_tresh2,miceList)
+
+
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Difference between the 2 trajectoriesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+DistFun=@(t1,t2) sqrt(sum((t1-t2).^2,2));
+Distance=DistFun(Trajectory1,Trajectory2);
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHfind near trajectoriesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+
+Index_proximity=Distance<Dist_tresh1;
+[Index_proximityBeg Index_proximityEnd]=getEventsIndexesGV(Index_proximity,length(timeLine));%find events
+
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+
+j1=1;j2=1;j3=1;j=0;
+
+chasing=[];
+chasedby=[];
+together=[];
+IndexChasing=[];
+allevents=[];
+Par=zeros(1,5); %for 5 mice
+
+
+
+for i=1:length(Index_proximityBeg) %loop for each interval
+    Ind_Seg=Index_proximityBeg(i):Index_proximityEnd(i); %wehere the proximity is near
+    IndHighVelocity=Velocity1(Ind_Seg)>Velocity_Tresh&Velocity2(Ind_Seg)>Velocity_Tresh;
+    [Index_HVBeg Index_HVEnd]=getEventsIndexesGV(IndHighVelocity,length(Ind_Seg));%index by considering the velocity and trajectory
+    interval=Ind_Seg(Index_HVEnd)-Ind_Seg(Index_HVBeg); %Original interval with velocity and trajectory assumptions
+    if ~isempty(interval)
+        [temp ind_max]=max(interval);
+        Seg=Index_HVBeg(ind_max(1)):Index_HVEnd(ind_max(1));
+        vel1=Velocity1(Ind_Seg(Seg),:);
+        vel2=Velocity2(Ind_Seg(Seg),:); %consider the larger interval
+        j=j+1;
+        allevents(j,:)=[Ind_Seg(Index_HVBeg(ind_max(1))) Ind_Seg(Index_HVEnd(ind_max(1))) 0];
+        if (Ind_Seg(Seg(1))-1)>0
+            timeline=cat(1,timeLine(Ind_Seg(Seg(1))-1),timeLine(Ind_Seg(Seg),:));
+            %%
+            timeVec=etime(datevec(timeline(2:end)),datevec(timeline(1:end-1)));
+            dist1=sum(vel1.*timeVec);
+            dist2=sum(vel2.*timeVec);
+%%Add by Silvia for without repeats
+%           timeVec=78; %use real time
+%             dist1=sum(vel1.*timeVec);
+%            dist2=sum(vel2.*timeVec); %ADD FOR THE CASE OF NON REPEATED
+%%
+            trajectory1=Trajectory1(Ind_Seg(Seg),:);
+            trajectory2=Trajectory2(Ind_Seg(Seg),:);
+            T1=trajectory1(1,:);
+            T2=trajectory1(1,:);%NO HAY UN ERROR
+            d1=DistFun(trajectory1,repmat(T1,size(trajectory1,1),1));
+            d2=DistFun(trajectory2,repmat(T2,size(trajectory2,1),1));
+            Par(j,1)=sum(d1>=Dist_tresh2)>0&sum(d2>=Dist_tresh2)>0;
+            Par(j,2)=(dist1>PathTresh&&dist2>PathTresh)||(DistFun(trajectory1(1,:),trajectory1(end,:))>=Dist_tresh2)&&(DistFun(trajectory2(1,:),trajectory2(end,:))>=Dist_tresh2);
+            [F C D]=iscorrelated(trajectory1,trajectory2);
+            Par(j,3)=C;
+            Par(j,4)=D;
+            if sum(d1>=Dist_tresh2)>0&&sum(d2>=Dist_tresh2)>0 %out of 20 cm radius
+                if((dist1>PathTresh&&dist2>PathTresh)||...,
+                        (DistFun(trajectory1(1,:),trajectory1(end,:))>=Dist_tresh2&&DistFun(trajectory2(1,:),trajectory2(end,:))>=Dist_tresh2))
+                    if (F)
+                        vec1=Vector1(Ind_Seg(Seg),:);
+                        vec2=trajectory2-trajectory1;
+                        vec2=vec2./[sqrt(sum(vec2.^2,2)) sqrt(sum(vec2.^2,2))];
+                        %ii=~isnan(vec1)&~isnan(vec2);
+                        flag=dot(vec1,vec2,2);
+                        flag=sum(flag(~isnan(flag)));
+                        Par(j,5)=flag;
+                        
+                        if flag>0
+                            IndexChasing=[IndexChasing  Ind_Seg(Seg)];
+                            chasing(j1,:)=[Ind_Seg(Index_HVBeg(ind_max(1))) Ind_Seg(Index_HVEnd(ind_max(1)))];
+%                             a=Ind_Seg(Index_HVBeg(ind_max(1)))
+%                             timeLine(a,1)
+                        
+                            j1=j1+1;
+                            allevents(j,3)=1;
+                        elseif flag<0
+                            chasedby(j2,:)=[Ind_Seg(Index_HVBeg(ind_max(1))) Ind_Seg(Index_HVEnd(ind_max(1)))];
+                          
+                            j2=j2+1;
+                        else
+                            together(j3,:)=[Ind_Seg(Index_HVBeg(ind_max(1))) Ind_Seg(Index_HVEnd(ind_max(1)))];
+                          
+                            j3=j3+1;
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+end
+
+%% 
+function [flag C D]=iscorrelated(trajectory1,trajectory2)
+
+CorTresh=.7;%.75
+flag=false;
+C=0;
+
+D=dot(trajectory1(end,:)-trajectory1(1,:),trajectory2(end,:)-trajectory2(1,:));
+
+if length(trajectory1)>4
+    ccx=corrcoef(trajectory1(:,1),trajectory2(:,1));
+    ccy=corrcoef(trajectory1(:,2),trajectory2(:,2));
+    cc=(ccx+ccy)/2;
+    %first is correlation second is for cutting out the cases of coming
+    %forward each other
+    C=cc(2);
+    if cc(2)>CorTresh&&dot(trajectory1(end,:)-trajectory1(1,:),trajectory2(end,:)-trajectory2(1,:))>0
+        flag=true;
+    end
+end
+end
+%% 
+function [result]=FindAngle(x,y,x1,y1,dx,dy)
+
+%% % vector of location between mouse 
+vloc=[x1-x,y1-y];
+%vector movement
+vmov=[dx,dy];
+%% %calculate angle between vectors
+Modvloc=norm(vloc);
+Modvmov=norm(vmov);
+
+if vloc==0 %the same coordinates as the angle is zero
+    result=0;
+elseif vmov==0
+    result=1000;
+else    
+coseno=dot(vloc,vmov)/(Modvloc*Modvmov);
+result=acos(coseno)*180/pi;
+end
+end
+%% 
+
+%% 
+function [result]=FindAngleDirection(dx,dy,dx1,dy1)
+
+%% % vector of movement second mouse 
+vmov2=[dx1,dy1];
+%vector movement
+vmov=[dx,dy];
+%% %calculate angle between vectors
+Modvmov2=norm(vmov2);
+Modvmov=norm(vmov);
+if Modvmov2~=0 & Modvmov~=0
+coseno=dot(vmov,vmov2)/(Modvmov2*Modvmov);
+result=acos(coseno)*180/pi;
+else
+    result=1000;
+end
+end
+%% 
+function [EventsBeg EventsEnd]=getEventsIndexesGV(IndLogical,n)
+
+EventsBeg=find(diff(IndLogical)==1)+1;
+EventsEnd=find(diff(IndLogical)==-1);
+
+if isempty(EventsBeg)||isempty(EventsEnd)
+    if(isempty(EventsBeg)&&~isempty(EventsEnd))
+        EventsBeg=[1;EventsBeg];
+    elseif(isempty(EventsEnd)&&~isempty(EventsBeg))
+        EventsEnd=[EventsEnd;n];
+    else
+        if sum(IndLogical)==n
+            EventsBeg=1;
+            EventsEnd=n;
+        end
+    end
+else
+    if(EventsBeg(1)>EventsEnd(1))
+        EventsBeg=[1;EventsBeg];
+    end
+    
+    if(EventsBeg(end)>EventsEnd(end))
+        EventsEnd=[EventsEnd;n];
+    end
+end
+
+end
+
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-This function fill gaps between chasing events
+function ChasingVector=FillGap(BegChasing, EndChasing,ChasingVector,Trajectory1,Trajectory2,GapPathEnd,GapFrames)
+
+if ~isempty(BegChasing)& length(BegChasing)>1
+ for i=1:length(BegChasing)-1
+    if (BegChasing(i+1)-EndChasing(i))<GapFrames %if the difference in frames between gaps in the chasing is less than a given value
+     %check if the trajectories are near
+     
+   %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Difference between the 2 trajectoriesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+             DistFun=@(t1,t2) sqrt(sum((t1-t2).^2,2));
+%              Trajectory1(EndChasing(i)+1:BegChasing(i+1)-1,:)
+%              Trajectory2(EndChasing(i)+1:BegChasing(i+1)-1,:)
+             Distance=DistFun(Trajectory1(EndChasing(i)+1:BegChasing(i+1)-1,:),Trajectory2(EndChasing(i)+1:BegChasing(i+1)-1,:));
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHfind near trajectoriesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+           
+            Index_proximity=(Distance > GapPathEnd); %if this condition is empty the trajectory are near then the chasing is filled with one
+           
+           
+              if isempty(find(Index_proximity)==1)
+                ChasingVector(EndChasing(i)+1:BegChasing(i+1)-1)=1; 
+    
+              end
+
+
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH  
+     
+
+
+
+
+   end
+end
+end
+end
+%%
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-This function fill gaps between SMALL chasing events
+function ChasingVector=FillGapSmall(BegChasing, EndChasing,ChasingVector,Trajectory1,Trajectory2,GapPathEndS,GapFramesS)
+
+if ~isempty(BegChasing)& length(BegChasing)>1
+ for i=1:length(BegChasing)-1
+    if (BegChasing(i+1)-EndChasing(i))<GapFramesS %if the difference in frames between gaps in the chasing is less than a given value REDUCE TEN TIMES THE GAP
+     %check if the trajectories are near
+     
+   %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Difference between the 2 trajectoriesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+             DistFun=@(t1,t2) sqrt(sum((t1-t2).^2,2));
+%              Trajectory1(EndChasing(i)+1:BegChasing(i+1)-1,:)
+%              Trajectory2(EndChasing(i)+1:BegChasing(i+1)-1,:)
+             Distance=DistFun(Trajectory1(EndChasing(i)+1:BegChasing(i+1)-1,:),Trajectory2(EndChasing(i)+1:BegChasing(i+1)-1,:));
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHfind near trajectoriesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+           
+            Index_proximity=(Distance > GapPathEndS); %if this condition is empty the trajectory are near then the chasing is filled with one
+           
+           
+              if isempty(find(Index_proximity)==1)
+                ChasingVector(EndChasing(i)+1:BegChasing(i+1)-1)=1; 
+    
+              end
+
+
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH  
+     
+
+
+
+
+   end
+end
+end
+end
+
+
+
+
+
+
+
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHSecond function for filtering
+function ChasingVector=RealEvents(BegChasing, EndChasing,ChasingVector,Dx1,Dy1,Dx2,Dy2,MinimumPath,V1,V2,VelocityThresh)
+clear DeltaX1;
+clear DeltaX2;
+clear DeltaY1;
+clear DeltaY2;
+
+% length(ChasingVector)
+
+if ~isempty(BegChasing)
+    
+   for i=1:length(BegChasing)
+       
+       
+     if  (EndChasing(i)-BegChasing(i))<10 %for small events less than 10 no consider
+       
+        ChasingVector(BegChasing(i):EndChasing(i))=0; %ELIMINATE CHASING EVENTS IF THERE AS LESS THAN 3 EVENTS
+     
+      
+     else
+
+       
+    DeltaX1=Dx1(BegChasing(i):EndChasing(i));
+    DeltaY1=Dy1(BegChasing(i):EndChasing(i));
+    
+    DeltaX2=Dx2(BegChasing(i):EndChasing(i));
+    DeltaY2=Dy2(BegChasing(i):EndChasing(i));
+    
+   MedV1= median(V1(BegChasing(i):EndChasing(i)));
+   MedV2= median(V2(BegChasing(i):EndChasing(i))); 
+    
+    DistFun1=sum(sqrt((DeltaX1).^2+(DeltaY1).^2));%all the distance done during this chasing   
+    DistFun2=sum(sqrt((DeltaX2).^2+(DeltaY2).^2));   
+     
+    if DistFun1< MinimumPath | DistFun2< MinimumPath
+        
+      ChasingVector(BegChasing(i):EndChasing(i))=0; %ELIMINATE CHASING EVENTS IF THE TRAYECTORY ARE VERY SMALL  
+    elseif   MedV1 < VelocityThresh | MedV2< VelocityThresh                   %check velocity median bigger than the thrheshold during this period if not it was not moving   
+         ChasingVector(BegChasing(i):EndChasing(i))=0; %ELIMINATE CHASING EVENTS IF THE mouse is not moving enough for cases it is in the eating place all the time.
+    end
+
+   end
+   
+   
+    
+end
+
+end
+
+end
+
+
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-First function for data filteringREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+function [ChasingVector ChasingVectorWithSmallEvents] =RealEvents1(BegChasing, EndChasing,ChasingVector,Dx1,Dy1,Dx2,Dy2,MinimumPath)
+
+ChasingVectorWithSmallEvents=[];
+
+ChasingVectorWithSmallEvents=zeros(length(ChasingVector),1);
+
+
+if ~isempty(BegChasing)
+    
+   for i=1:length(BegChasing)
+       
+       
+     if  (EndChasing(i)-BegChasing(i))<3 
+       
+        ChasingVector(BegChasing(i):EndChasing(i))=0; %ELIMINATE CHASING EVENTS IF THERE AS LESS THAN 3 EVENTS
+        
+      
+     else
+       
+    DeltaX1=Dx1(BegChasing(i):EndChasing(i));
+    DeltaY1=Dy1(BegChasing(i):EndChasing(i));
+    
+    DeltaX2=Dx2(BegChasing(i):EndChasing(i));
+    DeltaY2=Dy2(BegChasing(i):EndChasing(i));
+    
+    DistFun1=sum(sqrt((DeltaX1).^2+(DeltaY1).^2));%all the distance done during this chasing   
+    DistFun2=sum(sqrt((DeltaX2).^2+(DeltaY2).^2));   
+     
+    if DistFun1< MinimumPath | DistFun2< MinimumPath
+        
+      ChasingVector(BegChasing(i):EndChasing(i))=0; %ELIMINATE CHASING EVENTS IF THE TRAYECTORY ARE VERY SMALL  
+      ChasingVectorWithSmallEvents(BegChasing(i):EndChasing(i))=1; %CONSIDER ONLY SMALL EVENTS  
+        
+    end
+       
+   end
+   
+   
+    
+end
+
+end
+
+end
+
+
+
+
+
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Function to find the exact beggining and end of the chasingREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+
+function ChasingVector=FindEnds(BegChasing, EndChasing,ChasingVector,Trajectory1,Trajectory2,GapPath)
+
+   %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Distance between the 2 trajectoriesREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+             DistFun=@(t1,t2) sqrt(sum((t1-t2).^2,2));
+%           
+            DistanceT=DistFun(Trajectory1(1:end,:),Trajectory2(1:end,:));
+  A=length(ChasingVector);           
+if ~isempty(BegChasing)
+    
+   for i=1:length(BegChasing)
+
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHCorrect the beggining of the chasingREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+     if (BegChasing(i)>1)
+        IndBeginChasing=find(DistanceT(1:BegChasing(i)-1)>GapPath,1,'last');%the idea is to found the moment the trajectory are near
+        
+         if ~isempty( IndBeginChasing)
+            ChasingVector(IndBeginChasing:BegChasing(i)-1)=1; %correct chasing vector
+         end
+         
+     end
+
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHCorrect the end  of the chasingREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+     if (EndChasing(i)<length(ChasingVector))
+        IndEndChasing=find(DistanceT(EndChasing(i)+1:end)>GapPath,1,'first');%the idea is to found the moment the trajectory are separated at the end of the chasing
+      
+         if ~isempty(IndEndChasing)
+             if (EndChasing(i)+1+IndEndChasing-1)<=A %to avoid go out of the chasing size
+            ChasingVector(EndChasing(i)+1:EndChasing(i)+1+IndEndChasing-1)=1; %correct chasing vector
+             end
+          end
+         
+     end
+   end
+end
+
+% B=length(ChasingVector)
+
+end
+
+ 
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+
+%% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH Determine if the events with duplicates are correctedREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+function ChasingVector=CorrectDuplicates(ChasingVector,Duplicates1,Duplicates2,Trajectory1,Trajectory2)
+ChasingVector=ChasingVector;
+
+DistFun=@(t1,t2) sqrt(sum((t1-t2).^2,2));
+
+if ~isempty(ChasingVector)
+
+%REPLACE_WITH_DASH_DASHfind events which are chasing and also duplicated coord
+Ind=(ChasingVector(1:length(ChasingVector))==1 & Duplicates1(1:length(ChasingVector))==1 & Duplicates2(1:length(ChasingVector))==1);
+
+[EventsBegCD EventsEndCD]=getEventsIndexesGV(Ind,length(Ind));
+if ~isempty(EventsBegCD)
+  for i=1:length(EventsBegCD)
+    if EventsBegCD(i)>1 & EventsEndCD(i)<length(ChasingVector) %assure that it is a middle event not in the extrem
+      Iinitial=find(Duplicates1(1:EventsBegCD(i)-1)==0,1,'last');%find when the duplicates are finish or begin around the chasing event
+      Ifinal=find(Duplicates1(EventsEndCD(i)+1:end)==0,1,'first');
+      
+%       EventsEndCD(i)+1+Ifinal-1
+%       EventsBegCD(i)
+%         EventsEndCD(i)
+      
+      
+      if ~isempty(Ifinal) & ~isempty(Iinitial)
+      %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHdetermine if the event is real compare if the delta vector from mouse 1 to 2 before and after has the same sense or are oppositeREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+      
+     %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-measure the distanceREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+     
+    D1=DistFun(Trajectory1(Iinitial,:),Trajectory1(EventsBegCD(i),:));
+     D2=DistFun(Trajectory2(Iinitial,:),Trajectory2(EventsBegCD(i),:));
+     
+         D1f=DistFun(Trajectory1(EventsEndCD(i)+1+Ifinal-1,:),Trajectory1(EventsEndCD(i),:));
+     D2f=DistFun(Trajectory2(EventsEndCD(i)+1+Ifinal-1,:),Trajectory2(EventsEndCD(i),:));
+%      
+%      A=(Trajectory1(EventsEndCD(i)+1+Ifinal-1,:)-Trajectory1(EventsEndCD(i),:))
+%      B=(Trajectory2(EventsEndCD(i)+1+Ifinal-1,:)-Trajectory2(EventsEndCD(i),:))
+      beta=dot((Trajectory1(EventsEndCD(i)+1+Ifinal-1,:)-Trajectory1(EventsEndCD(i),:)),(Trajectory2(EventsEndCD(i)+1+Ifinal-1,:)-Trajectory2(EventsEndCD(i),:)));
+   % beta=dot((Trajectory1(EventsEndCD(i)+1+Ifinal-1,:)-Trajectory1(EventsEndCD(i),:)),(Trajectory2(EventsEndCD(i)+1+Ifinal-1,:)-Trajectory2(EventsEndCD(i),:)))/(norm(Trajectory1(EventsEndCD(i)+1+Ifinal-1,:)-Trajectory1(EventsEndCD(i),:))*norm(Trajectory2(EventsEndCD(i)+1+Ifinal-1,:)-Trajectory2(EventsEndCD(i),:)))
+    
+     if ~ (D1>D2 & D1f<D2f & beta>0)
+      %if ~ (D1>D2 & D1f<D2f) %IF MOUSE 1 IS CHASING 1 must be before2-also add the final angle is positive to be considered as chasing,beta ADD BETA TO ELIMINATE EFFECTS OF THAT ARE RUNNING AT THE END IN OPPOSITE DIRECTIONS
+      
+        ChasingVector(EventsBegCD(i):EventsEndCD(i))=0;
+      
+      end
+      
+%       Alpha=dot((Trajectory2(Iinitial,:)-Trajectory1(Iinitial,:)),(Trajectory2(EventsEndCD(i)+1+Ifinal-1,:)-Trajectory1(EventsEndCD(i)+1+Ifinal-1,:)))
+      
+%       if Alpha<0 %the event is not correct
+%           
+%          
+%         ChasingVector(EventsBegCD(i):EventsEndCD(i))=0;  
+%           
+%       end
+      end
+    end
+  end
+
+end
+
+end
+end
+%% 
+function SmallEvents=FoundSmallEvents(BegChasingCorrectedS,EndChasingCorrectedS,BegChasingCorrected, EndChasingCorrected)
+
+    SmallEvents=zeros(length(BegChasingCorrected),1);
+if ~isempty(BegChasingCorrectedS) 
+   for i=1:length(BegChasingCorrectedS) 
+   Index=find(BegChasingCorrected==BegChasingCorrectedS(i));
+   
+   SmallEvents(Index)=1;
+    
+   end 
+    
+    
+end
+end
+
+
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>

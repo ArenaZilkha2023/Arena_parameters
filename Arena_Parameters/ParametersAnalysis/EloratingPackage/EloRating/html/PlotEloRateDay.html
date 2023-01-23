@@ -1,0 +1,306 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>PlotEloRateDay</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-06-22"><meta name="DC.source" content="PlotEloRateDay.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Variable</a></li><li><a href="#4">Find in array contain the pvalues of the randomization -pvalue less than 0.05</a></li><li><a href="#5">Create the figure elo per day and all the elo</a></li><li><a href="#12">Activate excel file</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> PlotEloRateDay(EloeDayTotalOrder,EloMatrixOrder,MouseID,NumberDaysExp,Filename)
+</pre><h2>Variable<a name="2"></a></h2><pre class="codeinput"><span class="keyword">global</span> h
+</pre><pre class="codeinput">tempfigfile=[tempname <span class="string">'.png'</span>];
+temp=figure;
+set (temp, <span class="string">'Units'</span>, <span class="string">'normalized'</span>, <span class="string">'Position'</span>, [0,0,0.5,0.5]);
+</pre><img vspace="5" hspace="5" src="PlotEloRateDay_01.png" alt=""> <h2>Find in array contain the pvalues of the randomization -pvalue less than 0.05<a name="4"></a></h2><h2>Create the figure elo per day and all the elo<a name="5"></a></h2><pre class="codeinput"><span class="keyword">if</span> get(h.Checkbox2,<span class="string">'Value'</span>) == 1
+</pre><pre class="codeinput">subplot(2,1,2) <span class="comment">%plot Elo per day</span>
+<span class="keyword">for</span> i=2:length(MouseID)+1
+    T=char(EloeDayTotalOrder(1,i));
+p=plot(cell2mat(EloeDayTotalOrder(2:end,1)),cell2mat(EloeDayTotalOrder(2:end,i)),<span class="string">'-*'</span>,<span class="string">'MarkerSize'</span>,12,<span class="string">'DisplayName'</span>,T);
+legend(<span class="string">'-DynamicLegend'</span>,<span class="string">'Location'</span>,<span class="string">'northeastoutside'</span>);
+hold <span class="string">all</span>;
+title(<span class="string">'Elo-rating per day'</span>,<span class="string">'FontSize'</span>,12)
+xlabel(<span class="string">'Days'</span>,<span class="string">'FontSize'</span>,12)
+ylabel(<span class="string">'Elo-rating'</span>,<span class="string">'FontSize'</span>,12)
+<span class="comment">% l=size(EloeDayTotalOrder,1);</span>
+<span class="comment">% x=cell2mat(EloeDayTotalOrder(l-1,1));</span>
+<span class="comment">% y=cell2mat(EloeDayTotalOrder(l,i));</span>
+<span class="comment">% text(x,y,EloeDayTotalOrder(1,i),'FontSize',12)</span>
+<span class="keyword">end</span>
+
+hold <span class="string">on</span>;
+</pre><pre class="codeinput"><span class="comment">%Add markers</span>
+<span class="comment">% for i=2:NumberDaysExp+1 %loop during the day</span>
+<span class="comment">%     row=[];</span>
+<span class="comment">%     col=[];</span>
+<span class="comment">%     i</span>
+<span class="comment">%     A=[];</span>
+<span class="comment">%     A=(SaveArrayAux(2:length(MouseID)+1,2:length(MouseID)+1,i))</span>
+<span class="comment">%   isnumeric(A)</span>
+<span class="comment">%</span>
+<span class="comment">% [row,col]=find(cell2mat(A)&lt;0.05)    %find indexes less than 5percentage</span>
+<span class="comment">%</span>
+<span class="comment">%  for j=1:length(row)</span>
+<span class="comment">%    x=cell2mat(EloeDayTotalOrder(i,1));%represent the day</span>
+<span class="comment">% y=cell2mat(EloeDayTotalOrder(i,row(j)+1));</span>
+<span class="comment">% text(x,y,'*','FontSize',12)</span>
+<span class="comment">%</span>
+<span class="comment">%</span>
+<span class="comment">%</span>
+<span class="comment">%  end</span>
+<span class="comment">% end</span>
+</pre><pre class="codeinput">subplot(2,1,1)<span class="comment">%plot per event</span>
+<span class="comment">%find Events column</span>
+IndexEvents=find(strcmp(EloMatrixOrder(1,:),<span class="string">'Events'</span>)==1);
+
+
+<span class="keyword">for</span> i=4:length(MouseID)+3
+    T=char(EloMatrixOrder(1,i));
+p=plot(cell2mat(EloMatrixOrder(2:size(EloMatrixOrder,1)-1,IndexEvents)),cell2mat(EloMatrixOrder(2:size(EloMatrixOrder,1)-1,i)),<span class="string">'DisplayName'</span>,T);
+legend(<span class="string">'-DynamicLegend'</span>,<span class="string">'Location'</span>,<span class="string">'northeastoutside'</span>);
+hold <span class="string">all</span>;
+title(<span class="string">'Elo-rating per event'</span>,<span class="string">'FontSize'</span>,12)
+xlabel(<span class="string">'Events'</span>,<span class="string">'FontSize'</span>,12)
+ylabel(<span class="string">'Elo-rating'</span>,<span class="string">'FontSize'</span>,12)
+<span class="comment">% l=size(EloMatrixOrder,1);</span>
+<span class="comment">% x=cell2mat(EloMatrixOrder(l-2,IndexEvents));</span>
+<span class="comment">% y=cell2mat(EloMatrixOrder(l-2,i));</span>
+<span class="comment">% text(x,y,EloMatrixOrder(1,i),'FontSize',12)</span>
+<span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">else</span>
+  IndexEvents=find(strcmp(EloMatrixOrder(1,:),<span class="string">'Events'</span>)==1);
+
+
+<span class="keyword">for</span> i=4:length(MouseID)+3
+p=plot(cell2mat(EloMatrixOrder(2:size(EloMatrixOrder,1)-1,IndexEvents)),cell2mat(EloMatrixOrder(2:size(EloMatrixOrder,1)-1,i)));
+hold <span class="string">all</span>;
+title(<span class="string">'Elo-rating per event'</span>,<span class="string">'FontSize'</span>,12)
+xlabel(<span class="string">'Events'</span>,<span class="string">'FontSize'</span>,12)
+ylabel(<span class="string">'Elo-rating'</span>,<span class="string">'FontSize'</span>,12)
+l=size(EloMatrixOrder,1);
+x=cell2mat(EloMatrixOrder(l-2,IndexEvents));
+y=cell2mat(EloMatrixOrder(l-2,i));
+text(x,y,EloMatrixOrder(1,i),<span class="string">'FontSize'</span>,12)
+<span class="keyword">end</span>
+
+
+
+
+<span class="keyword">end</span>
+</pre><pre class="codeoutput error">Reference to non-existent field 'Checkbox2'.
+
+Error in PlotEloRateDay (line 19)
+if get(h.Checkbox2,'Value') == 1
+</pre><pre class="codeinput">print(temp,<span class="string">'-dpng'</span>,tempfigfile);
+</pre><h2>Activate excel file<a name="12"></a></h2><pre class="codeinput">Excel = actxserver(<span class="string">'Excel.Application'</span>);
+Excel.DisplayAlerts = false;
+ResultFile=Filename;
+ResultFile1=strcat(<span class="string">'AddGraphs'</span>,Filename);
+
+Workbook=invoke(Excel.Workbooks,<span class="string">'Open'</span>,ResultFile);
+set(Excel,<span class="string">'Visible'</span>,1);
+graphSheet=invoke(Workbook.Sheets,<span class="string">'Add'</span>);
+Shapes=graphSheet.Shapes;
+
+Shapes.AddPicture(tempfigfile,0,1,50,18,300,235);
+exl2.visible=1;
+invoke(Workbook,<span class="string">'SaveAs'</span>,ResultFile);
+invoke(Excel,<span class="string">'Quit'</span>);
+close(<span class="string">'gcf'</span>)
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function PlotEloRateDay(EloeDayTotalOrder,EloMatrixOrder,MouseID,NumberDaysExp,Filename)
+%% Variable
+global h
+
+%% 
+
+tempfigfile=[tempname '.png'];
+temp=figure;
+set (temp, 'Units', 'normalized', 'Position', [0,0,0.5,0.5]);
+
+
+
+
+%% Find in array contain the pvalues of the randomization -pvalue less than 0.05
+
+
+
+%% Create the figure elo per day and all the elo
+if get(h.Checkbox2,'Value') == 1
+subplot(2,1,2) %plot Elo per day
+for i=2:length(MouseID)+1
+    T=char(EloeDayTotalOrder(1,i));
+p=plot(cell2mat(EloeDayTotalOrder(2:end,1)),cell2mat(EloeDayTotalOrder(2:end,i)),'-*','MarkerSize',12,'DisplayName',T);
+legend('-DynamicLegend','Location','northeastoutside');
+hold all;
+title('Elo-rating per day','FontSize',12)
+xlabel('Days','FontSize',12)
+ylabel('Elo-rating','FontSize',12)
+% l=size(EloeDayTotalOrder,1);
+% x=cell2mat(EloeDayTotalOrder(l-1,1));
+% y=cell2mat(EloeDayTotalOrder(l,i));
+% text(x,y,EloeDayTotalOrder(1,i),'FontSize',12)
+end  
+
+hold on;
+%%
+%Add markers
+% for i=2:NumberDaysExp+1 %loop during the day
+%     row=[];
+%     col=[];
+%     i
+%     A=[];
+%     A=(SaveArrayAux(2:length(MouseID)+1,2:length(MouseID)+1,i))
+%   isnumeric(A)
+%     
+% [row,col]=find(cell2mat(A)<0.05)    %find indexes less than 5percentage
+%     
+%  for j=1:length(row)
+%    x=cell2mat(EloeDayTotalOrder(i,1));%represent the day
+% y=cell2mat(EloeDayTotalOrder(i,row(j)+1));
+% text(x,y,'*','FontSize',12)  
+%      
+%      
+%      
+%  end
+% end
+
+
+
+
+
+%% 
+
+
+
+subplot(2,1,1)%plot per event
+%find Events column
+IndexEvents=find(strcmp(EloMatrixOrder(1,:),'Events')==1);
+
+
+for i=4:length(MouseID)+3
+    T=char(EloMatrixOrder(1,i));
+p=plot(cell2mat(EloMatrixOrder(2:size(EloMatrixOrder,1)-1,IndexEvents)),cell2mat(EloMatrixOrder(2:size(EloMatrixOrder,1)-1,i)),'DisplayName',T);
+legend('-DynamicLegend','Location','northeastoutside');
+hold all;
+title('Elo-rating per event','FontSize',12)
+xlabel('Events','FontSize',12)
+ylabel('Elo-rating','FontSize',12)
+% l=size(EloMatrixOrder,1);
+% x=cell2mat(EloMatrixOrder(l-2,IndexEvents));
+% y=cell2mat(EloMatrixOrder(l-2,i));
+% text(x,y,EloMatrixOrder(1,i),'FontSize',12)
+end 
+
+else
+  IndexEvents=find(strcmp(EloMatrixOrder(1,:),'Events')==1);
+
+
+for i=4:length(MouseID)+3
+p=plot(cell2mat(EloMatrixOrder(2:size(EloMatrixOrder,1)-1,IndexEvents)),cell2mat(EloMatrixOrder(2:size(EloMatrixOrder,1)-1,i)));
+hold all;
+title('Elo-rating per event','FontSize',12)
+xlabel('Events','FontSize',12)
+ylabel('Elo-rating','FontSize',12)
+l=size(EloMatrixOrder,1);
+x=cell2mat(EloMatrixOrder(l-2,IndexEvents));
+y=cell2mat(EloMatrixOrder(l-2,i));
+text(x,y,EloMatrixOrder(1,i),'FontSize',12)
+end 
+  
+    
+    
+    
+end
+
+
+
+
+%% 
+
+%% 
+
+print(temp,'-dpng',tempfigfile);
+
+%% Activate excel file
+Excel = actxserver('Excel.Application');
+Excel.DisplayAlerts = false; 
+ResultFile=Filename;
+ResultFile1=strcat('AddGraphs',Filename);
+
+Workbook=invoke(Excel.Workbooks,'Open',ResultFile);
+set(Excel,'Visible',1);
+graphSheet=invoke(Workbook.Sheets,'Add');
+Shapes=graphSheet.Shapes;
+
+Shapes.AddPicture(tempfigfile,0,1,50,18,300,235);
+exl2.visible=1;
+invoke(Workbook,'SaveAs',ResultFile);
+invoke(Excel,'Quit');
+close('gcf')
+end
+
+
+##### SOURCE END #####
+--></body></html>

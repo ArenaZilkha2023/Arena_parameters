@@ -1,0 +1,98 @@
+
+NumberEvent =
+
+     1
+
+
+ListFoldersCSV = 
+
+1x0 <a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> array with fields:
+
+    name
+    date
+    bytes
+    isdir
+    datenum
+
+{Index exceeds matrix dimensions.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MainValidation', 'D:\MiceApplication\ScriptsForValidation\MainValidation.m', 58)" style="font-weight:bold">MainValidation</a> (<a href="matlab: opentoline('D:\MiceApplication\ScriptsForValidation\MainValidation.m',58,0)">line 58</a>)
+DateExp(I([1 2 4]))='.';
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('ValidationGUIChasingSecond>StartButton', 'D:\MiceApplication\GUI\ValidationGUIChasingSecond.m', 192)" style="font-weight:bold">ValidationGUIChasingSecond>StartButton</a> (<a href="matlab: opentoline('D:\MiceApplication\GUI\ValidationGUIChasingSecond.m',192,0)">line 192</a>)
+    MainValidation()
+} 
+Error while evaluating UIControl Callback
+
+opentoline('D:\MiceApplication\ScriptsForValidation\MainValidation.m',58,0)
+
+NumberEvent =
+
+     1
+
+
+ListFoldersCSV = 
+
+1x0 <a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> array with fields:
+
+    name
+    date
+    bytes
+    isdir
+    datenum
+
+{Undefined function or variable 'resultcsv'.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MainValidation', 'D:\MiceApplication\ScriptsForValidation\MainValidation.m', 130)" style="font-weight:bold">MainValidation</a> (<a href="matlab: opentoline('D:\MiceApplication\ScriptsForValidation\MainValidation.m',130,0)">line 130</a>)
+[numcsv txtcsv rawcsv]=xlsread(strcat(directory,'\',get(h.editExpName,'string'),'Video','\',ListFoldersCSV(resultcsv).name));
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('ValidationGUIChasingSecond>StartButton', 'D:\MiceApplication\GUI\ValidationGUIChasingSecond.m', 192)" style="font-weight:bold">ValidationGUIChasingSecond>StartButton</a> (<a href="matlab: opentoline('D:\MiceApplication\GUI\ValidationGUIChasingSecond.m',192,0)">line 192</a>)
+    MainValidation()
+} 
+Error while evaluating UIControl Callback
+
+MainValidation
+
+NumberEvent =
+
+     1
+
+
+ListFoldersCSV = 
+
+1x0 <a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> array with fields:
+
+    name
+    date
+    bytes
+    isdir
+    datenum
+
+{Undefined function or variable 'resultcsv'.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MainValidation', 'D:\MiceApplication\ScriptsForValidation\MainValidation.m', 130)" style="font-weight:bold">MainValidation</a> (<a href="matlab: opentoline('D:\MiceApplication\ScriptsForValidation\MainValidation.m',130,0)">line 130</a>)
+[numcsv txtcsv rawcsv]=xlsread(strcat(directory,'\',get(h.editExpName,'string'),'Video','\',ListFoldersCSV(resultcsv).name));
+} 
+MainValidation
+
+NumberEvent =
+
+     1
+
+
+ListFoldersCSV = 
+
+1x0 <a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> array with fields:
+
+    name
+    date
+    bytes
+    isdir
+    datenum
+
+{Undefined function or variable 'resultcsv'.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('MainValidation', 'D:\MiceApplication\ScriptsForValidation\MainValidation.m', 130)" style="font-weight:bold">MainValidation</a> (<a href="matlab: opentoline('D:\MiceApplication\ScriptsForValidation\MainValidation.m',130,0)">line 130</a>)
+[numcsv txtcsv rawcsv]=xlsread(strcat(directory,'\',get(h.editExpName,'string'),'Video','\',ListFoldersCSV(resultcsv).name));
+} 
+ValidationGUIChasingSecond

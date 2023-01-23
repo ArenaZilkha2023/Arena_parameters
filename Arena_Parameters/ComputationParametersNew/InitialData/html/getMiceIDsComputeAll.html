@@ -1,0 +1,302 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>getMiceIDsComputeAll</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-11"><meta name="DC.source" content="getMiceIDsComputeAll.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">Read data</a></li><li><a href="#4">find male and female list- Root directory and sheet given by the user</a></li><li><a href="#5">do mice type structure</a></li><li><a href="#10">Auxiliary functions</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> [miceType,malesList,femalesList,mice_3_chips,malesListRibs,femalesListRibs]=getMiceIDsComputeAll(DIR,sheet)
+</pre><pre class="codeinput"><span class="comment">% Types:</span>
+<span class="comment">% 'M'  -  male</span>
+<span class="comment">% 'F'  -  female</span>
+<span class="comment">% 'M*' -  knock-outs</span>
+<span class="comment">% 'Mi' -  intruder</span>
+</pre><h2>Read data<a name="3"></a></h2><pre class="codeinput">mice_3_chips=cell(0,3);
+</pre><h2>find male and female list- Root directory and sheet given by the user<a name="4"></a></h2><pre class="codeinput">[num,txt,raw]=xlsread([DIR,<span class="string">'\'</span>,<span class="string">'Parameters'</span>,<span class="string">'\'</span>,<span class="string">'MiceID.xlsx'</span>],sheet);
+
+
+index1=find(strcmp(raw(1,:),<span class="string">'Sex'</span>)==1);
+index2=find(strcmp(raw(1,:),<span class="string">'Chip1'</span>)==1); <span class="comment">%identity on the head</span>
+index3=find(strcmp(raw(1,:),<span class="string">'Chip3'</span>)==1);
+index4=find(strcmp(raw(1,:),<span class="string">'Chip2'</span>)==1); <span class="comment">%identity on the ribs</span>
+
+[NumMice,Conditions]=size(raw);
+
+malesList=cellfun(@male,raw(2:end,index1),raw(2:end,index2),<span class="string">'UniformOutput'</span>, false);
+malesList=malesList;
+<span class="comment">%remove empty spaces</span>
+Ind1=find(strcmp(malesList,<span class="string">''</span>)==0);
+malesList=malesList(Ind1);
+malesList=malesList';
+
+<span class="comment">%%for Ribs</span>
+malesListRibs=cellfun(@male,raw(2:end,index1),raw(2:end,index4),<span class="string">'UniformOutput'</span>, false);
+malesListRibs=malesListRibs;
+<span class="comment">%remove empty spaces</span>
+Ind1=find(strcmp(malesListRibs,<span class="string">''</span>)==0);
+malesListRibs=malesListRibs(Ind1);
+malesListRibs=malesListRibs';
+
+
+
+femalesList=cellfun(@female,raw(2:end,index1),raw(2:end,index2),<span class="string">'UniformOutput'</span>, false);
+femalesList=femalesList;
+<span class="comment">%remove empty spaces</span>
+Ind2=find(strcmp(femalesList,<span class="string">''</span>)==0);
+femalesList=femalesList(Ind2);
+femalesList=femalesList';
+
+<span class="comment">%for the Ribs</span>
+femalesListRibs=cellfun(@female,raw(2:end,index1),raw(2:end,index4),<span class="string">'UniformOutput'</span>, false);
+femalesListRibs=femalesListRibs;
+<span class="comment">%remove empty spaces</span>
+Ind2=find(strcmp(femalesListRibs,<span class="string">''</span>)==0);
+femalesListRibs=femalesListRibs(Ind2);
+femalesListRibs=femalesListRibs';
+
+
+
+
+mice_3_chips=raw(2:end,index2:index3);
+mice_3_chips=cellfun(@RemoveIsnan,mice_3_chips,<span class="string">'UniformOutput'</span>, false)
+</pre><pre class="codeoutput error">Not enough input arguments.
+
+Error in getMiceIDsComputeAll (line 15)
+[num,txt,raw]=xlsread([DIR,'\','Parameters','\','MiceID.xlsx'],sheet);
+</pre><h2>do mice type structure<a name="5"></a></h2><pre class="codeinput"><span class="keyword">for</span> i=2:NumMice
+    <span class="keyword">if</span> isnan(raw{i,index2})==0
+</pre><pre class="codeinput">    Aux=raw(i,index2);
+   Aux=strrep( Aux,<span class="string">''''</span>,<span class="string">''</span>) <span class="comment">%eliminate double quotes</span>
+</pre><pre class="codeinput">     Aux=char(Aux);
+
+Aux1=strcat(<span class="string">'x'</span>,Aux(length(Aux)-3:length(Aux)))
+
+
+<span class="keyword">if</span> strcmp(raw(i,index1),<span class="string">'male'</span>)==1
+
+    miceType.(Aux1)=<span class="string">'M'</span>;
+<span class="keyword">else</span>
+
+   miceType.(Aux1)=<span class="string">'F'</span>;
+<span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><h2>Auxiliary functions<a name="10"></a></h2><pre class="codeinput"><span class="keyword">function</span> result=male(a,b)
+<span class="keyword">if</span> strcmp(a,<span class="string">'male'</span>)==1
+  result=b;
+<span class="keyword">else</span>
+    result=<span class="string">''</span>;
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">end</span>
+
+
+<span class="keyword">function</span> result=female(a,b)
+<span class="keyword">if</span> strcmp(a,<span class="string">'female'</span>)==1
+  result=b;
+<span class="keyword">else</span>
+    result=<span class="string">''</span>;
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> result=RemoveIsnan(a)
+<span class="keyword">if</span> isnan(a)==1
+    result=<span class="string">''</span>;
+<span class="keyword">else</span>
+    result=a;
+<span class="keyword">end</span>
+
+
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function [miceType,malesList,femalesList,mice_3_chips,malesListRibs,femalesListRibs]=getMiceIDsComputeAll(DIR,sheet)
+% Types:
+% 'M'  -  male
+% 'F'  -  female
+% 'M*' -  knock-outs
+% 'Mi' -  intruder
+
+
+%% Read data
+
+mice_3_chips=cell(0,3);
+
+
+%% find male and female list- Root directory and sheet given by the user
+[num,txt,raw]=xlsread([DIR,'\','Parameters','\','MiceID.xlsx'],sheet);
+
+
+index1=find(strcmp(raw(1,:),'Sex')==1);
+index2=find(strcmp(raw(1,:),'Chip1')==1); %identity on the head
+index3=find(strcmp(raw(1,:),'Chip3')==1);
+index4=find(strcmp(raw(1,:),'Chip2')==1); %identity on the ribs
+
+[NumMice,Conditions]=size(raw);
+
+malesList=cellfun(@male,raw(2:end,index1),raw(2:end,index2),'UniformOutput', false);
+malesList=malesList;
+%remove empty spaces
+Ind1=find(strcmp(malesList,'')==0);
+malesList=malesList(Ind1);
+malesList=malesList';
+
+%%for Ribs
+malesListRibs=cellfun(@male,raw(2:end,index1),raw(2:end,index4),'UniformOutput', false);
+malesListRibs=malesListRibs;
+%remove empty spaces
+Ind1=find(strcmp(malesListRibs,'')==0);
+malesListRibs=malesListRibs(Ind1);
+malesListRibs=malesListRibs';
+
+
+
+femalesList=cellfun(@female,raw(2:end,index1),raw(2:end,index2),'UniformOutput', false);
+femalesList=femalesList;
+%remove empty spaces
+Ind2=find(strcmp(femalesList,'')==0);
+femalesList=femalesList(Ind2);
+femalesList=femalesList';
+
+%for the Ribs
+femalesListRibs=cellfun(@female,raw(2:end,index1),raw(2:end,index4),'UniformOutput', false);
+femalesListRibs=femalesListRibs;
+%remove empty spaces
+Ind2=find(strcmp(femalesListRibs,'')==0);
+femalesListRibs=femalesListRibs(Ind2);
+femalesListRibs=femalesListRibs';
+
+
+
+
+mice_3_chips=raw(2:end,index2:index3);
+mice_3_chips=cellfun(@RemoveIsnan,mice_3_chips,'UniformOutput', false)
+
+%% do mice type structure
+for i=2:NumMice
+    if isnan(raw{i,index2})==0
+    Aux=raw(i,index2);
+   Aux=strrep( Aux,'''','') %eliminate double quotes
+    %% 
+    
+     Aux=char(Aux);
+
+Aux1=strcat('x',Aux(length(Aux)-3:length(Aux)))
+
+
+if strcmp(raw(i,index1),'male')==1
+ 
+    miceType.(Aux1)='M';
+else
+   
+   miceType.(Aux1)='F';
+end
+end
+end
+end
+%% Auxiliary functions
+function result=male(a,b)
+if strcmp(a,'male')==1
+  result=b;
+else
+    result='';
+end
+
+
+
+end
+
+
+function result=female(a,b)
+if strcmp(a,'female')==1
+  result=b; 
+else
+    result='';
+end
+
+
+
+end
+
+function result=RemoveIsnan(a)
+if isnan(a)==1
+    result='';
+else
+    result=a;
+end
+
+
+end
+%% 
+
+
+
+##### SOURCE END #####
+--></body></html>

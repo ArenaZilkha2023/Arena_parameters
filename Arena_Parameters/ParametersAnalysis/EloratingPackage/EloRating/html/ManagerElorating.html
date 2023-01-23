@@ -1,0 +1,517 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>ManagerElorating</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-06-25"><meta name="DC.source" content="ManagerElorating.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">Variable reset</a></li><li><a href="#4">Load parameters</a></li><li><a href="#5">Load external data in excel format</a></li><li><a href="#6">CALCULATION OF THE ELO RATING</a></li><li><a href="#7">Table which includes the real interaction</a></li><li><a href="#8">Save number of events</a></li><li><a href="#9">Save only the days choose by the user</a></li><li><a href="#11">Group elorating per day and choose the last event per day</a></li><li><a href="#12">Insert new column with the days</a></li><li><a href="#13">-----------------Ranking according to the mean along the days of each mouse-------</a></li><li><a href="#14">Order Data according to the ranking</a></li><li><a href="#15">Number of events per day</a></li><li><a href="#17">Saving data</a></li><li><a href="#19">if checkbox is ok run shuffling methods</a></li><li><a href="#21">Arrange SaveArray</a></li><li><a href="#24">Plotting of Eloe day</a></li><li><a href="#26">Auxiliary functions</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> DataToUse =ManagerElorating(DataToUse,FilenameN)
+</pre><pre class="codeinput"><span class="comment">%UNTITLED Summary of this function goes here</span>
+<span class="comment">%  Manager of the Elo rating and montecarlo by adding external list-REQUEST</span>
+<span class="comment">%  DATA -fIRST COLUMN DATE-SECOND COL. TIME BEGIN-THIRD COL. FINISH EVENT-</span>
+<span class="comment">%  FOUR IDENTITY MOUSE- FIVE IDENTITY MOUSE- ACCEPTED/NOT</span>
+<span class="comment">%  ACCEPTED/REVERSED-the first row is with title</span>
+<span class="comment">%ASUMPTION THE DATA IS SORTED WITH THE TIME</span>
+</pre><h2>Variable reset<a name="3"></a></h2><pre class="codeinput"><span class="keyword">global</span> h
+<span class="keyword">global</span> version
+clear <span class="string">eventlist</span>
+clear <span class="string">Aux</span>
+clear <span class="string">LogicIndex</span>
+clear <span class="string">SubsetData</span>;
+clear <span class="string">Aux</span>;
+clear <span class="string">Aux1</span>;
+clear <span class="string">EloMatrix</span>;
+clear <span class="string">EloMatrixOrder</span>;
+clear <span class="string">EloeDayTotalOrder</span>;
+clear <span class="string">EloeDayTotal</span>;
+</pre><h2>Load parameters<a name="4"></a></h2><pre class="codeinput">Params = EloRatingParams();
+k=Params.k;
+initial_rating=Params.initial_rating;
+NumberDaysExp=Params.DaysExp;
+
+SubsetData=DataToUse.SubsetData;
+MouseID=DataToUse.MouseID;
+IndexChasing=DataToUse.IndexChasing;
+IndexBeingChasing=DataToUse.IndexBeingChasing;
+IndexEvents=DataToUse.IndexEvents;
+begin=DataToUse.begin;
+</pre><pre class="codeoutput error">Reference to non-existent field 'editEloRate'.
+
+Error in EloRatingParams (line 11)
+Params.initial_rating=str2num(get(h.editEloRate,'string'));
+
+Error in ManagerElorating (line 22)
+Params = EloRatingParams();
+</pre><h2>Load external data in excel format<a name="5"></a></h2><pre class="codeinput">hwait = waitbar(0,<span class="string">'Please wait Elo-rating calculation...'</span>);
+</pre><h2>CALCULATION OF THE ELO RATING<a name="6"></a></h2><pre class="codeinput"> close(hwait)
+hwait = waitbar(0.5,<span class="string">'Please wait...'</span>);
+eloe  = EloRatingCalculation( SubsetData,MouseID,k,initial_rating,IndexChasing,IndexBeingChasing,IndexEvents);
+</pre><h2>Table which includes the real interaction<a name="7"></a></h2><pre class="codeinput">Aux1=eloe';
+Aux=Aux1(2:end,:);
+Aux(diff(eloe',1,1)==0)=NaN;
+Aux=[Aux1(1,:);Aux];
+
+<span class="comment">%create elorating matrix</span>
+EloMatrix(1,1)={<span class="string">'Experiment date'</span>};
+EloMatrix(1,2)={<span class="string">'Time begin'</span>};
+EloMatrix(1,3)={<span class="string">'Time end'</span>};
+
+<span class="keyword">for</span> i=1:length(MouseID)
+EloMatrix(1,i+3)=strcat(<span class="string">''''</span>,MouseID(i),<span class="string">''''</span>);
+<span class="keyword">end</span>
+
+<span class="comment">%add zero time</span>
+EloMatrix(2:size(SubsetData,1)+2,1)=[0; SubsetData(:,1)];
+EloMatrix(2:size(SubsetData,1)+2,2)=[0; SubsetData(:,2)];
+EloMatrix(2:size(SubsetData,1)+2,3)=[0; SubsetData(:,3)];
+
+EloMatrix(2:size(SubsetData,1)+2,4:length(MouseID)+3)=num2cell(Aux1); <span class="comment">%including repeats of elorating</span>
+</pre><h2>Save number of events<a name="8"></a></h2><pre class="codeinput">widthM=size((EloMatrix),2)+1;
+EloMatrix(1,widthM)={<span class="string">'Events'</span>};
+EloMatrix(2:end,widthM)=num2cell([0:size((EloMatrix),1)-2]);
+</pre><h2>Save only the days choose by the user<a name="9"></a></h2><pre class="codeinput">IndexToRemove=DaysRemove(EloMatrix(:,1),NumberDaysExp);
+<span class="keyword">if</span> IndexToRemove&gt;0
+  EloMatrix(IndexToRemove+2,:)={<span class="string">''</span>};
+
+<span class="keyword">end</span>
+</pre><h2>Group elorating per day and choose the last event per day<a name="11"></a></h2><pre class="codeinput">  [EloeDayTotal,NumberEventsPerDay,Intervalbegin,Intervalfinish]= EloRatingperDay(SubsetData,Aux1,MouseID,NumberDaysExp);
+  <span class="comment">%save the numbers and raw of Elodaytotal to the structure without order</span>
+
+   DataToUse.numElo=cell2mat(EloeDayTotal(2:size(EloeDayTotal,1),2:size(EloeDayTotal,2)));
+
+
+  EloeDayTotalOrder=EloeDayTotal;
+  EloMatrixOrder=EloMatrix;
+</pre><h2>Insert new column with the days<a name="12"></a></h2><pre class="codeinput">  EloMatrixOrder(1,widthM+1)={<span class="string">'Day'</span>};
+  <span class="keyword">for</span> i=1:NumberDaysExp
+  EloMatrixOrder(Intervalbegin(i)+2:Intervalfinish(i)+2,widthM+1)=num2cell(i);
+  <span class="keyword">end</span>
+</pre><h2>-----------------Ranking according to the mean along the days of each mouse-------<a name="13"></a></h2><pre class="language-matlab"><span class="comment">%save the ranking by considering  the last event or last day</span>
+[Ranking I]=sort(cell2mat(EloeDayTotal(size(EloeDayTotal,1),2:end)),<span class="string">'descend'</span> );
+EloeDayTotal(:,2:end)
+</pre><pre class="codeinput">    [Ranking I]=sort(mean(cell2mat(EloeDayTotal(2:end,2:end)),1),<span class="string">'descend'</span>);
+
+  Tree(:,1)=strcat(<span class="string">''''</span>,MouseID(I),<span class="string">''''</span>);
+  Tree(:,2)=num2cell(Ranking');
+  <span class="comment">%save to the structure</span>
+  DataToUse.numR=Ranking';
+  DataToUse.rawR=Tree(:,1);
+</pre><h2>Order Data according to the ranking<a name="14"></a></h2><pre class="codeinput">  <span class="keyword">for</span> i=2:length(MouseID)+1
+      EloeDayTotalOrder(:,i)=EloeDayTotal(:,I(i-1)+1);
+      EloMatrixOrder(:,i+2)=EloMatrix(:,I(i-1)+3);
+  <span class="keyword">end</span>
+</pre><h2>Number of events per day<a name="15"></a></h2><pre class="codeinput">   widthM=size(EloeDayTotalOrder,2)+3;
+   EloeDayTotalOrder(1,widthM)={<span class="string">'Number of events per day'</span>};
+   EloeDayTotalOrder(3:NumberDaysExp+2,widthM)=num2cell(NumberEventsPerDay');
+   DataToUse.EloeDayTotalOrder=EloeDayTotalOrder;
+   DataToUse.EloMatrixOrder=EloMatrixOrder;
+</pre><h2>Saving data<a name="17"></a></h2><pre class="codeinput"><span class="comment">%    %% Add to the filename the matlab version used</span>
+<span class="comment">%    FilenameN=strcat(version,FilenameN);</span>
+
+   <span class="comment">%save elorating</span>
+<span class="keyword">if</span> (get(h.Checkbox1,<span class="string">'Value'</span>) == 1)
+ sheet1=[<span class="string">'Elo-rating All Events'</span>];
+ <span class="keyword">try</span>
+  xlswrite(FilenameN,EloMatrix,sheet1)
+ <span class="keyword">catch</span>
+    msgbox(<span class="string">'CLOSE YOUR EXCEL FILE'</span>)
+ <span class="keyword">end</span>
+<span class="keyword">end</span>
+  <span class="keyword">if</span> (get(h.Checkbox1,<span class="string">'Value'</span>) == 1)
+
+   sheet1=[<span class="string">'Elo-rating All Events'</span>];
+   <span class="keyword">try</span>
+  xlswrite(FilenameN,EloMatrixOrder,sheet1)
+   <span class="keyword">catch</span>
+       msgbox(<span class="string">'CLOSE YOUR EXCEL FILE'</span>)
+   <span class="keyword">end</span>
+  sheet1=[<span class="string">'Ranking'</span>];
+  <span class="keyword">try</span>
+  xlswrite(FilenameN,Tree,sheet1)
+  <span class="keyword">catch</span>
+     msgbox(<span class="string">'CLOSE YOUR EXCEL FILE'</span>)
+  <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+ <span class="keyword">if</span>  (get(h.Checkbox2,<span class="string">'Value'</span>) == 1)
+     <span class="keyword">try</span>
+<span class="comment">%   sheet1=['Elo-rating per day'];</span>
+<span class="comment">%   xlswrite(FilenameN,EloeDayTotal,sheet1)</span>
+   sheet1=[<span class="string">'Elo-rating per day order'</span>];
+  xlswrite(FilenameN,EloeDayTotalOrder,sheet1)
+ sheet1=[<span class="string">'Ranking'</span>];
+  xlswrite(FilenameN,Tree,sheet1)
+     <span class="keyword">catch</span>
+         msgbox(<span class="string">'CLOSE YOUR EXCEL FILE'</span>)
+     <span class="keyword">end</span>
+<span class="keyword">end</span>
+   close(hwait)
+  hwait = waitbar(1,<span class="string">'End of the calculation...'</span>);
+ close(hwait);
+ h1=msgbox(<span class="string">'The elorating calculation finished'</span>)
+
+<span class="comment">%</span>
+<span class="comment">%</span>
+ close(h1)
+</pre><h2>if checkbox is ok run shuffling methods<a name="19"></a></h2><pre class="codeinput"> <span class="keyword">if</span>  (get(h.Checkbox3,<span class="string">'Value'</span>) == 1) &amp; (get(h.Checkbox2,<span class="string">'Value'</span>) == 1) <span class="comment">%only if for one day was calculated</span>
+</pre><pre class="codeinput">  SaveArray=RunShuffling(DataToUse,FilenameN);
+  <span class="comment">%Save the data</span>
+      DataToUse.PvalueElo=SaveArray;
+      sheet=[<span class="string">'P-value of the randomization'</span>];
+      xlswrite(FilenameN,SaveArray,sheet)
+
+  <span class="comment">%FINISH</span>
+</pre><h2>Arrange SaveArray<a name="21"></a></h2><pre class="codeinput">  <span class="keyword">for</span> i=1:NumberDaysExp+1 <span class="comment">%read each matrix -Remember the first is last event</span>
+  SaveArrayAux(:,:,i)=SaveArray(i+(i-1)*(length(MouseID)+1):i+(i-1)*(length(MouseID)+1)+length(MouseID)+1,1:length(MouseID)+1);
+  <span class="keyword">end</span>
+</pre><pre class="codeinput"> <span class="keyword">end</span>
+</pre><h2>Plotting of Eloe day<a name="24"></a></h2><pre class="codeinput"><span class="keyword">if</span> IndexToRemove&gt;0
+   EloMatrixOrder=EloMatrixOrder(1:IndexToRemove(1)+1,:);
+<span class="keyword">end</span>
+
+ PlotEloRateDay(EloeDayTotalOrder,EloMatrixOrder,MouseID,NumberDaysExp,FilenameN);
+</pre><pre class="codeinput"> <span class="keyword">end</span>
+</pre><h2>Auxiliary functions<a name="26"></a></h2><pre class="codeinput">    <span class="keyword">function</span> I=DaysRemove(A,NumberDaysExp)
+    Days=[];
+    DaysWR=[];
+   A=A(3:end);
+    <span class="keyword">for</span> i=1:length(A)
+
+      Ax=char(strrep(A(i),<span class="string">''''</span>,<span class="string">''</span>)); <span class="comment">%remove every comma</span>
+    k=strfind(Ax,<span class="string">'_'</span>);
+
+    Days(i)=str2num(Ax(1:k(1)-1));
+
+    <span class="keyword">end</span>
+     Days=Days';
+ <span class="comment">%remove repeats days and locations</span>
+     DaysWR=unique(Days,<span class="string">'stable'</span>)
+
+     <span class="comment">%find not consider days</span>
+     <span class="keyword">if</span> NumberDaysExp==length(DaysWR)
+         I=0;
+     <span class="keyword">else</span>
+     DaysNC=DaysWR(NumberDaysExp+1:length(DaysWR));
+     <span class="keyword">for</span> i=1:length(DaysNC)
+         <span class="keyword">if</span> i==1
+        I=find(Days==DaysNC(i));
+         <span class="keyword">else</span>
+             I1=find(Days==DaysNC(i));
+             I=[I;I1];
+         <span class="keyword">end</span>
+     <span class="keyword">end</span>
+     <span class="keyword">end</span>
+
+ <span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function DataToUse =ManagerElorating(DataToUse,FilenameN) 
+%UNTITLED Summary of this function goes here
+%  Manager of the Elo rating and montecarlo by adding external list-REQUEST
+%  DATA -fIRST COLUMN DATE-SECOND COL. TIME BEGIN-THIRD COL. FINISH EVENT-
+%  FOUR IDENTITY MOUSE- FIVE IDENTITY MOUSE- ACCEPTED/NOT
+%  ACCEPTED/REVERSED-the first row is with title
+%ASUMPTION THE DATA IS SORTED WITH THE TIME
+%% Variable reset
+global h
+global version
+clear eventlist
+clear Aux
+clear LogicIndex
+clear SubsetData;
+clear Aux;
+clear Aux1;
+clear EloMatrix;
+clear EloMatrixOrder;
+clear EloeDayTotalOrder;
+clear EloeDayTotal;
+%% Load parameters
+Params = EloRatingParams();
+k=Params.k;
+initial_rating=Params.initial_rating;
+NumberDaysExp=Params.DaysExp;
+
+SubsetData=DataToUse.SubsetData;
+MouseID=DataToUse.MouseID;
+IndexChasing=DataToUse.IndexChasing;
+IndexBeingChasing=DataToUse.IndexBeingChasing;
+IndexEvents=DataToUse.IndexEvents;
+begin=DataToUse.begin;
+%% Load external data in excel format 
+hwait = waitbar(0,'Please wait Elo-rating calculation...');
+
+
+%% CALCULATION OF THE ELO RATING
+ close(hwait)
+hwait = waitbar(0.5,'Please wait...');
+eloe  = EloRatingCalculation( SubsetData,MouseID,k,initial_rating,IndexChasing,IndexBeingChasing,IndexEvents);
+
+ %% Table which includes the real interaction 
+
+Aux1=eloe';
+Aux=Aux1(2:end,:);
+Aux(diff(eloe',1,1)==0)=NaN;
+Aux=[Aux1(1,:);Aux];
+
+%create elorating matrix
+EloMatrix(1,1)={'Experiment date'};
+EloMatrix(1,2)={'Time begin'};
+EloMatrix(1,3)={'Time end'};
+
+for i=1:length(MouseID)
+EloMatrix(1,i+3)=strcat('''',MouseID(i),'''');
+end
+
+%add zero time
+EloMatrix(2:size(SubsetData,1)+2,1)=[0; SubsetData(:,1)];
+EloMatrix(2:size(SubsetData,1)+2,2)=[0; SubsetData(:,2)];
+EloMatrix(2:size(SubsetData,1)+2,3)=[0; SubsetData(:,3)];
+
+EloMatrix(2:size(SubsetData,1)+2,4:length(MouseID)+3)=num2cell(Aux1); %including repeats of elorating
+
+%% Save number of events
+widthM=size((EloMatrix),2)+1;
+EloMatrix(1,widthM)={'Events'};
+EloMatrix(2:end,widthM)=num2cell([0:size((EloMatrix),1)-2]);
+
+%% Save only the days choose by the user
+IndexToRemove=DaysRemove(EloMatrix(:,1),NumberDaysExp);
+if IndexToRemove>0
+  EloMatrix(IndexToRemove+2,:)={''};
+    
+end
+
+%% 
+
+  %% Group elorating per day and choose the last event per day
+  [EloeDayTotal,NumberEventsPerDay,Intervalbegin,Intervalfinish]= EloRatingperDay(SubsetData,Aux1,MouseID,NumberDaysExp);
+  %save the numbers and raw of Elodaytotal to the structure without order
+   
+   DataToUse.numElo=cell2mat(EloeDayTotal(2:size(EloeDayTotal,1),2:size(EloeDayTotal,2)));
+   
+  
+  EloeDayTotalOrder=EloeDayTotal;
+  EloMatrixOrder=EloMatrix;
+  
+
+  
+  %% Insert new column with the days
+  EloMatrixOrder(1,widthM+1)={'Day'};
+  for i=1:NumberDaysExp   
+  EloMatrixOrder(Intervalbegin(i)+2:Intervalfinish(i)+2,widthM+1)=num2cell(i);
+  end
+ %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Ranking according to the mean along the days of each mouseREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+%   %save the ranking by considering  the last event or last day
+%   [Ranking I]=sort(cell2mat(EloeDayTotal(size(EloeDayTotal,1),2:end)),'descend' );
+% EloeDayTotal(:,2:end)
+    [Ranking I]=sort(mean(cell2mat(EloeDayTotal(2:end,2:end)),1),'descend');
+  
+  Tree(:,1)=strcat('''',MouseID(I),'''');
+  Tree(:,2)=num2cell(Ranking');
+  %save to the structure
+  DataToUse.numR=Ranking';
+  DataToUse.rawR=Tree(:,1);
+  
+  
+  
+  %% Order Data according to the ranking
+  for i=2:length(MouseID)+1
+      EloeDayTotalOrder(:,i)=EloeDayTotal(:,I(i-1)+1);
+      EloMatrixOrder(:,i+2)=EloMatrix(:,I(i-1)+3);
+  end
+ 
+  %% Number of events per day
+   widthM=size(EloeDayTotalOrder,2)+3;
+   EloeDayTotalOrder(1,widthM)={'Number of events per day'};
+   EloeDayTotalOrder(3:NumberDaysExp+2,widthM)=num2cell(NumberEventsPerDay');
+   DataToUse.EloeDayTotalOrder=EloeDayTotalOrder;
+   DataToUse.EloMatrixOrder=EloMatrixOrder;
+   %% 
+  
+   %% Saving data
+   
+   
+%    %% Add to the filename the matlab version used
+%    FilenameN=strcat(version,FilenameN);
+   
+   %save elorating
+if (get(h.Checkbox1,'Value') == 1)
+ sheet1=['Elo-rating All Events'];
+ try
+  xlswrite(FilenameN,EloMatrix,sheet1)
+ catch
+    msgbox('CLOSE YOUR EXCEL FILE') 
+ end
+end
+  if (get(h.Checkbox1,'Value') == 1)
+     
+   sheet1=['Elo-rating All Events'];
+   try
+  xlswrite(FilenameN,EloMatrixOrder,sheet1)
+   catch
+       msgbox('CLOSE YOUR EXCEL FILE')
+   end
+  sheet1=['Ranking'];
+  try
+  xlswrite(FilenameN,Tree,sheet1)
+  catch
+     msgbox('CLOSE YOUR EXCEL FILE') 
+  end
+  end
+  
+ if  (get(h.Checkbox2,'Value') == 1)
+     try
+%   sheet1=['Elo-rating per day'];
+%   xlswrite(FilenameN,EloeDayTotal,sheet1) 
+   sheet1=['Elo-rating per day order'];
+  xlswrite(FilenameN,EloeDayTotalOrder,sheet1) 
+ sheet1=['Ranking'];
+  xlswrite(FilenameN,Tree,sheet1)
+     catch
+         msgbox('CLOSE YOUR EXCEL FILE')
+     end
+end
+   close(hwait)
+  hwait = waitbar(1,'End of the calculation...');
+ close(hwait);
+ h1=msgbox('The elorating calculation finished')
+
+% 
+%  
+ close(h1)
+ 
+ 
+ 
+
+ 
+ 
+ %% 
+ 
+ %% if checkbox is ok run shuffling methods
+ if  (get(h.Checkbox3,'Value') == 1) & (get(h.Checkbox2,'Value') == 1) %only if for one day was calculated
+  SaveArray=RunShuffling(DataToUse,FilenameN);
+  %Save the data
+      DataToUse.PvalueElo=SaveArray;
+      sheet=['P-value of the randomization'];
+      xlswrite(FilenameN,SaveArray,sheet)
+  
+  %FINISH
+  %% Arrange SaveArray
+  for i=1:NumberDaysExp+1 %read each matrix -Remember the first is last event
+  SaveArrayAux(:,:,i)=SaveArray(i+(i-1)*(length(MouseID)+1):i+(i-1)*(length(MouseID)+1)+length(MouseID)+1,1:length(MouseID)+1);
+  end
+ end
+ %% 
+ 
+  %% Plotting of Eloe day
+if IndexToRemove>0 
+   EloMatrixOrder=EloMatrixOrder(1:IndexToRemove(1)+1,:); 
+end
+
+ PlotEloRateDay(EloeDayTotalOrder,EloMatrixOrder,MouseID,NumberDaysExp,FilenameN);
+ 
+ 
+ end
+
+
+
+%% Auxiliary functions
+
+
+%% 
+    function I=DaysRemove(A,NumberDaysExp)
+    Days=[];
+    DaysWR=[];
+   A=A(3:end);
+    for i=1:length(A)
+         
+      Ax=char(strrep(A(i),'''','')); %remove every comma
+    k=strfind(Ax,'_');
+    
+    Days(i)=str2num(Ax(1:k(1)-1));
+  
+    end
+     Days=Days';
+ %remove repeats days and locations
+     DaysWR=unique(Days,'stable')
+     
+     %find not consider days
+     if NumberDaysExp==length(DaysWR)
+         I=0;
+     else
+     DaysNC=DaysWR(NumberDaysExp+1:length(DaysWR));
+     for i=1:length(DaysNC)
+         if i==1
+        I=find(Days==DaysNC(i));
+         else
+             I1=find(Days==DaysNC(i));
+             I=[I;I1];
+         end
+     end    
+     end    
+         
+ end
+   
+##### SOURCE END #####
+--></body></html>

@@ -1,0 +1,362 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Hiding</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-03-26"><meta name="DC.source" content="Hiding.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#4">%% -----------find the number of hiding box per interval------------</a></li><li><a href="#5">%% ------change the coordinates of the hiding to the position of the entrance to the hiding box---------</a></li><li><a href="#7">%% AUXILIARY FUNCTIONS</a></li><li><a href="#8">%%</a></li></ul></div><pre class="codeinput"><span class="keyword">classdef</span> Hiding
+    <span class="comment">%Find hiding box with the antenna</span>
+
+    <span class="keyword">properties</span>
+     AntennaNumber
+     AntennaHidingBox
+     CoordinateX
+     CoordinateY
+     HidingCoord
+
+    <span class="keyword">end</span>
+
+    <span class="keyword">methods</span>
+</pre><pre class="codeinput">        <span class="comment">%%---------------- Find where is hiding and assign 1-find according to antenna and by assuming that there are not coordinates values</span>
+         <span class="keyword">function</span> IsHiding=IsHiding(obj)
+          IsHiding=zeros(length(obj.AntennaNumber),1);
+          IndexS=[];
+          AntennaN=obj.AntennaHidingBox;<span class="comment">%consider antenna on the side and on the entrance to the cage</span>
+
+           <span class="comment">%only if it is sleeping</span>
+            <span class="keyword">for</span> j=1:length(AntennaN)
+
+             LogicalIndex1= strcmp({num2str(AntennaN(j))},obj.AntennaNumber) &amp; (cell2mat(obj.CoordinateX)&gt;=10000);
+
+             Index=find(LogicalIndex1==1);
+             IndexS=[IndexS ; Index];
+
+            <span class="keyword">end</span>
+            <span class="keyword">if</span> ~isempty(IndexS) <span class="comment">%only if is hiding</span>
+            IsHiding(IndexS)=1;
+            <span class="keyword">end</span>
+
+          <span class="keyword">end</span>
+</pre><pre class="codeinput">          <span class="comment">%%----------- Find the intervals frames for hiding-----------</span>
+          <span class="keyword">function</span>  IsHidingInterval=IsHidingInterval(obj,IsHiding)
+
+               [EventsBeg EventsEnd]=getEventsIndexesGV(IsHiding,length(IsHiding));
+               IsHidingInterval=[EventsBeg EventsEnd];
+
+          <span class="keyword">end</span>
+</pre><h2>%% -----------find the number of hiding box per interval------------<a name="4"></a></h2><pre class="codeinput">             <span class="comment">%since in a same interval there could be different antenna</span>
+             <span class="comment">%for-Perhaps in the FUTURE</span>
+             <span class="comment">%the same hiding box we are doing a mean and find the exact cage</span>
+
+             <span class="keyword">function</span> IsHidingCage=IsHidingCage(obj,IsHidingInterval)
+
+                 IsHidingCage=zeros(length(obj.AntennaNumber),1);
+                 <span class="keyword">for</span> i=1:length(IsHidingInterval(:,1))
+                 clear <span class="string">Data</span>
+                 clear <span class="string">result</span>
+                 clear <span class="string">MeanCages</span>
+                 clear <span class="string">value</span>
+
+                Data=obj.AntennaNumber(IsHidingInterval(i,1):IsHidingInterval(i,2));
+
+                <span class="comment">%convert the Data into number</span>
+
+                   result=cellfun(@NumberConversion,Data,<span class="string">'UniformOutput'</span>,false);
+                   MeanCages= mean(cell2mat(result));
+                  B=cell2mat(result);
+                   value =knnsearch(cell2mat(result),repmat(MeanCages,length(result),1));
+                   CageValue=B(value(1));
+
+
+                   <span class="comment">%look for the Cage number</span>
+                   <span class="keyword">if</span> ~isempty(find(obj.AntennaHidingBox ==CageValue, 1))
+                       IsHidingCage([IsHidingInterval(i,1):IsHidingInterval(i,2)],1)=find(obj.AntennaHidingBox==CageValue);
+
+
+                   <span class="keyword">end</span>
+
+
+
+                 <span class="keyword">end</span>
+
+
+             <span class="keyword">end</span>
+</pre><h2>%% ------change the coordinates of the hiding to the position of the entrance to the hiding box---------<a name="5"></a></h2><pre class="codeinput">             <span class="keyword">function</span> IsHidingCoord=IsHidingCoord(obj,IsHidingInterval,IsHidingCage)
+                 clear <span class="string">X</span>
+                 clear <span class="string">Y</span>
+                 X=obj.CoordinateX;
+                 Y=obj.CoordinateY;
+                 X=cell2mat(X);
+                 Y=cell2mat(Y);
+                <span class="keyword">for</span> i=1:length(IsHidingInterval(:,1))
+                   clear <span class="string">ReferenceCage</span>
+                   ReferenceCage=IsHidingCage(IsHidingInterval(i,1));
+                   X(IsHidingInterval(i,1):IsHidingInterval(i,2))=obj.HidingCoord(ReferenceCage,1); <span class="comment">%for the x</span>
+                   Y(IsHidingInterval(i,1):IsHidingInterval(i,2))=obj.HidingCoord(ReferenceCage,2); <span class="comment">%for the y</span>
+
+                <span class="keyword">end</span>
+                 IsHidingCoord=[X,Y];
+
+
+
+             <span class="keyword">end</span>
+</pre><pre class="codeinput">    <span class="keyword">end</span>
+
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">
+ans = 
+
+  Hiding with properties:
+
+       AntennaNumber: []
+    AntennaHidingBox: []
+         CoordinateX: []
+         CoordinateY: []
+         HidingCoord: []
+
+</pre><h2>%% AUXILIARY FUNCTIONS<a name="7"></a></h2><pre class="codeinput"><span class="keyword">function</span> [EventsBeg EventsEnd]=getEventsIndexesGV(IndLogical,n)
+
+EventsBeg=find(diff(IndLogical)==1)+1;
+EventsEnd=find(diff(IndLogical)==-1);
+
+<span class="keyword">if</span> isempty(EventsBeg)||isempty(EventsEnd)
+    <span class="keyword">if</span>(isempty(EventsBeg)&amp;&amp;~isempty(EventsEnd))
+        EventsBeg=[1;EventsBeg];
+    <span class="keyword">elseif</span>(isempty(EventsEnd)&amp;&amp;~isempty(EventsBeg))
+        EventsEnd=[EventsEnd;n];
+    <span class="keyword">else</span>
+        <span class="keyword">if</span> sum(IndLogical)==n
+            EventsBeg=1;
+            EventsEnd=n;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">else</span>
+    <span class="keyword">if</span>(EventsBeg(1)&gt;EventsEnd(1))
+        EventsBeg=[1;EventsBeg];
+    <span class="keyword">end</span>
+
+    <span class="keyword">if</span>(EventsBeg(end)&gt;EventsEnd(end))
+        EventsEnd=[EventsEnd;n];
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">end</span>
+</pre><h2>%%<a name="8"></a></h2><pre class="codeinput"><span class="keyword">function</span> result=NumberConversion(x)
+result=str2num(x);
+
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+classdef Hiding
+    %Find hiding box with the antenna
+    
+    properties
+     AntennaNumber   
+     AntennaHidingBox   
+     CoordinateX
+     CoordinateY
+     HidingCoord   
+        
+    end
+    
+    methods
+        %%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH Find where is hiding and assign 1-find according to antenna and by assuming that there are not coordinates values
+         function IsHiding=IsHiding(obj)
+          IsHiding=zeros(length(obj.AntennaNumber),1);  
+          IndexS=[];
+          AntennaN=obj.AntennaHidingBox;%consider antenna on the side and on the entrance to the cage
+          
+           %only if it is sleeping
+            for j=1:length(AntennaN)
+                
+             LogicalIndex1= strcmp({num2str(AntennaN(j))},obj.AntennaNumber) & (cell2mat(obj.CoordinateX)>=10000);
+                
+             Index=find(LogicalIndex1==1);
+             IndexS=[IndexS ; Index];
+             
+            end
+            if ~isempty(IndexS) %only if is hiding
+            IsHiding(IndexS)=1;
+            end
+            
+          end   
+          %% 
+          %%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH- Find the intervals frames for hidingREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+          function  IsHidingInterval=IsHidingInterval(obj,IsHiding)
+                 
+               [EventsBeg EventsEnd]=getEventsIndexesGV(IsHiding,length(IsHiding));  
+               IsHidingInterval=[EventsBeg EventsEnd];
+              
+          end
+        
+          %%    %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-find the number of hiding box per intervalREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+             %since in a same interval there could be different antenna
+             %for-Perhaps in the FUTURE
+             %the same hiding box we are doing a mean and find the exact cage
+             
+             function IsHidingCage=IsHidingCage(obj,IsHidingInterval)
+                
+                 IsHidingCage=zeros(length(obj.AntennaNumber),1);
+                 for i=1:length(IsHidingInterval(:,1))
+                 clear Data
+                 clear result
+                 clear MeanCages
+                 clear value
+                 
+                Data=obj.AntennaNumber(IsHidingInterval(i,1):IsHidingInterval(i,2));
+                    
+                %convert the Data into number
+                
+                   result=cellfun(@NumberConversion,Data,'UniformOutput',false);
+                   MeanCages= mean(cell2mat(result));
+                  B=cell2mat(result);
+                   value =knnsearch(cell2mat(result),repmat(MeanCages,length(result),1));
+                   CageValue=B(value(1));
+                   
+                  
+                   %look for the Cage number
+                   if ~isempty(find(obj.AntennaHidingBox ==CageValue, 1))
+                       IsHidingCage([IsHidingInterval(i,1):IsHidingInterval(i,2)],1)=find(obj.AntennaHidingBox==CageValue);
+                  
+                        
+                   end
+        
+                   
+                     
+                 end
+                 
+                 
+             end
+             
+             
+             %%       %% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHchange the coordinates of the hiding to the position of the entrance to the hiding boxREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+             
+             function IsHidingCoord=IsHidingCoord(obj,IsHidingInterval,IsHidingCage)
+                 clear X
+                 clear Y
+                 X=obj.CoordinateX;
+                 Y=obj.CoordinateY;
+                 X=cell2mat(X);
+                 Y=cell2mat(Y);
+                for i=1:length(IsHidingInterval(:,1))
+                   clear ReferenceCage 
+                   ReferenceCage=IsHidingCage(IsHidingInterval(i,1)); 
+                   X(IsHidingInterval(i,1):IsHidingInterval(i,2))=obj.HidingCoord(ReferenceCage,1); %for the x  
+                   Y(IsHidingInterval(i,1):IsHidingInterval(i,2))=obj.HidingCoord(ReferenceCage,2); %for the y   
+                    
+                end
+                 IsHidingCoord=[X,Y];
+                 
+                 
+                 
+             end
+             
+          
+        
+        
+        
+        
+        
+        
+    end
+    
+end
+%% %% AUXILIARY FUNCTIONS
+function [EventsBeg EventsEnd]=getEventsIndexesGV(IndLogical,n)
+
+EventsBeg=find(diff(IndLogical)==1)+1;
+EventsEnd=find(diff(IndLogical)==-1);
+
+if isempty(EventsBeg)||isempty(EventsEnd)
+    if(isempty(EventsBeg)&&~isempty(EventsEnd))
+        EventsBeg=[1;EventsBeg];
+    elseif(isempty(EventsEnd)&&~isempty(EventsBeg))
+        EventsEnd=[EventsEnd;n];
+    else
+        if sum(IndLogical)==n
+            EventsBeg=1;
+            EventsEnd=n;
+        end
+    end
+else
+    if(EventsBeg(1)>EventsEnd(1))
+        EventsBeg=[1;EventsBeg];
+    end
+    
+    if(EventsBeg(end)>EventsEnd(end))
+        EventsEnd=[EventsEnd;n];
+    end
+end
+
+end
+%% %% 
+function result=NumberConversion(x)
+result=str2num(x);
+
+end
+
+
+##### SOURCE END #####
+--></body></html>

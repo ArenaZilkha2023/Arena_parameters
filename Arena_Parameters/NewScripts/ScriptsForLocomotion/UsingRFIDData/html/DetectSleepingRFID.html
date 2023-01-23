@@ -1,0 +1,388 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>DetectSleepingRFID</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-03-16"><meta name="DC.source" content="DetectSleepingRFID.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">%% Assign cages</a></li><li><a href="#5">found sleeping box/tube</a></li><li><a href="#6">clear variables</a></li><li><a href="#9">%join events with small gap because of antenna jumping</a></li><li><a href="#17">%Get final events</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> [SleepingBoxIndexTotal NewCoord EventsBegfinal EventsEndfinal Cages]=DetectSleepingRFID(NewCoord,RFIDInf)
+</pre><pre class="codeinput"><span class="comment">%  Detect sleeping with RFID</span>
+<span class="comment">%variables</span>
+<span class="keyword">global</span> Params
+<span class="comment">%clear variables</span>
+EventsBeg=[];
+EventsEnd=[];
+EventsBeg1=[];
+EventsEnd1=[];
+EventsBegfinal=[];
+EventsEndfinal =[];
+Cages=[];
+I=[];
+</pre><h2>%% Assign cages<a name="3"></a></h2><pre class="codeinput">    CageNumber(1:8)=[2,5,7,35,47,45,43,8];<span class="comment">%order according to the cages order</span>
+    SideBox(1:8)=[49,50,51,52,53,54,55,56];<span class="comment">%this is detected if the mouse is jumping</span>
+</pre><pre class="codeinput">    SleepingBoxIndexTotal=[];
+    SleepingBoxIndexTotal=zeros(length(RFIDInf),1);
+     NewCoord=cell2mat(NewCoord);
+</pre><pre class="codeoutput error">Not enough input arguments.
+
+Error in DetectSleepingRFID (line 22)
+    SleepingBoxIndexTotal=zeros(length(RFIDInf),1);
+</pre><h2>found sleeping box/tube<a name="5"></a></h2><pre class="codeinput"><span class="keyword">for</span> j=1:8 <span class="comment">%go around the cages</span>
+</pre><h2>clear variables<a name="6"></a></h2><pre class="codeinput">    EventsBeg=[];
+    EventsEnd=[];
+    EventsBeg1=[];
+    EventsEnd1=[];
+    SleepingBoxIndex=[];
+    SleepingBoxIndex=zeros(length(RFIDInf),1);
+       <span class="keyword">if</span> (CageNumber(j)==8)
+    ActualCage=8;
+<span class="keyword">elseif</span> (CageNumber(j)==43)
+    ActualCage=7;
+<span class="keyword">elseif</span> (CageNumber(j)==2)
+    ActualCage=1;
+<span class="keyword">elseif</span> (CageNumber(j)==5)
+    ActualCage=2;
+ <span class="keyword">elseif</span> (CageNumber(j)==7)
+    ActualCage=3;
+ <span class="keyword">elseif</span> (CageNumber(j)==35)
+    ActualCage=4;
+ <span class="keyword">elseif</span> (CageNumber(j)==47)
+    ActualCage=5;
+ <span class="keyword">elseif</span> (CageNumber(j)==45)
+    ActualCage=6;
+<span class="keyword">end</span>
+</pre><pre class="codeinput">  <span class="keyword">if</span> ~isempty(find(strcmp({num2str(CageNumber(j))},RFIDInf)==1))<span class="comment">%only if it is sleeping</span>
+</pre><pre class="codeinput">         SleepingBoxIndex(strcmp({num2str(CageNumber(j))},RFIDInf))=1;
+
+    <span class="comment">%find the limits of each interval</span>
+
+         [EventsBeg EventsEnd]=getEventsIndexesGV(SleepingBoxIndex,length(SleepingBoxIndex));
+</pre><h2>%join events with small gap because of antenna jumping<a name="9"></a></h2><pre class="codeinput">         I=find(EventsEnd(1:length(EventsEnd)-1)-EventsBeg(2:length(EventsEnd))&lt; Params.frames);
+         <span class="keyword">if</span> ~isempty(I)
+         SleepingBoxIndex(EventsEnd(I):EventsBeg(I+1))=1;
+         <span class="keyword">end</span>
+</pre><pre class="codeinput">   <span class="comment">%arrange the upper border</span>
+   <span class="comment">%Find again intervals different for each cage</span>
+
+       [EventsBeg1 EventsEnd1]=getEventsIndexesGV(SleepingBoxIndex,length(SleepingBoxIndex));
+   <span class="comment">%for side cages 8 and 43</span>
+
+  <span class="keyword">for</span> i=1:length(EventsEnd1)<span class="comment">%loop on each event</span>
+
+  <span class="comment">%begin cage 8</span>
+ <span class="keyword">if</span> (CageNumber(j)==8)| (CageNumber(j)==43)
+  <span class="keyword">if</span> EventsEnd1(i)&lt; length((RFIDInf)) <span class="comment">%assure that it is not the end</span>
+   <span class="keyword">if</span> isnan(NewCoord(EventsEnd1(i),1))| NewCoord(EventsEnd1(i),1)&lt;=0 | NewCoord(EventsEnd1(i),1)&gt; 20000 <span class="comment">%under these conditions continue to look for the limit in the sleeping range</span>
+      I1=find(NewCoord(EventsEnd1(i):end,1)&gt;0 &amp; NewCoord(EventsEnd1(i):end,1)&lt;20000,1,<span class="string">'first'</span>)
+      <span class="keyword">if</span> ~isempty(I1)
+         SleepingBoxIndex( EventsEnd1(i):EventsEnd1(i)+(I1-1)-1)=1
+      <span class="keyword">else</span>
+          SleepingBoxIndex(EventsEnd1(i):end)=1;
+      <span class="keyword">end</span>
+   <span class="keyword">end</span>
+   <span class="keyword">end</span>
+ <span class="keyword">elseif</span>  (CageNumber(j)==2)| (CageNumber(j)==5)
+</pre><pre class="codeinput">  <span class="keyword">if</span> EventsEnd1(i)&lt; length((RFIDInf)) <span class="comment">%assure that it is not the end</span>
+   <span class="keyword">if</span> isnan(NewCoord(EventsEnd1(i),2))| NewCoord(EventsEnd1(i),2)&lt;=0 | NewCoord(EventsEnd1(i),2)&gt; 20000 <span class="comment">%under these conditions continue to look for the limit in the sleeping range the y direction</span>
+      I1=find(NewCoord(EventsEnd1(i):end,2)&gt;0 &amp; NewCoord(EventsEnd1(i):end,2)&lt;20000,1,<span class="string">'first'</span>);
+      <span class="keyword">if</span> ~isempty(I1)
+         SleepingBoxIndex( EventsEnd1(i):EventsEnd1(i)+(I1-1)-1)=1;
+      <span class="keyword">else</span>
+          SleepingBoxIndex(EventsEnd1(i):end)=1;
+      <span class="keyword">end</span>
+   <span class="keyword">end</span>
+  <span class="keyword">end</span>
+</pre><pre class="codeinput">   <span class="keyword">elseif</span>  (CageNumber(j)==7)| (CageNumber(j)==35)
+</pre><pre class="codeinput">    <span class="keyword">if</span> EventsEnd1(i)&lt; length((RFIDInf)) <span class="comment">%assure that it is not the end</span>
+      <span class="keyword">if</span> isnan(NewCoord(EventsEnd1(i),1))| NewCoord(EventsEnd1(i),1)&gt;=1110 | NewCoord(EventsEnd1(i),1)&gt; 20000 <span class="comment">%under these conditions continue to look for the limit in the sleeping range the y direction</span>
+      I1=find(NewCoord(EventsEnd1(i):end,1)&lt;1110 &amp; NewCoord(EventsEnd1(i):end,1)&lt;20000,1,<span class="string">'first'</span>); <span class="comment">%1110 COULD BE 1139</span>
+       <span class="keyword">if</span> ~isempty(I1)
+         SleepingBoxIndex( EventsEnd1(i):EventsEnd1(i)+(I1-1)-1)=1;
+       <span class="keyword">else</span>
+          SleepingBoxIndex(EventsEnd1(i):end)=1;
+       <span class="keyword">end</span>
+      <span class="keyword">end</span>
+  <span class="keyword">end</span>
+</pre><pre class="codeinput">     <span class="keyword">elseif</span>  (CageNumber(j)==45)| (CageNumber(j)==47)
+    <span class="keyword">if</span> EventsEnd1(i)&lt; length((RFIDInf)) <span class="comment">%assure that it is not the end</span>
+      <span class="keyword">if</span> isnan(NewCoord(EventsEnd1(i),2))| NewCoord(EventsEnd1(i),2)&gt;=1110 | NewCoord(EventsEnd1(i),2)&gt; 20000 <span class="comment">%under these conditions continue to look for the limit in the sleeping range the y direction</span>
+      I1=find(NewCoord(EventsEnd1(i):end,2)&lt;1110 &amp; NewCoord(EventsEnd1(i):end,2)&lt;20000,1,<span class="string">'first'</span>); <span class="comment">%1110 COULD BE 1139</span>
+       <span class="keyword">if</span> ~isempty(I1)
+         SleepingBoxIndex( EventsEnd1(i):EventsEnd1(i)+(I1-1)-1)=1;
+       <span class="keyword">else</span>
+          SleepingBoxIndex(EventsEnd1(i):end)=1;
+       <span class="keyword">end</span>
+      <span class="keyword">end</span>
+  <span class="keyword">end</span>
+ <span class="keyword">end</span>
+  <span class="keyword">end</span>
+</pre><h2>%Get final events<a name="17"></a></h2><pre class="codeinput">  [Inti Intf]=getEventsIndexesGV(SleepingBoxIndex,length(SleepingBoxIndex))
+  <span class="keyword">if</span> j==1
+[EventsBegfinal EventsEndfinal]=getEventsIndexesGV(SleepingBoxIndex,length(SleepingBoxIndex));
+  Cages=repmat(ActualCage,length(Inti),1);
+  SleepingBoxIndexTotal=SleepingBoxIndex;
+  <span class="keyword">else</span>
+      <span class="keyword">if</span> ~isempty(EventsBegfinal)
+        EventsBegfinal= [EventsBegfinal;Inti ];
+        EventsEndfinal= [EventsEndfinal;Intf ];
+
+    Cages=[Cages;repmat(ActualCage,length(Inti),1)];
+    SleepingBoxIndexTotal=SleepingBoxIndexTotal+ SleepingBoxIndex;
+      <span class="keyword">else</span>
+      [EventsBegfinal EventsEndfinal]=getEventsIndexesGV(SleepingBoxIndex,length(SleepingBoxIndex));
+      Cages=repmat(ActualCage,length(Inti),1);
+      SleepingBoxIndexTotal=SleepingBoxIndex;
+      <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+<span class="comment">%Replace the coordinates of cages to cages coordinates</span>
+
+<span class="keyword">if</span> ~isempty(Inti)
+NewCoord(Inti:Intf,1)=Params.CoordSleepingCells(ActualCage,1);
+NewCoord(Inti:Intf,2)=Params.CoordSleepingCells(ActualCage,2);
+<span class="keyword">end</span>
+</pre><pre class="codeinput"> <span class="keyword">end</span>
+</pre><pre class="codeinput">  <span class="keyword">end</span>
+ <span class="comment">%</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function [SleepingBoxIndexTotal NewCoord EventsBegfinal EventsEndfinal Cages]=DetectSleepingRFID(NewCoord,RFIDInf)
+%  Detect sleeping with RFID
+%variables
+global Params
+%clear variables
+EventsBeg=[];
+EventsEnd=[];
+EventsBeg1=[];
+EventsEnd1=[];
+EventsBegfinal=[];
+EventsEndfinal =[];
+Cages=[];
+I=[];
+
+%%   %% Assign cages
+    CageNumber(1:8)=[2,5,7,35,47,45,43,8];%order according to the cages order
+    SideBox(1:8)=[49,50,51,52,53,54,55,56];%this is detected if the mouse is jumping
+    
+ 
+    %% 
+    SleepingBoxIndexTotal=[];
+    SleepingBoxIndexTotal=zeros(length(RFIDInf),1);
+     NewCoord=cell2mat(NewCoord);
+     
+%% found sleeping box/tube
+for j=1:8 %go around the cages
+    %% clear variables
+    EventsBeg=[];
+    EventsEnd=[];
+    EventsBeg1=[];
+    EventsEnd1=[];
+    SleepingBoxIndex=[];
+    SleepingBoxIndex=zeros(length(RFIDInf),1);
+       if (CageNumber(j)==8)
+    ActualCage=8;
+elseif (CageNumber(j)==43)
+    ActualCage=7;
+elseif (CageNumber(j)==2)
+    ActualCage=1;
+elseif (CageNumber(j)==5)
+    ActualCage=2;
+ elseif (CageNumber(j)==7)
+    ActualCage=3;
+ elseif (CageNumber(j)==35)
+    ActualCage=4;
+ elseif (CageNumber(j)==47)
+    ActualCage=5;
+ elseif (CageNumber(j)==45) 
+    ActualCage=6;
+end
+    %% 
+
+
+  if ~isempty(find(strcmp({num2str(CageNumber(j))},RFIDInf)==1))%only if it is sleeping    
+    
+         SleepingBoxIndex(strcmp({num2str(CageNumber(j))},RFIDInf))=1;
+
+    %find the limits of each interval
+
+         [EventsBeg EventsEnd]=getEventsIndexesGV(SleepingBoxIndex,length(SleepingBoxIndex));
+         %% %join events with small gap because of antenna jumping
+         I=find(EventsEnd(1:length(EventsEnd)-1)-EventsBeg(2:length(EventsEnd))< Params.frames);
+         if ~isempty(I)
+         SleepingBoxIndex(EventsEnd(I):EventsBeg(I+1))=1;
+         end
+       
+%% 
+   %arrange the upper border
+   %Find again intervals different for each cage
+   
+       [EventsBeg1 EventsEnd1]=getEventsIndexesGV(SleepingBoxIndex,length(SleepingBoxIndex));
+   %for side cages 8 and 43
+
+  for i=1:length(EventsEnd1)%loop on each event
+  
+  %begin cage 8       
+ if (CageNumber(j)==8)| (CageNumber(j)==43)  
+  if EventsEnd1(i)< length((RFIDInf)) %assure that it is not the end
+   if isnan(NewCoord(EventsEnd1(i),1))| NewCoord(EventsEnd1(i),1)<=0 | NewCoord(EventsEnd1(i),1)> 20000 %under these conditions continue to look for the limit in the sleeping range
+      I1=find(NewCoord(EventsEnd1(i):end,1)>0 & NewCoord(EventsEnd1(i):end,1)<20000,1,'first')
+      if ~isempty(I1)
+         SleepingBoxIndex( EventsEnd1(i):EventsEnd1(i)+(I1-1)-1)=1
+      else
+          SleepingBoxIndex(EventsEnd1(i):end)=1;
+      end
+   end
+   end
+ elseif  (CageNumber(j)==2)| (CageNumber(j)==5) 
+  if EventsEnd1(i)< length((RFIDInf)) %assure that it is not the end
+   if isnan(NewCoord(EventsEnd1(i),2))| NewCoord(EventsEnd1(i),2)<=0 | NewCoord(EventsEnd1(i),2)> 20000 %under these conditions continue to look for the limit in the sleeping range the y direction
+      I1=find(NewCoord(EventsEnd1(i):end,2)>0 & NewCoord(EventsEnd1(i):end,2)<20000,1,'first');
+      if ~isempty(I1)
+         SleepingBoxIndex( EventsEnd1(i):EventsEnd1(i)+(I1-1)-1)=1;
+      else
+          SleepingBoxIndex(EventsEnd1(i):end)=1;
+      end
+   end
+  end
+  %% 
+   elseif  (CageNumber(j)==7)| (CageNumber(j)==35) 
+    if EventsEnd1(i)< length((RFIDInf)) %assure that it is not the end
+      if isnan(NewCoord(EventsEnd1(i),1))| NewCoord(EventsEnd1(i),1)>=1110 | NewCoord(EventsEnd1(i),1)> 20000 %under these conditions continue to look for the limit in the sleeping range the y direction
+      I1=find(NewCoord(EventsEnd1(i):end,1)<1110 & NewCoord(EventsEnd1(i):end,1)<20000,1,'first'); %1110 COULD BE 1139
+       if ~isempty(I1)
+         SleepingBoxIndex( EventsEnd1(i):EventsEnd1(i)+(I1-1)-1)=1;
+       else
+          SleepingBoxIndex(EventsEnd1(i):end)=1;
+       end
+      end
+  end
+  %% 
+     elseif  (CageNumber(j)==45)| (CageNumber(j)==47) 
+    if EventsEnd1(i)< length((RFIDInf)) %assure that it is not the end
+      if isnan(NewCoord(EventsEnd1(i),2))| NewCoord(EventsEnd1(i),2)>=1110 | NewCoord(EventsEnd1(i),2)> 20000 %under these conditions continue to look for the limit in the sleeping range the y direction
+      I1=find(NewCoord(EventsEnd1(i):end,2)<1110 & NewCoord(EventsEnd1(i):end,2)<20000,1,'first'); %1110 COULD BE 1139
+       if ~isempty(I1)
+         SleepingBoxIndex( EventsEnd1(i):EventsEnd1(i)+(I1-1)-1)=1;
+       else
+          SleepingBoxIndex(EventsEnd1(i):end)=1;
+       end
+      end
+  end
+ end
+  end  
+ 
+
+  %% %Get final events
+  [Inti Intf]=getEventsIndexesGV(SleepingBoxIndex,length(SleepingBoxIndex))
+  if j==1
+[EventsBegfinal EventsEndfinal]=getEventsIndexesGV(SleepingBoxIndex,length(SleepingBoxIndex));
+  Cages=repmat(ActualCage,length(Inti),1);
+  SleepingBoxIndexTotal=SleepingBoxIndex;
+  else
+      if ~isempty(EventsBegfinal)
+        EventsBegfinal= [EventsBegfinal;Inti ]; 
+        EventsEndfinal= [EventsEndfinal;Intf ];  
+    
+    Cages=[Cages;repmat(ActualCage,length(Inti),1)];
+    SleepingBoxIndexTotal=SleepingBoxIndexTotal+ SleepingBoxIndex;
+      else
+      [EventsBegfinal EventsEndfinal]=getEventsIndexesGV(SleepingBoxIndex,length(SleepingBoxIndex));  
+      Cages=repmat(ActualCage,length(Inti),1);
+      SleepingBoxIndexTotal=SleepingBoxIndex;
+      end
+  end
+
+%Replace the coordinates of cages to cages coordinates
+
+if ~isempty(Inti)
+NewCoord(Inti:Intf,1)=Params.CoordSleepingCells(ActualCage,1); 
+NewCoord(Inti:Intf,2)=Params.CoordSleepingCells(ActualCage,2);
+end
+
+  
+  
+ end
+  end
+ %
+  
+  
+  
+  
+  
+
+  
+  
+  
+  
+  
+  
+end
+%% 
+
+
+
+
+##### SOURCE END #####
+--></body></html>
